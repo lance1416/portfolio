@@ -1,5 +1,6 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import MainLayout from '@/layouts/MainLayout.tsx';
+import Experience from '@/pages/Experience.tsx';
 import Home from '@/pages/Home.tsx';
 
 const Placeholder = ({ title }: { title: string }) => (
@@ -22,7 +23,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'experience',
-        element: <Placeholder title="Experience" />,
+        element: <Experience />,
       },
       {
         path: 'projects',
