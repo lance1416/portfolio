@@ -1,1 +1,56 @@
 @import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  --font-serif:
+    "Newsreader", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+
+  --shadow-apple:
+    0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  --shadow-apple-lg:
+    0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+
+  /* Added dark mode base colors to the body */
+  body {
+    @apply bg-zinc-50 text-zinc-900 transition-colors duration-300;
+    @apply dark:bg-zinc-950 dark:text-zinc-50;
+
+    ::selection {
+      @apply bg-zinc-200 text-zinc-900 dark:bg-zinc-800 dark:text-white;
+    }
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply tracking-tight;
+  }
+}
+
+@layer utilities {
+  /* Updated glass utilities to handle both light and dark mode automatically */
+  .glass {
+    @apply bg-white/70 backdrop-blur-lg border border-white/40 shadow-apple;
+    @apply dark:bg-zinc-900/70 dark:border-zinc-800/50 dark:shadow-none;
+  }
+
+  .prose-academic {
+    @apply font-serif text-lg leading-relaxed text-zinc-800 dark:text-zinc-300 max-w-[65ch];
+  }
+}
