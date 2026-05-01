@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import MainLayout from '@/layouts/MainLayout.tsx';
 import Experience from '@/pages/Experience.tsx';
 import Home from '@/pages/Home.tsx';
+import Projects from '@/pages/Projects.tsx';
 
 const Placeholder = ({ title }: { title: string }) => (
   <main className="mx-auto max-w-4xl px-6 text-center pt-24">
@@ -27,7 +28,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'projects',
-        element: <Placeholder title="Projects" />,
+        element: <Projects />,
       },
       {
         path: 'research',
