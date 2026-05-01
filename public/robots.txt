@@ -1,0 +1,17 @@
+# ==========================================
+# Sinan Li's Portfolio - Robots.txt
+# ==========================================
+
+User-agent: *
+Allow: /
+
+# ------------------------------------------
+# Disallow specific files or directories
+# ------------------------------------------
+Disallow: /resume.pdf
+
+# ------------------------------------------
+# Sitemap
+# ------------------------------------------
+# Helps search engines discover your routes (/experience, /projects, etc.)
+Sitemap: https://www.lance1416.com/sitemap.xml
