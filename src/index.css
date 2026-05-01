@@ -6,8 +6,6 @@
   --font-sans:
     "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
     Arial, sans-serif;
-  --font-serif:
-    "Newsreader", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
 
   --shadow-apple:
     0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
@@ -23,7 +21,6 @@
     scroll-behavior: smooth;
   }
 
-  /* Added dark mode base colors to the body */
   body {
     @apply bg-zinc-50 text-zinc-900 transition-colors duration-300;
     @apply dark:bg-zinc-950 dark:text-zinc-50;
@@ -44,13 +41,13 @@
 }
 
 @layer utilities {
-  /* Updated glass utilities to handle both light and dark mode automatically */
   .glass {
-    @apply bg-white/70 backdrop-blur-lg border border-white/40 shadow-apple;
+    @apply bg-white/70 backdrop-blur-xl border border-white/40 shadow-apple;
     @apply dark:bg-zinc-900/70 dark:border-zinc-800/50 dark:shadow-none;
   }
 
+  /* Removed 'font-serif' so it inherits Inter automatically */
   .prose-academic {
-    @apply font-serif text-lg leading-relaxed text-zinc-800 dark:text-zinc-300 max-w-[65ch];
+    @apply text-lg leading-relaxed text-zinc-800 dark:text-zinc-300 max-w-[65ch];
   }
 }
