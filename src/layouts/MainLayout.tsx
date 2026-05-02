@@ -3,9 +3,17 @@ import { Outlet, ScrollRestoration, useLocation } from 'react-router-dom';
 import { CommandPalette } from '@/components/CommandPalette.tsx';
 import { Footer } from '@/components/Footer';
 import { Navbar } from '@/components/Navbar';
+import { TerminalView } from '@/components/TerminalView.tsx';
+import { useTerminal } from '@/context/TerminalContext.tsx';
 
 export default function MainLayout() {
   const location = useLocation();
+  const { isTerminal } = useTerminal(); // <-- Get the state
+
+  // IF TERMINAL MODE IS ACTIVE, RENDER ONLY THE SHELL
+  if (isTerminal) {
+    return <TerminalView />;
+  }
 
   return (
     <div className="relative flex min-h-screen flex-col overflow-x-hidden selection:bg-zinc-200 selection:text-zinc-900 dark:selection:bg-zinc-800 dark:selection:text-white">

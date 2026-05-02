@@ -1,7 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { Download, Menu, X } from 'lucide-react';
+import { Download, Menu, TerminalSquare, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useTerminal } from '@/context/TerminalContext.tsx';
 import { cn } from '../utils/cn';
 import { ThemeToggle } from './ThemeToggle';
 
@@ -22,6 +23,8 @@ export function Navbar() {
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [pathname]);
+
+  const { toggleTerminal } = useTerminal();
 
   return (
     <motion.div
@@ -94,6 +97,16 @@ export function Navbar() {
                 <span className="text-sm">⌘</span>K
               </kbd>
             </button>
+
+            <button
+              type="button"
+              onClick={toggleTerminal}
+              aria-label="Toggle Terminal Mode"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-zinc-200/50 bg-white/50 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:border-zinc-700/50 dark:bg-zinc-800/50 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-50"
+            >
+              <TerminalSquare className="h-4 w-4" />
+            </button>
+
             <ThemeToggle />
 
             <a

@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { TerminalProvider } from '@/context/TerminalContext.tsx';
 import MainLayout from '@/layouts/MainLayout';
 import ErrorPage from '@/pages/ErrorPage';
 
@@ -68,7 +69,9 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <TerminalProvider>{<RouterProvider router={router} />}</TerminalProvider>
+  );
 }
 
 export default App;
