@@ -63,7 +63,7 @@ export function EducationCard({ item }: { item: EducationItem }) {
             {/* Right: Date Badge & Large Coat of Arms */}
             <div className="flex shrink-0 flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-start gap-6 w-full sm:w-auto">
               {/* Date Badge */}
-              <span className="inline-flex rounded-full border border-zinc-200/60 bg-white/50 px-3 py-1 text-xs font-semibold tracking-widest text-zinc-500 uppercase dark:border-zinc-700/50 dark:bg-zinc-800/50 dark:text-zinc-400">
+              <span className="inline-flex rounded-full border border-zinc-200/60 bg-white/50 px-3 py-1 font-mono text-xs font-medium text-zinc-500 dark:border-zinc-700/50 dark:bg-zinc-800/50 dark:text-zinc-400">
                 {item.period}
               </span>
 
@@ -125,7 +125,7 @@ export function AwardRow({ award }: { award: AwardItem }) {
           </p>
         </div>
       </div>
-      <span className="text-sm font-medium tracking-widest text-zinc-400 transition-colors group-hover:text-zinc-900 dark:text-zinc-500 dark:group-hover:text-zinc-100">
+      <span className="font-mono text-sm font-medium text-zinc-400 transition-colors group-hover:text-zinc-900 dark:text-zinc-500 dark:group-hover:text-zinc-100">
         {award.year}
       </span>
     </motion.div>

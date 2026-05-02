@@ -6,6 +6,8 @@
   --font-sans:
     "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
     Arial, sans-serif;
+  --font-mono:
+    "JetBrains Mono", "SF Mono", "Fira Code", ui-monospace, monospace;
 
   --shadow-apple:
     0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
@@ -46,7 +48,6 @@
     @apply dark:bg-zinc-900/70 dark:border-zinc-800/50 dark:shadow-none;
   }
 
-  /* Removed 'font-serif' so it inherits Inter automatically */
   .prose-academic {
     @apply text-lg leading-relaxed text-zinc-800 dark:text-zinc-300 max-w-[65ch];
   }

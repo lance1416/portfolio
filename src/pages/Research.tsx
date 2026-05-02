@@ -46,7 +46,7 @@ export default function Research() {
             <div className="absolute inset-0 bg-linear-to-br from-zinc-100/50 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 dark:from-zinc-800/20" />
 
             <div className="relative z-10">
-              <div className="flex items-center gap-3 text-sm font-semibold tracking-widest text-zinc-500 uppercase dark:text-zinc-400">
+              <div className="flex items-center gap-3 font-mono text-xs font-medium text-zinc-500 uppercase tracking-widest dark:text-zinc-400">
                 <Microscope className="h-5 w-5" />
                 <span>Current Dissertation</span>
               </div>

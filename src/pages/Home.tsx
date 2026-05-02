@@ -142,10 +142,10 @@ export default function Home() {
                 <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
                   Quantum Research
                 </h3>
-                <p className="mt-4 font-serif text-lg leading-relaxed text-zinc-600 dark:text-zinc-400">
+                <p className="mt-4 text-lg leading-relaxed text-zinc-600 dark:text-zinc-400">
                   Investigating fault-equivalence rewrites and quantum
                   decodability using{' '}
-                  <span className="text-zinc-900 dark:text-zinc-100 font-sans font-semibold">
+                  <span className="text-zinc-900 dark:text-zinc-100 font-semibold">
                     ZX-Calculus
                   </span>{' '}
                   at Oxford.
@@ -170,9 +170,9 @@ export default function Home() {
                 <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
                   IQBank Engineering
                 </h3>
-                <p className="mt-4 font-serif text-lg leading-relaxed text-zinc-600 dark:text-zinc-400">
+                <p className="mt-4 text-lg leading-relaxed text-zinc-600 dark:text-zinc-400">
                   Architecting a full-stack study platform for{' '}
-                  <span className="text-zinc-900 dark:text-zinc-100 font-sans font-semibold">
+                  <span className="text-zinc-900 dark:text-zinc-100 font-semibold">
                     100+ beta users
                   </span>{' '}
                   using React, Node, and PostgreSQL.

@@ -16,7 +16,7 @@ export function SkillPill({ skill, activeColor }: SkillPillProps) {
         { '--hover-color': activeColor || '#71717a' } as React.CSSProperties
       }
       transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-      className="inline-flex cursor-default items-center rounded-full glass px-3 py-1 text-xs font-medium text-zinc-600 border border-zinc-200/50 hover:border-[var(--hover-color)] transition-colors dark:text-zinc-400 dark:border-zinc-800 dark:hover:border-[var(--hover-color)] hover:text-zinc-900 dark:hover:text-zinc-100"
+      className="inline-flex cursor-default items-center rounded-full glass px-3 py-1 font-mono text-xs font-medium text-zinc-600 border border-zinc-200/50 hover:border-[var(--hover-color)] transition-colors dark:text-zinc-400 dark:border-zinc-800 dark:hover:border-[var(--hover-color)] hover:text-zinc-900 dark:hover:text-zinc-100"
     >
       {skill}
     </motion.span>

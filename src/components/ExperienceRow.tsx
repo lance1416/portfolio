@@ -77,7 +77,7 @@ export function ExperienceRow({ job }: { job: ExperienceItem }) {
 
             {/* Period encapsulated in a sleek badge */}
             <div className="shrink-0">
-              <span className="inline-flex rounded-full border border-zinc-200/60 bg-white/50 px-3 py-1 text-xs font-semibold tracking-widest text-zinc-500 uppercase dark:border-zinc-700/50 dark:bg-zinc-800/50 dark:text-zinc-400">
+              <span className="inline-flex rounded-full border border-zinc-200/60 bg-white/50 px-3 py-1 font-mono text-xs font-medium text-zinc-500 dark:border-zinc-700/50 dark:bg-zinc-800/50 dark:text-zinc-400">
                 {job.period}
               </span>
             </div>
