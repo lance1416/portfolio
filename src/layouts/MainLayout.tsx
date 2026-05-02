@@ -1,16 +1,17 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { Outlet, ScrollRestoration, useLocation } from 'react-router-dom';
-import { CommandPalette } from '@/components/CommandPalette.tsx';
-import { Footer } from '@/components/Footer';
-import { Navbar } from '@/components/Navbar';
-import { TerminalView } from '@/components/TerminalView.tsx';
-import { useTerminal } from '@/context/TerminalContext.tsx';
+import { CommandPalette } from '../components/CommandPalette';
+import { FloatingDock } from '../components/FloatingDock';
+import { Footer } from '../components/Footer';
+import { Navbar } from '../components/Navbar';
+import { TerminalView } from '../components/TerminalView'; // <-- 1. Import this
+import { useTerminal } from '../context/TerminalContext'; // <-- 2. Import this
 
 export default function MainLayout() {
   const location = useLocation();
-  const { isTerminal } = useTerminal(); // <-- Get the state
+  const { isTerminal } = useTerminal(); // <-- 3. Grab the state
 
-  // IF TERMINAL MODE IS ACTIVE, RENDER ONLY THE SHELL
+  // 4. RESTORED: Intercept the render if Terminal Mode is active
   if (isTerminal) {
     return <TerminalView />;
   }
@@ -18,12 +19,9 @@ export default function MainLayout() {
   return (
     <div className="relative flex min-h-screen flex-col overflow-x-hidden selection:bg-zinc-200 selection:text-zinc-900 dark:selection:bg-zinc-800 dark:selection:text-white">
       <CommandPalette />
-
-      {/* Extracted Navbar Component */}
       <Navbar />
 
-      {/* The Animated Cinematic Page Wrapper */}
-      <div className="relative z-10 flex-1 pb-24 pt-32">
+      <div className="relative z-10 flex-1 pb-32 pt-32">
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}
@@ -39,6 +37,7 @@ export default function MainLayout() {
       </div>
 
       <Footer />
+      <FloatingDock />
       <ScrollRestoration />
     </div>
   );

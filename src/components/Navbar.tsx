@@ -1,12 +1,10 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { Download, Menu, TerminalSquare, X } from 'lucide-react';
+import { FileText, Menu, Moon, Search, TerminalSquare, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useTerminal } from '@/context/TerminalContext.tsx';
+import { useTerminal } from '../context/TerminalContext'; // If using Terminal Mode
 import { cn } from '../utils/cn';
-import { ThemeToggle } from './ThemeToggle';
 
-// Define the routes outside the component for cleaner mapping
 const NAV_LINKS = [
   { name: 'Experience', path: '/experience' },
   { name: 'Projects', path: '/projects' },
@@ -14,41 +12,59 @@ const NAV_LINKS = [
 ];
 
 export function Navbar() {
-  const location = useLocation();
-  const pathname = location.pathname;
+  const { pathname } = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { toggleTerminal } = useTerminal(); // If using Terminal Mode
 
-  // Automatically close the mobile menu whenever the route changes
+  // Lock body scroll when full-screen menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [isMobileMenuOpen]);
+
   // biome-ignore lint/correctness/useExhaustiveDependencies: Intentional
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [pathname]);
 
-  const { toggleTerminal } = useTerminal();
+  const openCommandPalette = () => {
+    document.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'k', metaKey: true }),
+    );
+    setIsMobileMenuOpen(false); // Close menu if opening search on mobile
+  };
+
+  const toggleTheme = () => {
+    document.documentElement.classList.toggle('dark');
+  };
 
   return (
-    <motion.div
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-      className="fixed inset-x-4 top-4 z-50 mx-auto max-w-3xl"
-    >
+    <>
       {/*
-        Refined Glass Chassis
-        Added explicit border, backdrop-blur, and shadow for a tactile hardware feel.
+        The Main Navigation Pill
+        z-[60] ensures it always sits ABOVE the full-screen mobile menu
       */}
-      <nav className="relative flex items-center justify-between rounded-full border border-zinc-200/50 bg-white/60 px-4 py-2.5 shadow-sm backdrop-blur-md dark:border-zinc-800/50 dark:bg-zinc-950/60 sm:px-6">
-        {/* Logo */}
-        <Link
-          to="/"
-          className="z-10 font-semibold tracking-tight text-zinc-900 transition-transform active:scale-95 dark:text-zinc-50"
-        >
-          Sinan Li
-        </Link>
+      <motion.div
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+        className="fixed inset-x-4 top-4 z-[60] mx-auto max-w-3xl"
+      >
+        <nav className="relative flex items-center justify-between rounded-full border border-zinc-200/50 bg-white/60 px-4 py-2.5 shadow-sm backdrop-blur-md dark:border-zinc-800/50 dark:bg-zinc-950/60 sm:px-6">
+          <div className="flex w-32 items-center">
+            <Link
+              to="/"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="z-10 font-semibold tracking-tight text-zinc-900 transition-transform active:scale-95 dark:text-zinc-50"
+            >
+              Sinan Li
+            </Link>
+          </div>
 
-        <div className="flex items-center gap-2 sm:gap-6">
-          {/* Desktop Links with Sliding Pill */}
-          <div className="hidden items-center gap-1 sm:flex">
+          <div className="hidden flex-1 items-center justify-center gap-1 sm:flex">
             {NAV_LINKS.map((link) => {
               const isActive = pathname.startsWith(link.path);
               return (
@@ -62,7 +78,6 @@ export function Navbar() {
                       : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50',
                   )}
                 >
-                  {/* The Sliding Pill Indicator */}
                   {isActive && (
                     <motion.div
                       layoutId="nav-pill"
@@ -74,52 +89,25 @@ export function Navbar() {
                       }}
                     />
                   )}
-                  {/* Text sits above the pill */}
                   <span className="relative z-10">{link.name}</span>
                 </Link>
               );
             })}
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex items-center gap-3 sm:border-l sm:border-zinc-200/60 sm:pl-6 sm:dark:border-zinc-800/60">
+          <div className="flex w-32 justify-end gap-3">
             <button
               type="button"
-              onClick={() =>
-                document.dispatchEvent(
-                  new KeyboardEvent('keydown', { key: 'k', metaKey: true }),
-                )
-              }
-              className="hidden sm:flex items-center gap-2 rounded-full border border-zinc-200/50 bg-white/50 px-3 py-1.5 text-xs font-medium text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:border-zinc-700/50 dark:bg-zinc-800/50 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+              onClick={openCommandPalette}
+              className="group hidden sm:flex items-center gap-2 rounded-full border border-zinc-200/50 bg-white/50 pl-3 pr-2 py-1.5 text-xs font-medium text-zinc-500 transition-all hover:bg-zinc-100 hover:text-zinc-900 dark:border-zinc-700/50 dark:bg-zinc-800/50 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
             >
-              Search
-              <kbd className="flex items-center gap-1 font-sans text-[10px]">
+              <Search className="h-3.5 w-3.5" />
+              <span>Menu</span>
+              <kbd className="flex items-center gap-1 rounded bg-zinc-200/50 px-1.5 py-0.5 font-sans text-[10px] text-zinc-400 transition-colors group-hover:text-zinc-500 dark:bg-zinc-700/50 dark:group-hover:text-zinc-300">
                 <span className="text-sm">⌘</span>K
               </kbd>
             </button>
 
-            <button
-              type="button"
-              onClick={toggleTerminal}
-              aria-label="Toggle Terminal Mode"
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-zinc-200/50 bg-white/50 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:border-zinc-700/50 dark:bg-zinc-800/50 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-50"
-            >
-              <TerminalSquare className="h-4 w-4" />
-            </button>
-
-            <ThemeToggle />
-
-            <a
-              href="/resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group hidden h-9 items-center justify-center gap-2 rounded-full bg-zinc-900 px-4 text-xs font-semibold text-white shadow-sm transition-all hover:bg-zinc-800 hover:shadow-md active:scale-95 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-zinc-200 sm:flex"
-            >
-              <span>Resume</span>
-              <Download className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5" />
-            </a>
-
-            {/* Mobile Menu Toggle */}
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -139,53 +127,92 @@ export function Navbar() {
               </motion.div>
             </button>
           </div>
-        </div>
-      </nav>
+        </nav>
+      </motion.div>
 
-      {/* Mobile Menu Dropdown */}
+      {/*
+        The Apple-Style Full-Screen Mobile Takeover
+        z-[50] places it perfectly beneath the floating Navbar pill
+      */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -10, scale: 0.95 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 24 }}
-            className="absolute left-0 right-0 top-[115%] flex origin-top flex-col gap-4 rounded-3xl border border-zinc-200/60 bg-white/80 p-6 shadow-apple-lg backdrop-blur-xl dark:border-zinc-800/60 dark:bg-zinc-900/80 sm:hidden"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed inset-0 z-[50] flex flex-col bg-white/95 px-6 pb-8 pt-32 backdrop-blur-3xl dark:bg-zinc-950/95 sm:hidden"
           >
-            <div className="flex flex-col gap-2 text-base">
-              {NAV_LINKS.map((link) => {
-                const isActive = pathname.startsWith(link.path);
-                return (
+            {/* Massive Typography Links */}
+            <div className="flex flex-1 flex-col justify-center gap-6">
+              {NAV_LINKS.map((link, i) => (
+                <motion.div
+                  key={link.name}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{
+                    delay: i * 0.1,
+                    duration: 0.4,
+                    ease: 'easeOut',
+                  }}
+                >
                   <Link
-                    key={link.name}
                     to={link.path}
-                    className={cn(
-                      'flex items-center rounded-2xl px-4 py-3 font-medium transition-all active:scale-[0.98]',
-                      isActive
-                        ? 'bg-zinc-100 text-zinc-900 dark:bg-zinc-800/50 dark:text-zinc-50'
-                        : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/30 dark:hover:text-zinc-50',
-                    )}
+                    className="text-4xl font-bold tracking-tight text-zinc-900 transition-colors active:text-zinc-500 dark:text-zinc-50 dark:active:text-zinc-400"
                   >
                     {link.name}
                   </Link>
-                );
-              })}
+                </motion.div>
+              ))}
             </div>
 
-            <div className="mt-2 border-t border-zinc-200/60 pt-4 dark:border-zinc-700/50">
+            {/* Mobile Actions Grid (Replaces the Dock) */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.4 }}
+              className="grid grid-cols-2 gap-3 border-t border-zinc-200/60 pt-6 dark:border-zinc-800/60"
+            >
+              <button
+                type="button"
+                onClick={openCommandPalette}
+                className="flex flex-col items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm font-semibold text-zinc-900 transition-all active:scale-95 dark:bg-zinc-900 dark:text-zinc-50"
+              >
+                <Search className="h-6 w-6 text-zinc-500 dark:text-zinc-400" />
+                Search
+              </button>
+
               <a
                 href="/resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex w-full items-center justify-center gap-2 rounded-full bg-zinc-900 py-3 text-sm font-semibold text-white transition-all active:scale-95 dark:bg-zinc-100 dark:text-zinc-950"
+                className="flex flex-col items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm font-semibold text-zinc-900 transition-all active:scale-95 dark:bg-zinc-900 dark:text-zinc-50"
               >
-                <Download className="h-4 w-4" />
-                Download Resume
+                <FileText className="h-6 w-6 text-zinc-500 dark:text-zinc-400" />
+                Resume
               </a>
-            </div>
+
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className="flex flex-col items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm font-semibold text-zinc-900 transition-all active:scale-95 dark:bg-zinc-900 dark:text-zinc-50"
+              >
+                <Moon className="h-6 w-6 text-zinc-500 dark:text-zinc-400" />
+                Theme
+              </button>
+
+              <button
+                type="button"
+                onClick={toggleTerminal}
+                className="flex flex-col items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm font-semibold text-zinc-900 transition-all active:scale-95 dark:bg-zinc-900 dark:text-zinc-50"
+              >
+                <TerminalSquare className="h-6 w-6 text-zinc-500 dark:text-zinc-400" />
+                Terminal
+              </button>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </>
   );
 }
