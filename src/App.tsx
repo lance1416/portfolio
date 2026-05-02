@@ -1,11 +1,21 @@
+import { lazy, Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import MainLayout from '@/layouts/MainLayout.tsx';
-import ErrorPage from '@/pages/ErrorPage.tsx';
-import Experience from '@/pages/Experience.tsx';
-import Home from '@/pages/Home.tsx';
-import NotFound from '@/pages/NotFound.tsx';
-import Projects from '@/pages/Projects.tsx';
-import Research from '@/pages/Research.tsx';
+import MainLayout from '@/layouts/MainLayout';
+import ErrorPage from '@/pages/ErrorPage';
+
+// Lazy load the pages
+const Home = lazy(() => import('./pages/Home'));
+const Experience = lazy(() => import('./pages/Experience'));
+const Projects = lazy(() => import('./pages/Projects'));
+const Research = lazy(() => import('./pages/Research'));
+const NotFound = lazy(() => import('./pages/NotFound'));
+
+// A minimal fallback spinner for the split-second it takes to load a new route
+const PageLoader = () => (
+  <div className="flex min-h-[50vh] items-center justify-center">
+    <div className="h-6 w-6 animate-spin rounded-full border-2 border-zinc-300 border-t-zinc-900 dark:border-zinc-700 dark:border-t-zinc-100" />
+  </div>
+);
 
 const router = createBrowserRouter([
   {
@@ -15,24 +25,43 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Home />,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <Home />
+          </Suspense>
+        ),
       },
       {
         path: 'experience',
-        element: <Experience />,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <Experience />
+          </Suspense>
+        ),
       },
       {
         path: 'projects',
-        element: <Projects />,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <Projects />
+          </Suspense>
+        ),
       },
       {
         path: 'research',
-        element: <Research />,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <Research />
+          </Suspense>
+        ),
       },
-      // 404 Catch-all route
       {
         path: '*',
-        element: <NotFound />,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <NotFound />
+          </Suspense>
+        ),
       },
     ],
   },
