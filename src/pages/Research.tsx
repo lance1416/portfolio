@@ -6,7 +6,12 @@ import {
   itemVariants,
 } from '@/components/ResearchComponents';
 import { SkillPill } from '@/components/SkillPill';
-import { awardsData, dissertationData, educationData } from '@/data/research';
+import {
+  type AwardItem,
+  awardsData,
+  dissertationData,
+  educationData,
+} from '@/data/research';
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -38,7 +43,7 @@ export default function Research() {
             className="group relative overflow-hidden rounded-[2.5rem] border border-zinc-200 bg-white p-8 sm:p-12 transition-all duration-500 hover:shadow-apple-lg dark:border-zinc-800 dark:bg-zinc-900/40 dark:hover:shadow-none"
           >
             {/* Soft background glow on hover */}
-            <div className="absolute inset-0 bg-gradient-to-br from-zinc-100/50 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 dark:from-zinc-800/20" />
+            <div className="absolute inset-0 bg-linear-to-br from-zinc-100/50 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 dark:from-zinc-800/20" />
 
             <div className="relative z-10">
               <div className="flex items-center gap-3 text-sm font-semibold tracking-widest text-zinc-500 uppercase dark:text-zinc-400">
@@ -64,7 +69,7 @@ export default function Research() {
           </motion.div>
         </section>
 
-        {/* SECTION 2: Education Bento Grid */}
+        {/* SECTION 2: Academic Background Timeline */}
         <section>
           <motion.h2
             variants={itemVariants}
@@ -72,7 +77,12 @@ export default function Research() {
           >
             Academic Background
           </motion.h2>
-          <div className="group/grid grid grid-cols-1 gap-6 sm:grid-cols-2">
+
+          {/* The Timeline Container */}
+          <div className="group/list relative space-y-8 sm:space-y-12">
+            {/* The Continuous Vertical Thread */}
+            <div className="absolute bottom-0 left-4.75 top-6 w-px bg-zinc-200 dark:bg-zinc-800 md:left-5.75" />
+
             {educationData.map((item) => (
               <EducationCard key={item.id} item={item} />
             ))}
@@ -88,7 +98,7 @@ export default function Research() {
             Awards & Honours
           </motion.h2>
           <div className="rounded-3xl border border-zinc-200 bg-white/50 px-6 py-2 dark:border-zinc-800 dark:bg-zinc-900/30">
-            {awardsData.map((award) => (
+            {awardsData.map((award: AwardItem) => (
               <AwardRow key={award.id} award={award} />
             ))}
           </div>

@@ -6,8 +6,9 @@ export interface ExperienceItem {
   link?: string;
   description: string[];
   skills: string[];
+  color?: string;
+  isActive?: boolean;
 }
-
 export const experienceData: ExperienceItem[] = [
   {
     id: 'iqbank',
@@ -29,6 +30,8 @@ export const experienceData: ExperienceItem[] = [
       'Prisma',
       'System Architecture',
     ],
+    isActive: true,
+    color: '#3b5fb2',
   },
   {
     id: 'uoft-ta',
@@ -47,5 +50,6 @@ export const experienceData: ExperienceItem[] = [
       'Technical Writing',
       'Mentorship',
     ],
+    color: '#1E3765',
   },
 ];

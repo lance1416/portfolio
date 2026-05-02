@@ -15,6 +15,7 @@ export interface ProjectItem {
   description: string[];
   skills: string[];
   imageUrl?: string;
+  color?: string;
 }
 
 export const projectsData: ProjectItem[] = [
@@ -23,6 +24,7 @@ export const projectsData: ProjectItem[] = [
     title: 'KidneyOS',
     subtitle: 'Rust-Based Toy Operating System',
     year: '2024',
+    color: '#d34516',
     imageUrl: 'projects/kidney-os.png',
     description: [
       'Took sole ownership of the complete storage subsystem beneath the VFS layer in a from-scratch Rust OS kernel.',
@@ -48,6 +50,7 @@ export const projectsData: ProjectItem[] = [
     title: 'Evogami',
     subtitle: 'Multidisciplinary Game Design Project',
     year: '2024',
+    color: '#fa5c5c',
     imageUrl: 'projects/evogami.png',
     description: [
       'Co-led a 13-person multidisciplinary team—CS students, music composers, and game designers—through the full development lifecycle of an original game.',

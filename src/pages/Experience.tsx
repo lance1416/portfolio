@@ -27,8 +27,11 @@ export default function Experience() {
         </p>
       </header>
 
-      {/* The group/list triggers the spotlight dimming effect on the children */}
-      <div className="group/list space-y-12 sm:space-y-20">
+      {/* The Timeline Container */}
+      <div className="group/list relative space-y-8 sm:space-y-12">
+        {/* The Continuous Vertical Thread */}
+        <div className="absolute bottom-0 left-[19px] top-6 w-px bg-zinc-200 dark:bg-zinc-800 md:left-[23px]" />
+
         {experienceData.map((job) => (
           <ExperienceRow key={job.id} job={job} />
         ))}

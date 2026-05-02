@@ -55,10 +55,10 @@ export default function Home() {
           variants={itemVariants}
           className="mx-auto mt-8 prose-academic"
         >
-          I am a systems engineer and researcher currently investigating quantum
-          decodability using ZX-calculus. I specialize in bridging the gap
-          between theoretical mathematics, low-level systems programming, and
-          scalable full-stack product development.
+          I am a Master’s candidate at the University of Oxford exploring
+          quantum decodability via ZX-calculus. My work focuses on the
+          intersection of formal mathematics and systems engineering—applying
+          theoretical foundations to build robust, scalable software.
         </motion.p>
 
         <motion.div
@@ -113,42 +113,72 @@ export default function Home() {
         variants={itemVariants}
         className="mt-32 border-t border-zinc-200/50 pt-16 dark:border-zinc-800/50"
       >
-        <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-          Current Focus
-        </h2>
-
-        <div className="mt-8 grid gap-6 sm:grid-cols-2">
-          {/* Highlight 1 */}
-          <motion.div
-            whileHover={{ y: -5, scale: 1.02 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-            className="group rounded-3xl glass p-8 transition-shadow hover:shadow-apple-lg hover:bg-white/80 dark:hover:bg-zinc-800/60"
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+            Current Focus
+          </h2>
+          <Link
+            to="/experience"
+            className="text-sm font-medium text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
           >
-            <Cpu className="h-8 w-8 text-zinc-400 dark:text-zinc-500 mb-6 group-hover:text-zinc-900 dark:group-hover:text-zinc-100 transition-colors" />
-            <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-              Quantum Research
-            </h3>
-            <p className="mt-3 font-serif text-zinc-600 dark:text-zinc-400 leading-relaxed">
-              Investigating the effect of fault-equivalence rewrites on quantum
-              decodability using ZX-calculus under Professor Aleks Kissinger.
-            </p>
+            View All →
+          </Link>
+        </div>
+
+        <div className="grid gap-6 sm:grid-cols-2">
+          {/* Highlight Card 1 */}
+          <motion.div
+            whileHover={{ y: -8, scale: 1.01 }}
+            className="group relative overflow-hidden rounded-[2.5rem] border border-zinc-200/60 bg-white p-1 dark:border-zinc-800 dark:bg-zinc-900/40"
+          >
+            <div className="relative h-full w-full rounded-[2.2rem] bg-zinc-50/50 p-8 dark:bg-zinc-950/20">
+              {/* Animated Glow Effect */}
+              <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-indigo-500/5 blur-3xl transition-all duration-500 group-hover:bg-indigo-500/10" />
+
+              <div className="relative z-10">
+                <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-sm border border-zinc-100 dark:bg-zinc-900 dark:border-zinc-800">
+                  <Cpu className="h-6 w-6 text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-100 transition-colors" />
+                </div>
+                <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
+                  Quantum Research
+                </h3>
+                <p className="mt-4 font-serif text-lg leading-relaxed text-zinc-600 dark:text-zinc-400">
+                  Investigating fault-equivalence rewrites and quantum
+                  decodability using{' '}
+                  <span className="text-zinc-900 dark:text-zinc-100 font-sans font-semibold">
+                    ZX-Calculus
+                  </span>{' '}
+                  at Oxford.
+                </p>
+              </div>
+            </div>
           </motion.div>
 
-          {/* Highlight 2 */}
+          {/* Highlight Card 2 */}
           <motion.div
-            whileHover={{ y: -5, scale: 1.02 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-            className="group rounded-3xl glass p-8 transition-shadow hover:shadow-apple-lg hover:bg-white/80 dark:hover:bg-zinc-800/60"
+            whileHover={{ y: -8, scale: 1.01 }}
+            className="group relative overflow-hidden rounded-[2.5rem] border border-zinc-200/60 bg-white p-1 dark:border-zinc-800 dark:bg-zinc-900/40"
           >
-            <BookOpen className="h-8 w-8 text-zinc-400 dark:text-zinc-500 mb-6 group-hover:text-zinc-900 dark:group-hover:text-zinc-100 transition-colors" />
-            <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-              IQBank Engineering
-            </h3>
-            <p className="mt-3 font-serif text-zinc-600 dark:text-zinc-400 leading-relaxed">
-              Co-founding and leading development for a TypeScript & PostgreSQL
-              study platform, serving an active beta user base of over 100
-              students.
-            </p>
+            <div className="relative h-full w-full rounded-[2.2rem] bg-zinc-50/50 p-8 dark:bg-zinc-950/20">
+              {/* Animated Glow Effect */}
+              <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-emerald-500/5 blur-3xl transition-all duration-500 group-hover:bg-emerald-500/10" />
+
+              <div className="relative z-10">
+                <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-sm border border-zinc-100 dark:bg-zinc-900 dark:border-zinc-800">
+                  <BookOpen className="h-6 w-6 text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-100 transition-colors" />
+                </div>
+                <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
+                  IQBank Engineering
+                </h3>
+                <p className="mt-4 font-serif text-lg leading-relaxed text-zinc-600 dark:text-zinc-400">
+                  Architecting a full-stack study platform for{' '}
+                  <span className="text-zinc-900 dark:text-zinc-100 font-sans font-semibold">
+                    100+ beta users
+                  </span>{' '}
+                  using React, Node, and PostgreSQL.
+                </p>
+              </div>
+            </div>
           </motion.div>
         </div>
       </motion.section>

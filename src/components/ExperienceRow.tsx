@@ -1,13 +1,13 @@
 import { motion, type Variants } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
-import { SkillPill } from '@/components/SkillPill';
 import type { ExperienceItem } from '@/data/experience';
+import { SkillPill } from './SkillPill';
 
 const rowVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, x: -20 },
   show: {
     opacity: 1,
-    y: 0,
+    x: 0,
     transition: { type: 'spring', stiffness: 300, damping: 24 },
   },
 };
@@ -16,66 +16,99 @@ export function ExperienceRow({ job }: { job: ExperienceItem }) {
   return (
     <motion.article
       variants={rowVariants}
-      className="group relative grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-8 transition-all duration-500 md:hover:!opacity-100 md:group-hover/list:opacity-30"
+      className="group/item relative flex gap-6 md:gap-8 transition-all duration-500 md:hover:opacity-100! md:group-hover/list:opacity-40"
     >
-      {/* Liquid Glass Background */}
-      <div className="absolute -inset-x-6 -inset-y-6 z-0 hidden rounded-[2rem] glass opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:scale-100 scale-95 md:block" />
+      {/* 1. The Timeline Node */}
+      <div className="relative z-20 mt-4 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-zinc-50 dark:bg-zinc-950 md:mt-6 md:h-12 md:w-12">
+        {/* The Dot */}
+        <div
+          className="h-2.5 w-2.5 rounded-full ring-4 ring-zinc-50 transition-transform duration-500 group-hover/item:scale-150 dark:ring-zinc-950"
+          style={{ backgroundColor: job.isActive ? job.color : '#a1a1aa' }}
+        />
 
-      {/* Left Column: Dates & Company */}
-      <div className="z-10 md:col-span-1 pt-1">
-        <p className="text-sm font-semibold tracking-widest text-zinc-400 dark:text-zinc-500 uppercase">
-          {job.period}
-        </p>
-
-        {/* Conditional rendering for the company link */}
-        {job.link ? (
-          <a
-            href={job.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group/link mt-2 md:mt-4 inline-flex items-center gap-1 font-medium text-zinc-900 dark:text-zinc-100 transition-colors hover:text-zinc-600 dark:hover:text-zinc-300"
-          >
-            {job.company}
-            <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5" />
-          </a>
-        ) : (
-          <p className="mt-2 font-medium text-zinc-900 dark:text-zinc-100 md:mt-4 transition-colors group-hover:text-black dark:group-hover:text-white">
-            {job.company}
-          </p>
+        {/* The New Soft Pulse (Replaces the old animate-ping div) */}
+        {job.isActive && (
+          <motion.div
+            className="absolute inset-0 rounded-full"
+            style={{ backgroundColor: job.color }}
+            animate={{ scale: [1, 2.5], opacity: [0.3, 0] }}
+            transition={{
+              duration: 2.5,
+              repeat: Infinity,
+              ease: 'easeOut',
+            }}
+          />
         )}
       </div>
 
-      {/* Right Column: Role, Description, Skills */}
-      <div className="z-10 md:col-span-3">
-        {/* Role Title (High contrast Zinc instead of purple) */}
-        <h3 className="text-xl font-bold tracking-tight text-zinc-800 dark:text-zinc-200 transition-colors duration-300 group-hover:text-zinc-950 dark:group-hover:text-white">
-          {job.role}
-        </h3>
+      {/* 2. The Content Card */}
+      <div className="relative flex-1 overflow-hidden rounded-4xl border border-transparent p-6 transition-all duration-500 group-hover/item:border-zinc-200/60 group-hover/item:bg-white/40 group-hover/item:shadow-apple dark:group-hover/item:border-zinc-700/50 dark:group-hover/item:bg-zinc-900/40 md:p-8">
+        {/* The Constrained Aura Glow (Only visible on hover) */}
+        <div
+          className="absolute -right-20 -top-20 z-0 h-64 w-64 rounded-full blur-[100px] opacity-0 transition-opacity duration-700 group-hover/item:opacity-20 pointer-events-none"
+          style={{ backgroundColor: job.color || '#71717a' }}
+        />
 
-        {/* Bullet Points */}
-        <ul className="mt-4 space-y-4 text-zinc-600 dark:text-zinc-400">
-          {job.description.map((point, index) => (
-            // biome-ignore lint/suspicious/noArrayIndexKey: pre-defined, does not change dynamically
-            <li key={index} className="flex items-start gap-4">
-              <svg
-                className="mt-2.5 h-1.5 w-1.5 shrink-0 fill-zinc-300 dark:fill-zinc-700 transition-colors duration-300 group-hover:fill-zinc-500 dark:group-hover:fill-zinc-400"
-                viewBox="0 0 6 6"
-                aria-hidden="true"
-              >
-                <circle cx="3" cy="3" r="3"></circle>
-              </svg>
-              <span className="leading-relaxed transition-colors duration-300 group-hover:text-zinc-800 dark:group-hover:text-zinc-200">
-                {point}
+        <div className="relative z-10 flex flex-col gap-4">
+          {/* Header: Role, Company & Period */}
+          <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
+            <div>
+              <h3 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+                {job.role}
+              </h3>
+
+              {/* Company with Link */}
+              {job.link ? (
+                <a
+                  href={job.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group/link mt-2 inline-flex items-center gap-1 font-medium text-zinc-600 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+                >
+                  {job.company}
+                  <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5" />
+                </a>
+              ) : (
+                <p className="mt-2 font-medium text-zinc-600 dark:text-zinc-400">
+                  {job.company}
+                </p>
+              )}
+            </div>
+
+            {/* Period encapsulated in a sleek badge */}
+            <div className="shrink-0">
+              <span className="inline-flex rounded-full border border-zinc-200/60 bg-white/50 px-3 py-1 text-xs font-semibold tracking-widest text-zinc-500 uppercase dark:border-zinc-700/50 dark:bg-zinc-800/50 dark:text-zinc-400">
+                {job.period}
               </span>
-            </li>
-          ))}
-        </ul>
+            </div>
+          </div>
 
-        {/* Skills */}
-        <div className="mt-8 flex flex-wrap gap-2">
-          {job.skills.map((skill) => (
-            <SkillPill key={skill} skill={skill} />
-          ))}
+          {/* Description */}
+          <ul className="mt-4 space-y-4 text-zinc-600 dark:text-zinc-400">
+            {job.description.map((point, index) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: pre-defined, does not change dynamically
+              <li key={index} className="flex items-start gap-4">
+                <svg
+                  className="mt-2.5 h-1.5 w-1.5 shrink-0 transition-colors duration-300"
+                  viewBox="0 0 6 6"
+                  style={{ fill: job.isActive ? job.color : '#d4d4d8' }}
+                >
+                  <title>{job.isActive ? 'Active Role' : 'Past Role'}</title>
+                  <circle cx="3" cy="3" r="3"></circle>
+                </svg>
+                <span className="leading-relaxed group-hover/item:text-zinc-800 dark:group-hover/item:text-zinc-200 transition-colors">
+                  {point}
+                </span>
+              </li>
+            ))}
+          </ul>
+
+          {/* Skills */}
+          <div className="mt-6 flex flex-wrap gap-2">
+            {job.skills.map((skill) => (
+              <SkillPill key={skill} skill={skill} activeColor={job.color} />
+            ))}
+          </div>
         </div>
       </div>
     </motion.article>
