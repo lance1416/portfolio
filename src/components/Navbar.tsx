@@ -80,6 +80,20 @@ export function Navbar() {
 
           {/* Action Buttons */}
           <div className="flex items-center gap-3 sm:border-l sm:border-zinc-200/60 sm:pl-6 sm:dark:border-zinc-800/60">
+            <button
+              type="button"
+              onClick={() =>
+                document.dispatchEvent(
+                  new KeyboardEvent('keydown', { key: 'k', metaKey: true }),
+                )
+              }
+              className="hidden sm:flex items-center gap-2 rounded-full border border-zinc-200/50 bg-white/50 px-3 py-1.5 text-xs font-medium text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:border-zinc-700/50 dark:bg-zinc-800/50 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+            >
+              Search
+              <kbd className="flex items-center gap-1 font-sans text-[10px]">
+                <span className="text-sm">⌘</span>K
+              </kbd>
+            </button>
             <ThemeToggle />
 
             <a

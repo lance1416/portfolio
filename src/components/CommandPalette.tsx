@@ -1,0 +1,263 @@
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+  Briefcase,
+  Check,
+  Code,
+  Copy,
+  FileText,
+  GraduationCap,
+  Home,
+  Moon,
+  Search,
+} from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { cn } from '../utils/cn'; // Assuming you have this utility
+
+export function CommandPalette() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const [copied, setCopied] = useState(false);
+
+  // New: Track the currently highlighted index
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const inputRef = useRef<HTMLInputElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+
+  // 1. Global Cmd+K Listener
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setIsOpen((open) => !open);
+      }
+      if (e.key === 'Escape') {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('keydown', down);
+    return () => document.removeEventListener('keydown', down);
+  }, []);
+
+  // 2. Manage Reset & Auto-Focus
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => inputRef.current?.focus(), 50);
+    } else {
+      document.body.style.overflow = 'auto';
+      setQuery('');
+      setSelectedIndex(0);
+    }
+  }, [isOpen]);
+
+  const runCommand = (command: () => void) => {
+    command();
+    if (command.name !== 'copyEmail') {
+      setIsOpen(false);
+    }
+  };
+
+  const copyEmail = () => {
+    navigator.clipboard.writeText('lanceli1416@gmail.com');
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+      setIsOpen(false);
+    }, 1500);
+  };
+
+  const toggleTheme = () => {
+    document.documentElement.classList.toggle('dark');
+  };
+
+  const actions = [
+    {
+      id: 'home',
+      name: 'Go to Home',
+      icon: Home,
+      onSelect: () => navigate('/'),
+    },
+    {
+      id: 'exp',
+      name: 'Go to Experience',
+      icon: Briefcase,
+      onSelect: () => navigate('/experience'),
+    },
+    {
+      id: 'proj',
+      name: 'Go to Projects',
+      icon: Code,
+      onSelect: () => navigate('/projects'),
+    },
+    {
+      id: 'res',
+      name: 'Go to Research',
+      icon: GraduationCap,
+      onSelect: () => navigate('/research'),
+    },
+    {
+      id: 'theme',
+      name: 'Toggle Dark Mode',
+      icon: Moon,
+      onSelect: toggleTheme,
+    },
+    {
+      id: 'resume',
+      name: 'Download Resume',
+      icon: FileText,
+      onSelect: () => window.open('/resume.pdf', '_blank'),
+    },
+    {
+      id: 'email',
+      name: copied ? 'Email Copied!' : 'Copy Email Address',
+      icon: copied ? Check : Copy,
+      onSelect: copyEmail,
+    },
+  ];
+
+  const filteredActions =
+    query === ''
+      ? actions
+      : actions.filter((action) =>
+          action.name.toLowerCase().includes(query.toLowerCase()),
+        );
+
+  // 3. Reset selection when search query changes
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Intentional
+  useEffect(() => {
+    setSelectedIndex(0);
+  }, [query]);
+
+  // 4. Auto-scroll logic: keeps the highlighted item visible in the scrollable list
+  useEffect(() => {
+    if (!isOpen) return;
+    const activeElement = document.getElementById(
+      `command-item-${selectedIndex}`,
+    );
+    if (activeElement && listRef.current) {
+      // 'nearest' ensures smooth scrolling without jarring jumps
+      activeElement.scrollIntoView({ block: 'nearest' });
+    }
+  }, [selectedIndex, isOpen]);
+
+  // 5. The Keyboard Navigation Engine
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (filteredActions.length === 0) return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setSelectedIndex((prev) => (prev + 1) % filteredActions.length);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setSelectedIndex(
+        (prev) => (prev - 1 + filteredActions.length) % filteredActions.length,
+      );
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      runCommand(filteredActions[selectedIndex].onSelect);
+    }
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsOpen(false)}
+            className="fixed inset-0 z-[100] bg-zinc-900/20 backdrop-blur-sm dark:bg-black/40"
+          />
+
+          <div className="fixed inset-0 z-[101] flex items-start justify-center pt-[20vh] px-4 pointer-events-none">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: -20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: -20 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+              className="w-full max-w-xl overflow-hidden rounded-2xl border border-zinc-200/60 bg-white/80 shadow-2xl backdrop-blur-xl dark:border-zinc-800/60 dark:bg-zinc-900/80 pointer-events-auto"
+            >
+              <div className="flex items-center border-b border-zinc-200/60 px-4 dark:border-zinc-800/60">
+                <Search className="h-5 w-5 text-zinc-400 dark:text-zinc-500" />
+                <input
+                  ref={inputRef}
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onKeyDown={handleKeyDown} // Hooked up the listener here
+                  placeholder="Type a command or search..."
+                  className="h-14 w-full bg-transparent px-4 font-mono text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none dark:text-zinc-50 dark:placeholder:text-zinc-500"
+                />
+                <kbd className="hidden sm:inline-flex items-center gap-1 rounded border border-zinc-200 bg-zinc-100 px-2 py-0.5 font-mono text-[10px] text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400">
+                  ESC
+                </kbd>
+              </div>
+
+              {/* Added a ref to the list container for scrolling */}
+              <div ref={listRef} className="max-h-[60vh] overflow-y-auto p-2">
+                {filteredActions.length === 0 ? (
+                  <p className="p-4 text-center text-sm text-zinc-500 dark:text-zinc-400">
+                    No results found.
+                  </p>
+                ) : (
+                  filteredActions.map((action, index) => {
+                    const Icon = action.icon;
+                    // Check if this item is currently highlighted via keyboard
+                    const isSelected = index === selectedIndex;
+
+                    return (
+                      <button
+                        type="button"
+                        key={action.id}
+                        id={`command-item-${index}`}
+                        onClick={() => runCommand(action.onSelect)}
+                        // Sync mouse hover with keyboard selection
+                        onMouseEnter={() => setSelectedIndex(index)}
+                        className={cn(
+                          'group flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors',
+                          isSelected
+                            ? 'bg-zinc-100 text-zinc-900 dark:bg-zinc-800/50 dark:text-zinc-50'
+                            : 'text-zinc-600 dark:text-zinc-400',
+                        )}
+                      >
+                        <Icon
+                          className={cn(
+                            'h-4 w-4 transition-colors',
+                            isSelected
+                              ? 'text-zinc-900 dark:text-zinc-50'
+                              : 'text-zinc-400',
+                          )}
+                        />
+                        {action.name}
+                      </button>
+                    );
+                  })
+                )}
+              </div>
+
+              <div className="border-t border-zinc-200/60 bg-zinc-50/50 px-4 py-3 dark:border-zinc-800/60 dark:bg-zinc-950/50">
+                <p className="font-mono text-xs text-zinc-500 dark:text-zinc-400 flex items-center gap-2">
+                  Use{' '}
+                  <kbd className="rounded border border-zinc-200 bg-zinc-100 px-1.5 py-0.5 font-mono text-[10px] dark:border-zinc-700 dark:bg-zinc-800">
+                    ↑
+                  </kbd>{' '}
+                  <kbd className="rounded border border-zinc-200 bg-zinc-100 px-1.5 py-0.5 font-mono text-[10px] dark:border-zinc-700 dark:bg-zinc-800">
+                    ↓
+                  </kbd>{' '}
+                  to navigate,{' '}
+                  <kbd className="rounded border border-zinc-200 bg-zinc-100 px-1.5 py-0.5 font-mono text-[10px] dark:border-zinc-700 dark:bg-zinc-800">
+                    ↵
+                  </kbd>{' '}
+                  to select
+                </p>
+              </div>
+            </motion.div>
+          </div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+}
