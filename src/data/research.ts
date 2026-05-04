@@ -51,13 +51,13 @@ export const awardsData: AwardItem[] = [
     id: 'deans-list',
     title: 'Dean’s List Scholar',
     issuer: 'University of Toronto',
-    year: '2021 – 2025',
+    year: '2022, 2023, 2024, 2025',
   },
   {
     id: 'later-life',
     title: 'Later Life Learning Scholarship',
     issuer: 'University of Toronto',
-    year: '2021, 2024',
+    year: '2022, 2024',
   },
   {
     id: 'innis',
