@@ -1,5 +1,11 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { FileText, Moon, Search, TerminalSquare } from 'lucide-react';
+import {
+  FileText,
+  type LucideIcon,
+  Moon,
+  Search,
+  TerminalSquare,
+} from 'lucide-react';
 import { useState } from 'react';
 import { useTerminal } from '../context/TerminalContext'; // If you built Terminal Mode
 
@@ -10,7 +16,7 @@ function DockItem({
   onClick,
   shortcut,
 }: {
-  icon: any;
+  icon: LucideIcon;
   label: string;
   onClick: () => void;
   shortcut?: string;

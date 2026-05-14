@@ -1,0 +1,26 @@
+import type { Variants } from 'framer-motion';
+
+/** Standard fade-up for individual items inside a stagger container. */
+export const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { type: 'spring', stiffness: 320, damping: 28 },
+  },
+};
+
+/** Stagger container — orchestrates children with a moderate delay. */
+export const stagger: Variants = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { staggerChildren: 0.12 } },
+};
+
+/** Faster stagger for home page where content appears on first load. */
+export const staggerFast: Variants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.08, delayChildren: 0.05 },
+  },
+};

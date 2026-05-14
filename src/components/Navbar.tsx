@@ -58,7 +58,7 @@ export function Navbar() {
             <Link
               to="/"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="z-10 font-semibold tracking-tight text-zinc-900 transition-transform active:scale-95 dark:text-zinc-50"
+              className="z-10 font-display font-normal text-zinc-900 transition-transform active:scale-95 dark:text-zinc-50"
             >
               Sinan Li
             </Link>

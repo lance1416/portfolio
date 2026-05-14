@@ -1,10 +1,7 @@
-import { motion, type Variants } from 'framer-motion';
-import { Microscope } from 'lucide-react';
-import {
-  AwardRow,
-  EducationCard,
-  itemVariants,
-} from '@/components/ResearchComponents';
+import { motion } from 'framer-motion';
+import type { RefObject } from 'react';
+import { PageHeader } from '@/components/PageHeader';
+import { AwardRow, EducationCard } from '@/components/ResearchComponents';
 import { SkillPill } from '@/components/SkillPill';
 import {
   type AwardItem,
@@ -12,92 +9,77 @@ import {
   dissertationData,
   educationData,
 } from '@/data/research';
-
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.15 } },
-};
+import { useBalancedText } from '@/hooks/useBalancedText';
+import { fadeUp, stagger } from '@/utils/variants';
 
 export default function Research() {
+  const { ref: titleRef, style: titleStyle } =
+    useBalancedText<HTMLHeadingElement>(dissertationData.title);
+
   return (
     <motion.main
-      variants={containerVariants}
+      variants={stagger}
       initial="hidden"
       animate="show"
       className="mx-auto max-w-4xl px-6"
     >
-      <header className="mb-20 text-center sm:text-left">
-        <h1 className="text-4xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-5xl">
-          Research & Education
-        </h1>
-        <p className="mt-4 text-lg text-zinc-600 dark:text-zinc-400">
-          Academic background and current investigations in quantum computation.
-        </p>
-      </header>
+      <PageHeader
+        chapter="§ 03"
+        title="Research"
+        subtitle="Academic background and current investigations in quantum computation."
+      />
 
       <div className="space-y-24">
-        {/* SECTION 1: Dissertation Spotlight */}
+        {/* Dissertation — journal abstract style */}
+        <motion.section variants={fadeUp}>
+          <p className="label-overline mb-8">Current Dissertation</p>
+
+          <div className="border-l-2 border-accent pl-6">
+            <h2
+              ref={titleRef as RefObject<HTMLHeadingElement>}
+              style={titleStyle}
+              className="font-display text-3xl font-normal leading-snug text-zinc-900 dark:text-zinc-50 sm:text-4xl"
+            >
+              {dissertationData.title}
+            </h2>
+          </div>
+
+          <div className="mt-8 border-l border-zinc-200 pl-6 dark:border-zinc-800">
+            <p className="label-overline mb-3">Abstract</p>
+            <p className="max-w-2xl text-base leading-relaxed text-zinc-600 dark:text-zinc-400">
+              {dissertationData.abstract}
+            </p>
+          </div>
+
+          <div className="mt-8 flex flex-wrap gap-2">
+            {dissertationData.tags.map((tag) => (
+              <SkillPill
+                key={tag}
+                skill={tag}
+                activeColor="var(--color-accent)"
+              />
+            ))}
+          </div>
+        </motion.section>
+
+        {/* Academic Background */}
         <section>
-          <motion.div
-            variants={itemVariants}
-            className="group relative overflow-hidden rounded-[2.5rem] border border-zinc-200 bg-white p-8 sm:p-12 transition-all duration-500 hover:shadow-apple-lg dark:border-zinc-800 dark:bg-zinc-900/40 dark:hover:shadow-none"
-          >
-            {/* Soft background glow on hover */}
-            <div className="absolute inset-0 bg-linear-to-br from-zinc-100/50 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 dark:from-zinc-800/20" />
-
-            <div className="relative z-10">
-              <div className="flex items-center gap-3 font-mono text-xs font-medium text-zinc-500 uppercase tracking-widest dark:text-zinc-400">
-                <Microscope className="h-5 w-5" />
-                <span>Current Dissertation</span>
-              </div>
-
-              <h2 className="mt-6 text-2xl font-bold leading-tight text-zinc-900 dark:text-zinc-50 sm:text-4xl transition-colors duration-300">
-                {dissertationData.title}
-              </h2>
-
-              {/* Note: the abstract uses your 'prose-academic' styling for high legibility */}
-              <p className="mt-8 prose-academic max-w-3xl">
-                {dissertationData.abstract}
-              </p>
-
-              <div className="mt-10 flex flex-wrap gap-2">
-                {dissertationData.tags.map((tag) => (
-                  <SkillPill key={tag} skill={tag} />
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        </section>
-
-        {/* SECTION 2: Academic Background Timeline */}
-        <section>
-          <motion.h2
-            variants={itemVariants}
-            className="mb-8 text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50"
-          >
+          <motion.p variants={fadeUp} className="label-overline mb-0">
             Academic Background
-          </motion.h2>
-
-          {/* The Timeline Container */}
-          <div className="group/list relative space-y-8 sm:space-y-12">
-            {/* The Continuous Vertical Thread */}
-            <div className="absolute bottom-0 left-4.75 top-6 w-px bg-zinc-200 dark:bg-zinc-800 md:left-5.75" />
-
+          </motion.p>
+          <div>
             {educationData.map((item) => (
               <EducationCard key={item.id} item={item} />
             ))}
           </div>
         </section>
 
-        {/* SECTION 3: Awards & Honours */}
+        {/* Awards & Honours */}
         <section>
-          <motion.h2
-            variants={itemVariants}
-            className="mb-8 text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50"
-          >
+          <motion.p variants={fadeUp} className="label-overline mb-6">
             Awards & Honours
-          </motion.h2>
-          <div className="rounded-3xl border border-zinc-200 bg-white/50 px-6 py-2 dark:border-zinc-800 dark:bg-zinc-900/30">
+          </motion.p>
+          <div className="border-t border-zinc-200 dark:border-zinc-800">
             {awardsData.map((award: AwardItem) => (
               <AwardRow key={award.id} award={award} />
             ))}

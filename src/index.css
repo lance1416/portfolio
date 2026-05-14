@@ -3,19 +3,31 @@
 @variant dark (&:where(.dark, .dark *));
 
 @theme {
+  --font-display:
+    "Playfair Display", Georgia, "Times New Roman", serif;
   --font-sans:
     "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
     Arial, sans-serif;
   --font-mono:
     "JetBrains Mono", "SF Mono", "Fira Code", ui-monospace, monospace;
 
+  /* Quantum indigo — derived from Oxford blue, calibrated for screen */
+  --color-accent: oklch(42% 0.22 268);
+  --color-accent-muted: oklch(72% 0.14 268);
+  --color-accent-subtle: oklch(97% 0.03 268);
+
   --shadow-apple:
     0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
   --shadow-apple-lg:
-    0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+    0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
 }
 
 @layer base {
+  .dark {
+    --color-accent: oklch(72% 0.14 268);
+    --color-accent-subtle: oklch(18% 0.06 268);
+  }
+
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -24,12 +36,19 @@
   }
 
   body {
-    @apply bg-zinc-50 text-zinc-900 transition-colors duration-300;
-    @apply dark:bg-zinc-950 dark:text-zinc-50;
+    /* Warm off-white instead of cold zinc-50 */
+    background-color: #fafaf8;
+    @apply text-zinc-900 transition-colors duration-300;
+    @apply dark:text-zinc-50;
 
     ::selection {
       @apply bg-zinc-200 text-zinc-900 dark:bg-zinc-800 dark:text-white;
     }
+  }
+
+  .dark body {
+    /* Near-black with no blue cast */
+    background-color: #0c0c0c;
   }
 
   h1,
@@ -39,16 +58,29 @@
   h5,
   h6 {
     @apply tracking-tight;
+    text-wrap: balance;
   }
 }
 
 @layer utilities {
+  /* Overline label — mono caps for section metadata */
+  .label-overline {
+    @apply font-mono text-[10px] font-medium uppercase tracking-widest text-zinc-400 dark:text-zinc-500;
+  }
+
+  /* Inline metadata — mono for years, periods, counts */
+  .mono-meta {
+    @apply font-mono text-xs text-zinc-400 dark:text-zinc-500;
+  }
+
+  /* Glass — reserved for floating overlay elements (navbar, dock) only */
   .glass {
     @apply bg-white/70 backdrop-blur-xl border border-white/40 shadow-apple;
     @apply dark:bg-zinc-900/70 dark:border-zinc-800/50 dark:shadow-none;
   }
 
+  /* Legacy prose utility */
   .prose-academic {
-    @apply text-lg leading-relaxed text-zinc-800 dark:text-zinc-300 max-w-[65ch];
+    @apply text-base leading-relaxed text-zinc-700 dark:text-zinc-300 max-w-[65ch];
   }
 }
