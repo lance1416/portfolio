@@ -225,23 +225,10 @@ export default function Home() {
               const color = isDark ? item.darkColor : item.lightColor;
               return (
                 <li key={item.label} className="flex items-start gap-2.5">
-                  <div className="relative mt-[5px] h-1.5 w-1.5 shrink-0">
-                    <div
-                      className="absolute inset-0 rounded-full"
-                      style={{ backgroundColor: color }}
-                    />
-                    <motion.div
-                      className="absolute inset-0 rounded-full"
-                      style={{ backgroundColor: color }}
-                      animate={{ scale: [1, 2.8], opacity: [0.5, 0] }}
-                      transition={{
-                        duration: 2.5,
-                        repeat: Infinity,
-                        ease: 'easeOut',
-                        delay: item.delay,
-                      }}
-                    />
-                  </div>
+                  <div
+                    className="mt-[5px] h-1.5 w-1.5 shrink-0 rounded-full"
+                    style={{ backgroundColor: color }}
+                  />
                   <div>
                     <p className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
                       {item.label}

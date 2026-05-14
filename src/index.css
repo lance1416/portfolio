@@ -35,6 +35,13 @@
     scroll-behavior: smooth;
   }
 
+  /* Hide native cursor on precise-pointer devices — replaced by CustomCursor */
+  @media (pointer: fine) {
+    * {
+      cursor: none;
+    }
+  }
+
   body {
     /* Warm off-white instead of cold zinc-50 */
     background-color: #fafaf8;
@@ -98,6 +105,12 @@
   /* Legacy prose utility */
   .prose-academic {
     @apply text-base leading-relaxed text-zinc-700 dark:text-zinc-300 max-w-[65ch];
+  }
+
+  /* OpenType refinements for display type — oldstyle numerals, ligatures, optical sizing */
+  .font-display {
+    font-feature-settings: 'onum' 1, 'liga' 1, 'kern' 1, 'calt' 1;
+    font-optical-sizing: auto;
   }
 
   /* Animated underline — grows left-to-right on hover */
