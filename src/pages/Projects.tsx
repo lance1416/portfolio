@@ -18,11 +18,16 @@ export default function Projects() {
         subtitle="Engineering challenges spanning low-level systems to multidisciplinary game design."
       />
 
-      <div>
+      <motion.div
+        variants={stagger}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: '-80px' }}
+      >
         {projectsData.map((project, index) => (
           <ProjectCard key={project.id} project={project} index={index} />
         ))}
-      </div>
+      </motion.div>
     </motion.main>
   );
 }

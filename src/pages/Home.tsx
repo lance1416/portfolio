@@ -264,7 +264,7 @@ export default function Home() {
                 <a
                   href={href}
                   {...(ext ? { target: '_blank', rel: 'noreferrer' } : {})}
-                  className="font-mono text-xs text-zinc-500 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+                  className="link-underline font-mono text-xs text-zinc-500 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
                 >
                   {label}
                   {ext && <span className="ml-0.5 opacity-40">↗</span>}

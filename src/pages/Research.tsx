@@ -63,7 +63,12 @@ export default function Research() {
         </motion.section>
 
         {/* Academic Background */}
-        <section>
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: '-80px' }}
+        >
           <motion.p variants={fadeUp} className="label-overline mb-0">
             Academic Background
           </motion.p>
@@ -72,10 +77,15 @@ export default function Research() {
               <EducationCard key={item.id} item={item} />
             ))}
           </div>
-        </section>
+        </motion.div>
 
         {/* Awards & Honours */}
-        <section>
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: '-80px' }}
+        >
           <motion.p variants={fadeUp} className="label-overline mb-6">
             Awards & Honours
           </motion.p>
@@ -84,7 +94,7 @@ export default function Research() {
               <AwardRow key={award.id} award={award} />
             ))}
           </div>
-        </section>
+        </motion.div>
       </div>
     </motion.main>
   );

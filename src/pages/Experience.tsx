@@ -18,11 +18,16 @@ export default function Experience() {
         subtitle="A chronological record of professional and academic roles."
       />
 
-      <div>
+      <motion.div
+        variants={stagger}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: '-80px' }}
+      >
         {experienceData.map((job) => (
           <ExperienceRow key={job.id} job={job} />
         ))}
-      </div>
+      </motion.div>
     </motion.main>
   );
 }

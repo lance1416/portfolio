@@ -31,8 +31,15 @@ export function ProjectCard({
   return (
     <motion.article
       variants={fadeUp}
-      className="group border-b border-zinc-200 py-12 first:border-t dark:border-zinc-800"
+      className="group relative border-b border-zinc-200 py-12 pl-3 first:border-t dark:border-zinc-800"
     >
+      {/* Accent left-border reveal on hover */}
+      <span
+        aria-hidden="true"
+        className="absolute inset-y-0 left-0 w-[3px] origin-top scale-y-0 transition-transform duration-300 ease-out group-hover:scale-y-100"
+        style={{ backgroundColor: accentColor }}
+      />
+
       {/* Meta row */}
       <div className="mb-4 flex items-center justify-between">
         <span className="label-overline">Project {num}</span>

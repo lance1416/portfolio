@@ -9,8 +9,15 @@ export function ExperienceRow({ job }: { job: ExperienceItem }) {
   return (
     <motion.article
       variants={fadeUp}
-      className="border-b border-zinc-200 py-10 first:border-t dark:border-zinc-800"
+      className="group relative border-b border-zinc-200 py-10 pl-3 first:border-t dark:border-zinc-800"
     >
+      {/* Accent left-border reveal on hover */}
+      <span
+        aria-hidden="true"
+        className="absolute inset-y-0 left-0 w-[3px] origin-top scale-y-0 transition-transform duration-300 ease-out group-hover:scale-y-100"
+        style={{ backgroundColor: job.color ?? 'var(--color-accent)' }}
+      />
+
       {/* Header */}
       <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div>
@@ -19,7 +26,7 @@ export function ExperienceRow({ job }: { job: ExperienceItem }) {
               href={job.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="label-overline mb-2 inline-flex items-center gap-1 transition-colors hover:text-zinc-900 dark:hover:text-zinc-100"
+              className="link-underline label-overline mb-2 inline-flex items-center gap-1 transition-colors hover:text-zinc-900 dark:hover:text-zinc-100"
             >
               {job.company}
               <ArrowUpRight className="h-2.5 w-2.5" />
