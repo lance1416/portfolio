@@ -10,17 +10,14 @@ export const fadeUp: Variants = {
   },
 };
 
-/** Stagger container — orchestrates children with a moderate delay. */
+/** Stagger container — orchestrates children only; container itself has no opacity animation. */
 export const stagger: Variants = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.12 } },
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12 } },
 };
 
 /** Faster stagger for home page where content appears on first load. */
 export const staggerFast: Variants = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.08, delayChildren: 0.05 },
-  },
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08, delayChildren: 0.05 } },
 };
