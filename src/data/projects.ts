@@ -20,6 +20,32 @@ export interface ProjectItem {
 
 export const projectsData: ProjectItem[] = [
   {
+    id: 'archive-tools',
+    title: 'Archive Tools',
+    subtitle: 'Open source archive manager with advanced functionalities',
+    year: '2026',
+    color: '#ff3e00',
+    imageUrl: 'projects/archive-tools.png',
+    description: [
+      'Archive management tool written in Python, Tauri, and SevletKit',
+      'Supports a wide range of archive formats, including ZIP, RAR, 7z, and TAR, with seamless cross-platform compatibility.',
+      'Advanced features including password manager, filename encoding, password encoding, and more to come.',
+    ],
+    skills: [
+      'Python',
+      'Rust',
+      'Tauri',
+      'SevletKit',
+      'Cross-Platform Development',
+    ],
+    links: [
+      {
+        type: 'github',
+        url: 'https://github.com/CheesyToast1416/archive-tools',
+      },
+    ],
+  },
+  {
     id: 'kidneyos',
     title: 'KidneyOS',
     subtitle: 'Rust-Based Toy Operating System',
