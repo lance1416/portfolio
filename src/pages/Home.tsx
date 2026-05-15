@@ -40,7 +40,7 @@ const FIELDS = [
   {
     domain: 'Research',
     detail:
-      'MSc Oxford · Kissinger lab · quantum error correction & ZX-calculus',
+      'MSc Oxford · Quantum Group · quantum error correction & ZX-calculus',
   },
   {
     domain: 'Systems',
