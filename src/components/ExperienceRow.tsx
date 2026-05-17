@@ -10,11 +10,16 @@ export function ExperienceRow({ job }: { job: ExperienceItem }) {
     <motion.article
       variants={fadeUp}
       className="group relative border-b border-zinc-200 py-10 pl-3 first:border-t dark:border-zinc-800"
+      style={
+        job.isActive
+          ? { backgroundColor: `${job.color ?? '#6366f1'}0a` }
+          : undefined
+      }
     >
-      {/* Accent left-border reveal on hover */}
+      {/* Left border: always visible for active, hover-only for inactive */}
       <span
         aria-hidden="true"
-        className="absolute inset-y-0 left-0 w-[3px] origin-top scale-y-0 transition-transform duration-300 ease-out group-hover:scale-y-100"
+        className={`absolute inset-y-0 left-0 w-[3px] origin-top transition-transform duration-300 ease-out ${job.isActive ? 'scale-y-100' : 'scale-y-0 group-hover:scale-y-100'}`}
         style={{ backgroundColor: job.color ?? 'var(--color-accent)' }}
       />
 
@@ -41,7 +46,28 @@ export function ExperienceRow({ job }: { job: ExperienceItem }) {
 
         <div className="mt-1 flex shrink-0 items-center gap-3 sm:mt-0">
           {job.isActive && (
-            <span className="label-overline text-accent">Active</span>
+            <span className="inline-flex items-center gap-1.5">
+              <span className="relative flex h-2 w-2">
+                <span
+                  className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60"
+                  style={{
+                    backgroundColor: job.color ?? 'var(--color-accent)',
+                  }}
+                />
+                <span
+                  className="relative inline-flex h-2 w-2 rounded-full"
+                  style={{
+                    backgroundColor: job.color ?? 'var(--color-accent)',
+                  }}
+                />
+              </span>
+              <span
+                className="label-overline"
+                style={{ color: job.color ?? 'var(--color-accent)' }}
+              >
+                Live
+              </span>
+            </span>
           )}
           <span className="mono-meta whitespace-nowrap">{job.period}</span>
         </div>
