@@ -53,7 +53,7 @@ export function ProjectCard({
               target="_blank"
               rel="noopener noreferrer"
               style={{ '--hover-color': accentColor } as React.CSSProperties}
-              className="text-zinc-400 transition-all hover:scale-110 hover:text-(--hover-color) active:scale-95 dark:text-zinc-500"
+              className="text-zinc-400 transition hover:scale-110 hover:text-(--hover-color) active:scale-[0.96] dark:text-zinc-500"
               aria-label={`Link to ${link.type}`}
             >
               {renderLinkIcon(link.type)}
@@ -72,7 +72,7 @@ export function ProjectCard({
 
       {/* Image */}
       {project.imageUrl ? (
-        <div className="my-8 aspect-[16/7] overflow-hidden rounded-2xl border border-zinc-200/60 dark:border-zinc-800/60">
+        <div className="my-8 aspect-[16/7] overflow-hidden rounded-2xl border border-black/10 dark:border-white/10">
           <img
             src={project.imageUrl}
             alt={`Preview of ${project.title}`}

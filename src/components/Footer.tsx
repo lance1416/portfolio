@@ -8,12 +8,13 @@ export function Footer() {
           © {new Date().getFullYear()} Sinan Li
         </p>
 
-        <div className="flex items-center gap-5">
+        {/* 40x40 hit areas: -m-3 cancels the box padding so the visible row keeps its bounds; gap-0 keeps centers 40px apart (adjacent, never overlapping) */}
+        <div className="-m-3 flex items-center">
           <a
             href="https://github.com/lance1416"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-zinc-400 transition-colors hover:text-zinc-900 dark:text-zinc-500 dark:hover:text-zinc-100"
+            className="flex h-10 w-10 items-center justify-center text-zinc-400 transition-colors hover:text-zinc-900 dark:text-zinc-500 dark:hover:text-zinc-100"
             aria-label="GitHub"
           >
             <FaGithub className="h-4 w-4" />
@@ -22,14 +23,14 @@ export function Footer() {
             href="https://linkedin.com/in/sinanli"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-zinc-400 transition-colors hover:text-zinc-900 dark:text-zinc-500 dark:hover:text-zinc-100"
+            className="flex h-10 w-10 items-center justify-center text-zinc-400 transition-colors hover:text-zinc-900 dark:text-zinc-500 dark:hover:text-zinc-100"
             aria-label="LinkedIn"
           >
             <FaLinkedin className="h-4 w-4" />
           </a>
           <a
             href="mailto:lanceli1416@gmail.com"
-            className="text-zinc-400 transition-colors hover:text-zinc-900 dark:text-zinc-500 dark:hover:text-zinc-100"
+            className="flex h-10 w-10 items-center justify-center text-zinc-400 transition-colors hover:text-zinc-900 dark:text-zinc-500 dark:hover:text-zinc-100"
             aria-label="Email"
           >
             <FaEnvelope className="h-4 w-4" />

@@ -50,7 +50,7 @@ export default function ErrorPage() {
           <button
             type="button"
             onClick={() => window.location.reload()}
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-sm font-medium text-white shadow-apple-lg transition-all hover:scale-105 active:scale-95 dark:bg-zinc-100 dark:text-zinc-950"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-sm font-medium text-white shadow-apple-lg transition-transform hover:scale-105 active:scale-[0.96] dark:bg-zinc-100 dark:text-zinc-950"
           >
             <RotateCcw className="h-4 w-4" />
             Reload Application

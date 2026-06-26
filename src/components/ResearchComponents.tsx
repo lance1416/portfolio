@@ -49,7 +49,7 @@ export function EducationCard({ item }: { item: EducationItem }) {
             <img
               src={item.logoUrl}
               alt={`${item.institution} seal`}
-              className="h-20 w-20 object-contain opacity-20 grayscale transition-all duration-500 group-hover:opacity-60 group-hover:grayscale-0"
+              className="h-20 w-20 object-contain opacity-20 grayscale transition duration-500 group-hover:opacity-60 group-hover:grayscale-0"
               style={{ '--accent': accentColor } as React.CSSProperties}
             />
           </div>

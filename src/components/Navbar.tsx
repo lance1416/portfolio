@@ -58,7 +58,7 @@ export function Navbar() {
             <Link
               to="/"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="z-10 font-display font-normal text-zinc-900 transition-transform active:scale-95 dark:text-zinc-50"
+              className="z-10 font-display font-normal text-zinc-900 transition-transform active:scale-[0.96] dark:text-zinc-50"
             >
               Sinan Li
             </Link>
@@ -99,7 +99,7 @@ export function Navbar() {
             <button
               type="button"
               onClick={openCommandPalette}
-              className="group hidden sm:flex items-center gap-2 rounded-full border border-zinc-200/50 bg-white/50 pl-3 pr-2 py-1.5 text-xs font-medium text-zinc-500 transition-all hover:bg-zinc-100 hover:text-zinc-900 dark:border-zinc-700/50 dark:bg-zinc-800/50 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+              className="group hidden sm:flex items-center gap-2 rounded-full border border-zinc-200/50 bg-white/50 pl-3 pr-2 py-1.5 text-xs font-medium text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:border-zinc-700/50 dark:bg-zinc-800/50 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
             >
               <Search className="h-3.5 w-3.5" />
               <span>Menu</span>
@@ -176,7 +176,7 @@ export function Navbar() {
               <button
                 type="button"
                 onClick={openCommandPalette}
-                className="flex flex-col items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm font-semibold text-zinc-900 transition-all active:scale-95 dark:bg-zinc-900 dark:text-zinc-50"
+                className="flex flex-col items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm font-semibold text-zinc-900 transition-transform active:scale-[0.96] dark:bg-zinc-900 dark:text-zinc-50"
               >
                 <Search className="h-6 w-6 text-zinc-500 dark:text-zinc-400" />
                 Search
@@ -186,7 +186,7 @@ export function Navbar() {
                 href="/resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex flex-col items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm font-semibold text-zinc-900 transition-all active:scale-95 dark:bg-zinc-900 dark:text-zinc-50"
+                className="flex flex-col items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm font-semibold text-zinc-900 transition-transform active:scale-[0.96] dark:bg-zinc-900 dark:text-zinc-50"
               >
                 <FileText className="h-6 w-6 text-zinc-500 dark:text-zinc-400" />
                 Resume
@@ -195,7 +195,7 @@ export function Navbar() {
               <button
                 type="button"
                 onClick={toggleTheme}
-                className="flex flex-col items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm font-semibold text-zinc-900 transition-all active:scale-95 dark:bg-zinc-900 dark:text-zinc-50"
+                className="flex flex-col items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm font-semibold text-zinc-900 transition-transform active:scale-[0.96] dark:bg-zinc-900 dark:text-zinc-50"
               >
                 <Moon className="h-6 w-6 text-zinc-500 dark:text-zinc-400" />
                 Theme
@@ -204,7 +204,7 @@ export function Navbar() {
               <button
                 type="button"
                 onClick={toggleTerminal}
-                className="flex flex-col items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm font-semibold text-zinc-900 transition-all active:scale-95 dark:bg-zinc-900 dark:text-zinc-50"
+                className="flex flex-col items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm font-semibold text-zinc-900 transition-transform active:scale-[0.96] dark:bg-zinc-900 dark:text-zinc-50"
               >
                 <TerminalSquare className="h-6 w-6 text-zinc-500 dark:text-zinc-400" />
                 Terminal
