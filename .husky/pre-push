@@ -1,1 +1,1 @@
-yarn tsc -b
+pnpm tsc -b
