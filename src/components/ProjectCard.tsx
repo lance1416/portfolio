@@ -43,22 +43,29 @@ export function ProjectCard({
       {/* Meta row */}
       <div className="mb-4 flex items-center justify-between">
         <span className="label-overline">Project {num}</span>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
           <span className="mono-meta">{project.year}</span>
-          {project.links?.map((link, i) => (
-            <a
-              // biome-ignore lint/suspicious/noArrayIndexKey: static ordered data
-              key={i}
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ '--hover-color': accentColor } as React.CSSProperties}
-              className="text-zinc-400 transition hover:scale-110 hover:text-(--hover-color) active:scale-[0.96] dark:text-zinc-500"
-              aria-label={`Link to ${link.type}`}
-            >
-              {renderLinkIcon(link.type)}
-            </a>
-          ))}
+          {project.links?.length ? (
+            // -mr-3 pulls the 40px hit areas back so icons align to the card edge
+            <div className="-mr-3 flex items-center">
+              {project.links.map((link, i) => (
+                <a
+                  // biome-ignore lint/suspicious/noArrayIndexKey: static ordered data
+                  key={i}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={
+                    { '--hover-color': accentColor } as React.CSSProperties
+                  }
+                  className="flex h-10 w-10 items-center justify-center text-zinc-400 transition-[color,transform] hover:scale-110 hover:text-(--hover-color) active:scale-[0.96] dark:text-zinc-500"
+                  aria-label={`Link to ${link.type}`}
+                >
+                  {renderLinkIcon(link.type)}
+                </a>
+              ))}
+            </div>
+          ) : null}
         </div>
       </div>
 
@@ -82,9 +89,19 @@ export function ProjectCard({
         </div>
       ) : (
         <div
-          className="my-8 h-px opacity-30"
-          style={{ backgroundColor: accentColor }}
-        />
+          className="my-8 flex aspect-[16/7] items-center justify-center overflow-hidden rounded-2xl border border-black/10 dark:border-white/10"
+          style={{
+            backgroundImage: `linear-gradient(135deg, ${accentColor}1f, transparent 70%)`,
+          }}
+        >
+          <span
+            aria-hidden="true"
+            className="select-none font-display text-[8rem] font-bold leading-none tracking-tighter"
+            style={{ color: `${accentColor}33` }}
+          >
+            {num}
+          </span>
+        </div>
       )}
 
       <NumberedList items={project.description} className="mb-8 max-w-2xl" />

@@ -12,7 +12,7 @@ export function ExperienceRow({ job }: { job: ExperienceItem }) {
       className="group relative border-b border-zinc-200 py-10 pl-3 first:border-t dark:border-zinc-800"
       style={
         job.isActive
-          ? { backgroundColor: `${job.color ?? '#6366f1'}0a` }
+          ? { backgroundColor: `${job.color ?? '#6366f1'}14` }
           : undefined
       }
     >

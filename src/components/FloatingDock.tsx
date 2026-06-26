@@ -54,7 +54,7 @@ function DockItem({
       <button
         type="button"
         onClick={onClick}
-        className="group relative flex h-12 w-12 items-center justify-center rounded-2xl transition duration-300 hover:bg-zinc-100 hover:scale-110 active:scale-[0.96] dark:hover:bg-zinc-800"
+        className="group relative flex h-12 w-12 items-center justify-center rounded-2xl transition-[transform,background-color] duration-300 hover:bg-zinc-100 hover:scale-110 active:scale-[0.96] dark:hover:bg-zinc-800"
       >
         <Icon className="h-5 w-5 text-zinc-500 transition-colors group-hover:text-zinc-900 dark:text-zinc-400 dark:group-hover:text-zinc-50" />
       </button>

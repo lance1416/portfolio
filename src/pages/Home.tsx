@@ -184,7 +184,7 @@ export default function Home() {
       {/* ── LEFT: Identity sidebar ── */}
       <motion.aside
         variants={fadeUp}
-        className="flex flex-col gap-10 lg:sticky lg:top-32 lg:self-start lg:border-r lg:border-zinc-200 lg:pr-10 dark:lg:border-zinc-800"
+        className="order-2 flex flex-col gap-10 lg:order-none lg:sticky lg:top-32 lg:self-start lg:border-r lg:border-zinc-200 lg:pr-10 dark:lg:border-zinc-800"
       >
         <div>
           <p className="label-overline mb-2">Portfolio</p>
@@ -246,7 +246,7 @@ export default function Home() {
       </motion.aside>
 
       {/* ── CENTER: Hero ── */}
-      <main className="pb-16 lg:px-12">
+      <main className="order-1 pb-16 lg:order-none lg:px-12">
         <motion.section variants={fadeUp} className="mb-20">
           <h2 className="font-display text-4xl font-normal leading-[1.15] tracking-tight text-zinc-900 dark:text-zinc-100 sm:text-5xl">
             Quantum research.

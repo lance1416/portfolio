@@ -201,7 +201,7 @@ export function CommandPalette() {
                         // Sync mouse hover with keyboard selection
                         onMouseEnter={() => setSelectedIndex(index)}
                         className={cn(
-                          'group flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors',
+                          'group flex w-full items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors',
                           isSelected
                             ? 'bg-zinc-100 text-zinc-900 dark:bg-zinc-800/50 dark:text-zinc-50'
                             : 'text-zinc-600 dark:text-zinc-400',

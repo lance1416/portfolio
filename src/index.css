@@ -83,6 +83,12 @@
     @apply tracking-tight;
     text-wrap: balance;
   }
+
+  /* Avoid single-word orphans in running text */
+  p,
+  li {
+    text-wrap: pretty;
+  }
 }
 
 @layer utilities {
