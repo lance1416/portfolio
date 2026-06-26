@@ -11,6 +11,20 @@ export interface ExperienceItem {
 }
 export const experienceData: ExperienceItem[] = [
   {
+    id: 'fabrial',
+    role: 'Research Engineer',
+    company: 'FABRIAL LABS LTD',
+    period: 'Jun 2026 – Present',
+    link: 'https://www.fabrialcomputing.com/',
+    description: [
+      'FABRIAL is a frontier formal foundations lab in stealth.',
+      'Everybody else’s immutable first principles are our core variables.',
+    ],
+    skills: ['AI', 'ZXW Calculus'],
+    isActive: true,
+    color: '#6b7280',
+  },
+  {
     id: 'iqbank',
     role: 'Co-founder, Development Lead & Product Manager',
     company: 'IQBank',
