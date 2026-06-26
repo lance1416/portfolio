@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { TerminalProvider } from '@/context/TerminalContext.tsx';
+import { CommandPaletteProvider } from '@/context/CommandPaletteContext';
+import { TerminalProvider } from '@/context/TerminalContext';
 import MainLayout from '@/layouts/MainLayout';
 import ErrorPage from '@/pages/ErrorPage';
 
@@ -70,7 +71,11 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <TerminalProvider>{<RouterProvider router={router} />}</TerminalProvider>
+    <TerminalProvider>
+      <CommandPaletteProvider>
+        <RouterProvider router={router} />
+      </CommandPaletteProvider>
+    </TerminalProvider>
   );
 }
 

@@ -2,8 +2,10 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { FileText, Menu, Moon, Search, TerminalSquare, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useTerminal } from '../context/TerminalContext'; // If using Terminal Mode
-import { cn } from '../utils/cn';
+import { useCommandPalette } from '@/context/CommandPaletteContext';
+import { useTerminal } from '@/context/TerminalContext';
+import { cn } from '@/utils/cn';
+import { useTheme } from './ThemeProvider';
 
 const NAV_LINKS = [
   { name: 'Experience', path: '/experience' },
@@ -14,7 +16,9 @@ const NAV_LINKS = [
 export function Navbar() {
   const { pathname } = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { toggleTerminal } = useTerminal(); // If using Terminal Mode
+  const { toggleTerminal } = useTerminal();
+  const { open } = useCommandPalette();
+  const { toggleTheme } = useTheme();
 
   // Lock body scroll when full-screen menu is open
   useEffect(() => {
@@ -31,14 +35,8 @@ export function Navbar() {
   }, [pathname]);
 
   const openCommandPalette = () => {
-    document.dispatchEvent(
-      new KeyboardEvent('keydown', { key: 'k', metaKey: true }),
-    );
-    setIsMobileMenuOpen(false); // Close menu if opening search on mobile
-  };
-
-  const toggleTheme = () => {
-    document.documentElement.classList.toggle('dark');
+    open();
+    setIsMobileMenuOpen(false); // Close the mobile menu if opening search there
   };
 
   return (

@@ -9,55 +9,72 @@ type ThemeProviderProps = {
 };
 
 type ThemeProviderState = {
+  /** The user's chosen preference — may be 'system'. */
   theme: Theme;
+  /** The resolved appearance currently applied to the document. */
+  isDark: boolean;
   setTheme: (theme: Theme) => void;
+  /** Flip between light and dark, persisting the choice. */
+  toggleTheme: () => void;
 };
 
-const initialState: ThemeProviderState = {
-  theme: 'system',
-  setTheme: () => null,
-};
+const ThemeProviderContext = createContext<ThemeProviderState | undefined>(
+  undefined,
+);
 
-const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
+/** Resolve a preference to the concrete dark/light appearance. */
+function resolveIsDark(theme: Theme): boolean {
+  if (theme === 'system') {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+  return theme === 'dark';
+}
 
 export function ThemeProvider({
   children,
   defaultTheme = 'system',
   storageKey = 'portfolio-ui-theme',
-  ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(
+  const [theme, setThemeState] = useState<Theme>(
     () => (localStorage.getItem(storageKey) as Theme) || defaultTheme,
   );
+  // Resolve the initial appearance synchronously to avoid a first-paint flash.
+  const [isDark, setIsDark] = useState(() => resolveIsDark(theme));
 
   useEffect(() => {
     const root = window.document.documentElement;
+    const media = window.matchMedia('(prefers-color-scheme: dark)');
 
-    root.classList.remove('light', 'dark');
+    const apply = () => {
+      const dark = resolveIsDark(theme);
+      root.classList.toggle('dark', dark);
+      root.classList.toggle('light', !dark);
+      setIsDark(dark);
+    };
 
+    apply();
+
+    // Follow the OS preference live, but only while in 'system' mode.
     if (theme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)')
-        .matches
-        ? 'dark'
-        : 'light';
-
-      root.classList.add(systemTheme);
-      return;
+      media.addEventListener('change', apply);
+      return () => media.removeEventListener('change', apply);
     }
-
-    root.classList.add(theme);
   }, [theme]);
 
-  const value = {
+  const setTheme = (next: Theme) => {
+    localStorage.setItem(storageKey, next);
+    setThemeState(next);
+  };
+
+  const value: ThemeProviderState = {
     theme,
-    setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme);
-      setTheme(theme);
-    },
+    isDark,
+    setTheme,
+    toggleTheme: () => setTheme(isDark ? 'light' : 'dark'),
   };
 
   return (
-    <ThemeProviderContext.Provider {...props} value={value}>
+    <ThemeProviderContext.Provider value={value}>
       {children}
     </ThemeProviderContext.Provider>
   );

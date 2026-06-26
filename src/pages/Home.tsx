@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTheme } from '@/components/ThemeProvider';
 import { useBalancedText } from '@/hooks/useBalancedText';
 import { fadeUp, staggerFast } from '@/utils/variants';
 
@@ -115,24 +116,6 @@ function LocalTime() {
   );
 }
 
-/** Observes the `dark` class on <html> and returns a boolean. */
-function useIsDark() {
-  const [isDark, setIsDark] = useState(() =>
-    document.documentElement.classList.contains('dark'),
-  );
-  useEffect(() => {
-    const ob = new MutationObserver(() =>
-      setIsDark(document.documentElement.classList.contains('dark')),
-    );
-    ob.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class'],
-    });
-    return () => ob.disconnect();
-  }, []);
-  return isDark;
-}
-
 // ─── Index list — shared between mobile inline + desktop right column ─────────
 
 function IndexList({ compact = false }: { compact?: boolean }) {
@@ -187,7 +170,7 @@ function IndexList({ compact = false }: { compact?: boolean }) {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function Home() {
-  const isDark = useIsDark();
+  const { isDark } = useTheme();
   const { ref: subtitleRef, style: subtitleStyle } =
     useBalancedText<HTMLParagraphElement>(SUBTITLE_TEXT);
 

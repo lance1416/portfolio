@@ -1,10 +1,10 @@
 import { XSquare } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useTerminal } from '../context/TerminalContext';
-import { experienceData } from '../data/experience';
-import { projectsData } from '../data/projects';
-import { educationData } from '../data/research';
+import { useTerminal } from '@/context/TerminalContext';
+import { experienceData } from '@/data/experience';
+import { projectsData } from '@/data/projects';
+import { educationData } from '@/data/research';
 
 export function TerminalView() {
   const location = useLocation();

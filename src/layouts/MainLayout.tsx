@@ -1,12 +1,12 @@
 import { Outlet, ScrollRestoration } from 'react-router-dom';
-import { CommandPalette } from '../components/CommandPalette';
-import { CustomCursor } from '../components/CustomCursor';
-import { FloatingDock } from '../components/FloatingDock';
-import { Footer } from '../components/Footer';
-import { Navbar } from '../components/Navbar';
-import { ScrollProgress } from '../components/ScrollProgress';
-import { TerminalView } from '../components/TerminalView';
-import { useTerminal } from '../context/TerminalContext';
+import { CommandPalette } from '@/components/CommandPalette';
+import { CustomCursor } from '@/components/CustomCursor';
+import { FloatingDock } from '@/components/FloatingDock';
+import { Footer } from '@/components/Footer';
+import { Navbar } from '@/components/Navbar';
+import { ScrollProgress } from '@/components/ScrollProgress';
+import { TerminalView } from '@/components/TerminalView';
+import { useTerminal } from '@/context/TerminalContext';
 
 export default function MainLayout() {
   const { isTerminal } = useTerminal();

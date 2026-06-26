@@ -1,73 +1,60 @@
-# React + TypeScript + Vite
+# Portfolio — Sinan Li
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Personal portfolio site. A single-page React app covering experience, projects,
+and research, with a command palette, a "terminal mode" that renders the
+underlying data as JSON, light/dark theming, and editorial typography.
 
-Currently, two official plugins are available:
+Live at **[lance1416.com](https://www.lance1416.com)**.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tech stack
 
-## React Compiler
+- **React 19** + **TypeScript** + **Vite**
+- **Tailwind CSS v4** (configured entirely in `src/index.css` via `@theme`)
+- **Framer Motion** for transitions and micro-interactions
+- **React Router** for routing
+- **Biome** for linting/formatting, **Husky** + **commitlint** for git hooks
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Getting started
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+pnpm install
+pnpm dev        # start the dev server
+pnpm build      # type-check (tsc -b) and build for production
+pnpm preview    # preview the production build
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Scripts
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+| Script         | Description                                 |
+| -------------- | ------------------------------------------- |
+| `pnpm dev`     | Start the Vite dev server with HMR          |
+| `pnpm build`   | Type-check and produce a production build    |
+| `pnpm preview` | Serve the production build locally           |
+| `pnpm lint`    | Lint with Biome                             |
+| `pnpm format`  | Format with Biome                          |
+| `pnpm check`   | Lint, format, and organize imports (write)  |
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Project structure
+
 ```
+src/
+  components/   Reusable UI (Navbar, CommandPalette, FloatingDock, cards…)
+  context/      React contexts (Terminal mode, Command palette)
+  data/         Content as typed data (experience, projects, research)
+  hooks/        Custom hooks (useBalancedText)
+  layouts/      MainLayout — shared chrome around routed pages
+  pages/        Route-level views (Home, Experience, Projects, Research…)
+  utils/        Helpers (cn, motion variants)
+  index.css     Tailwind v4 theme + base/utility layers
+```
+
+Editing content (jobs, projects, education, awards) means editing the typed
+arrays under `src/data/` — no component changes required.
+
+## Conventions
+
+- Imports use the `@/` alias for anything outside the current directory.
+- Theme is owned by `ThemeProvider`; read/toggle it via `useTheme()` rather than
+  touching the `dark` class directly.
+- Commits follow [Conventional Commits](https://www.conventionalcommits.org/)
+  (enforced by commitlint).

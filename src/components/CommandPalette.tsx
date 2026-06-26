@@ -12,36 +12,24 @@ import {
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { cn } from '../utils/cn'; // Assuming you have this utility
+import { useCommandPalette } from '@/context/CommandPaletteContext';
+import { cn } from '@/utils/cn';
+import { useTheme } from './ThemeProvider';
 
 export function CommandPalette() {
-  const [isOpen, setIsOpen] = useState(false);
+  const { isOpen, close } = useCommandPalette();
+  const { toggleTheme } = useTheme();
   const [query, setQuery] = useState('');
   const [copied, setCopied] = useState(false);
 
-  // New: Track the currently highlighted index
+  // Track the currently highlighted index for keyboard navigation.
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
-  // 1. Global Cmd+K Listener
-  useEffect(() => {
-    const down = (e: KeyboardEvent) => {
-      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        setIsOpen((open) => !open);
-      }
-      if (e.key === 'Escape') {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener('keydown', down);
-    return () => document.removeEventListener('keydown', down);
-  }, []);
-
-  // 2. Manage Reset & Auto-Focus
+  // Lock scroll + focus the input when opening; reset state when closing.
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -56,7 +44,7 @@ export function CommandPalette() {
   const runCommand = (command: () => void) => {
     command();
     if (command.name !== 'copyEmail') {
-      setIsOpen(false);
+      close();
     }
   };
 
@@ -65,12 +53,8 @@ export function CommandPalette() {
     setCopied(true);
     setTimeout(() => {
       setCopied(false);
-      setIsOpen(false);
+      close();
     }, 1500);
-  };
-
-  const toggleTheme = () => {
-    document.documentElement.classList.toggle('dark');
   };
 
   const actions = [
@@ -169,7 +153,7 @@ export function CommandPalette() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setIsOpen(false)}
+            onClick={close}
             className="fixed inset-0 z-[100] bg-zinc-900/20 backdrop-blur-sm dark:bg-black/40"
           />
 

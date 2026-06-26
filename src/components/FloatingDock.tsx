@@ -7,7 +7,9 @@ import {
   TerminalSquare,
 } from 'lucide-react';
 import { useState } from 'react';
-import { useTerminal } from '../context/TerminalContext'; // If you built Terminal Mode
+import { useCommandPalette } from '@/context/CommandPaletteContext';
+import { useTerminal } from '@/context/TerminalContext';
+import { useTheme } from './ThemeProvider';
 
 // A reusable Dock Button component with a built-in tooltip
 function DockItem({
@@ -61,17 +63,9 @@ function DockItem({
 }
 
 export function FloatingDock() {
-  const { toggleTerminal } = useTerminal(); // Assuming this exists from earlier
-
-  const triggerCmdK = () => {
-    document.dispatchEvent(
-      new KeyboardEvent('keydown', { key: 'k', metaKey: true }),
-    );
-  };
-
-  const toggleTheme = () => {
-    document.documentElement.classList.toggle('dark');
-  };
+  const { toggleTerminal } = useTerminal();
+  const { open: openCommandPalette } = useCommandPalette();
+  const { toggleTheme } = useTheme();
 
   const downloadResume = () => {
     window.open('/resume.pdf', '_blank');
@@ -88,7 +82,7 @@ export function FloatingDock() {
         icon={Search}
         label="Command Palette"
         shortcut="⌘K"
-        onClick={triggerCmdK}
+        onClick={openCommandPalette}
       />
 
       {/* Separator */}
