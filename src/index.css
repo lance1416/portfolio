@@ -34,6 +34,19 @@
   box-shadow: var(--elevation-overlay);
 }
 
+/*
+ * Scope for a per-item brand colour: set `--role-base` inline, read `--role`.
+ * Dark brand colours (e.g. navy) disappear on the dark background, so dark
+ * mode mixes them toward white.
+ */
+@utility role-scope {
+  --role: var(--role-base);
+
+  &:where(.dark, .dark *) {
+    --role: color-mix(in oklch, var(--role-base) 60%, white);
+  }
+}
+
 @layer base {
   /*
    * Elevation for floating surfaces: a 1px ring stands in for a border so it

@@ -1,8 +1,9 @@
 import { motion } from 'motion/react';
-import { ExperienceRow } from '@/components/ExperienceRow';
+import { ExperienceEntry } from '@/components/ExperienceEntry';
+import { ExperienceTimeline } from '@/components/ExperienceTimeline';
 import { PageHeader } from '@/components/PageHeader';
 import { experienceData } from '@/data/experience';
-import { revealOnScroll, stagger } from '@/utils/variants';
+import { stagger } from '@/utils/variants';
 
 export default function Experience() {
   return (
@@ -12,17 +13,16 @@ export default function Experience() {
       animate="show"
       className="mx-auto max-w-4xl px-6"
     >
-      <PageHeader
-        chapter="§ 01"
-        title="Experience"
-        subtitle="A chronological record of professional and academic roles."
-      />
+      <PageHeader chapter="§ 01" title="Experience" />
 
-      <motion.div variants={stagger} {...revealOnScroll}>
+      {/* The timeline bars are this page's one entrance animation; entries stay still. */}
+      <ExperienceTimeline jobs={experienceData} />
+
+      <div className="mt-12">
         {experienceData.map((job) => (
-          <ExperienceRow key={job.id} job={job} />
+          <ExperienceEntry key={job.id} job={job} />
         ))}
-      </motion.div>
+      </div>
     </motion.main>
   );
 }

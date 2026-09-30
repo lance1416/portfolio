@@ -1,20 +1,41 @@
+import { nowMonthPosition, toMonthIndex } from '@/utils/months';
+
 export interface ExperienceItem {
   id: string;
   role: string;
   company: string;
-  period: string;
+  /** Short name for the timeline strip. */
+  label: string;
+  /** 'YYYY-MM', inclusive. */
+  start: string;
+  /** 'YYYY-MM', inclusive; omitted while the role is ongoing. */
+  end?: string;
   link?: string;
+  /** First entry is shown as the lead paragraph. */
   description: string[];
   skills: string[];
-  color?: string;
-  isActive?: boolean;
+  color: string;
+}
+
+/**
+ * Month-index span of a role: `from` is the start of its first month, `to` the
+ * end of its last month (or today, if ongoing). `months` counts whole months.
+ */
+export function roleSpan(item: ExperienceItem, now = nowMonthPosition()) {
+  const from = toMonthIndex(item.start);
+  const to = item.end ? toMonthIndex(item.end) + 1 : now;
+  const months =
+    (item.end ? toMonthIndex(item.end) : Math.floor(now)) - from + 1;
+  return { from, to, months };
 }
 export const experienceData: ExperienceItem[] = [
   {
     id: 'fabrial',
     role: 'Research Engineer',
     company: 'Fabrial Labs Ltd.',
-    period: 'Jun 2026 – Aug 2026',
+    label: 'Fabrial Labs',
+    start: '2026-06',
+    end: '2026-08',
     link: 'https://www.fabrialcomputing.com/',
     description: [
       'Applied diagrammatic methods from category theory, a formalism that came out of quantum computing, to modelling machine learning processes at an early-stage AI research startup (stealth).',
@@ -33,7 +54,8 @@ export const experienceData: ExperienceItem[] = [
     id: 'iqbank',
     role: 'Co-founder, Development Lead & Product Manager',
     company: 'IQBank',
-    period: 'Apr 2025 – Present',
+    label: 'IQBank',
+    start: '2025-04',
     link: 'https://iqbank.teach.cs.toronto.edu',
     description: [
       'Built the study platform in TypeScript, React, and PostgreSQL for 379 users. Remain its largest code contributor and run it in production on university infrastructure with Docker and CI.',
@@ -50,14 +72,15 @@ export const experienceData: ExperienceItem[] = [
       'Access Control',
       'User Research',
     ],
-    isActive: true,
     color: '#3b5fb2',
   },
   {
     id: 'uoft-ta',
     role: 'Teaching Assistant, CSC309: Programming on the Web',
     company: 'University of Toronto',
-    period: 'Jan 2025 – Apr 2025',
+    label: 'UofT TA',
+    start: '2025-01',
+    end: '2025-04',
     description: [
       'Owned one of the course’s major assignments for a cohort of 300+ students: designed it with the professor, then wrote the spec, rubric, reference solution, and automated test suite for a RESTful loyalty-program backend. It has been reused in later terms.',
       'Held weekly office hours across the full syllabus: front-end and back-end web development, REST APIs, and debugging.',
