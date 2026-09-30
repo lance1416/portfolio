@@ -16,6 +16,7 @@ import { NAV_LINKS } from '@/data/navigation';
 import { profile } from '@/data/profile';
 import { useScrollLock } from '@/hooks/useScrollLock';
 import { cn } from '@/utils/cn';
+import { openResume } from '@/utils/resume';
 
 interface Action {
   id: string;
@@ -36,32 +37,42 @@ export function CommandPalette() {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
+  const copyTimerRef = useRef<number>(undefined);
   const navigate = useNavigate();
 
   useScrollLock(isOpen);
 
-  // Focus the input when opening; reset state when closing.
+  // Focus the input when opening; reset state (and any pending auto-close) when closing.
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 50);
     } else {
+      clearTimeout(copyTimerRef.current);
+      setCopied(false);
       setQuery('');
       setSelectedIndex(0);
     }
   }, [isOpen]);
+
+  useEffect(() => () => clearTimeout(copyTimerRef.current), []);
 
   const runAction = (action: Action) => {
     action.onSelect();
     if (!action.keepOpen) close();
   };
 
-  const copyEmail = () => {
-    navigator.clipboard.writeText(profile.email);
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(profile.email);
+    } catch {
+      // Clipboard unavailable (permissions, insecure context): open the mail client instead.
+      window.location.href = `mailto:${profile.email}`;
       close();
-    }, 1500);
+      return;
+    }
+    setCopied(true);
+    clearTimeout(copyTimerRef.current);
+    copyTimerRef.current = window.setTimeout(close, 1500);
   };
 
   const actions: Action[] = [
@@ -87,7 +98,7 @@ export function CommandPalette() {
       id: 'resume',
       name: 'Download Resume',
       icon: FileText,
-      onSelect: () => window.open(profile.resumeUrl, '_blank'),
+      onSelect: openResume,
     },
     {
       id: 'email',
