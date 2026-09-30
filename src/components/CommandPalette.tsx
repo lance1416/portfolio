@@ -1,10 +1,7 @@
 import {
-  Briefcase,
   Check,
-  Code,
   Copy,
   FileText,
-  GraduationCap,
   Home,
   type LucideIcon,
   Moon,
@@ -14,6 +11,8 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCommandPalette } from '@/context/CommandPaletteContext';
+import { NAV_LINKS } from '@/data/navigation';
+import { profile } from '@/data/profile';
 import { useScrollLock } from '@/hooks/useScrollLock';
 import { cn } from '@/utils/cn';
 import { useTheme } from './ThemeProvider';
@@ -57,7 +56,7 @@ export function CommandPalette() {
   };
 
   const copyEmail = () => {
-    navigator.clipboard.writeText('lanceli1416@gmail.com');
+    navigator.clipboard.writeText(profile.email);
     setCopied(true);
     setTimeout(() => {
       setCopied(false);
@@ -72,24 +71,12 @@ export function CommandPalette() {
       icon: Home,
       onSelect: () => navigate('/'),
     },
-    {
-      id: 'exp',
-      name: 'Go to Experience',
-      icon: Briefcase,
-      onSelect: () => navigate('/experience'),
-    },
-    {
-      id: 'proj',
-      name: 'Go to Projects',
-      icon: Code,
-      onSelect: () => navigate('/projects'),
-    },
-    {
-      id: 'res',
-      name: 'Go to Research',
-      icon: GraduationCap,
-      onSelect: () => navigate('/research'),
-    },
+    ...NAV_LINKS.map((link) => ({
+      id: link.path,
+      name: `Go to ${link.name}`,
+      icon: link.icon,
+      onSelect: () => navigate(link.path),
+    })),
     {
       id: 'theme',
       name: 'Toggle Dark Mode',
@@ -100,7 +87,7 @@ export function CommandPalette() {
       id: 'resume',
       name: 'Download Resume',
       icon: FileText,
-      onSelect: () => window.open('/resume.pdf', '_blank'),
+      onSelect: () => window.open(profile.resumeUrl, '_blank'),
     },
     {
       id: 'email',

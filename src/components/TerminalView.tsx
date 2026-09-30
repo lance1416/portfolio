@@ -1,50 +1,40 @@
 import { XSquare } from 'lucide-react';
-import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTerminal } from '@/context/TerminalContext';
 import { experienceData } from '@/data/experience';
+import { profile } from '@/data/profile';
 import { projectsData } from '@/data/projects';
 import { educationData } from '@/data/research';
 
+interface TerminalFile {
+  filename: string;
+  data: unknown;
+}
+
+// Each route "cats" its underlying data as JSON.
+const FILES_BY_PATH: Record<string, TerminalFile> = {
+  '/experience': { filename: 'experience.json', data: experienceData },
+  '/projects': { filename: 'projects.json', data: projectsData },
+  '/research': { filename: 'research.json', data: educationData },
+};
+
+const WHOAMI: TerminalFile = {
+  filename: 'whoami.json',
+  data: {
+    name: profile.name,
+    role: profile.role,
+    location: profile.location,
+    status: profile.status,
+    email: profile.email,
+  },
+};
+
 export function TerminalView() {
-  const location = useLocation();
+  const { pathname } = useLocation();
   const { toggleTerminal } = useTerminal();
-  const [output, setOutput] = useState('');
 
-  // Map the current URL to your raw data
-  useEffect(() => {
-    // biome-ignore lint/suspicious/noImplicitAnyLet: Type not determined until later.
-    let data;
-    let filename = '';
-
-    switch (location.pathname) {
-      case '/experience':
-        data = experienceData;
-        filename = 'experience.json';
-        break;
-      case '/projects':
-        data = projectsData;
-        filename = 'projects.json';
-        break;
-      case '/research':
-        data = educationData;
-        filename = 'research.json';
-        break;
-      default:
-        data = {
-          name: 'Sinan Li',
-          role: 'Systems Engineer & Researcher',
-          location: 'Oxford, UK',
-          status: 'Building KidneyOS / Researching ZX-Calculus',
-          email: 'lanceli1416@gmail.com',
-        };
-        filename = 'whoami.json';
-    }
-
-    // Simulate terminal execution
-    const command = `sinan@macbook-pro:~$ cat ${filename}\n`;
-    setOutput(command + JSON.stringify(data, null, 2));
-  }, [location.pathname]);
+  const { filename, data } = FILES_BY_PATH[pathname] ?? WHOAMI;
+  const output = `sinan@macbook-pro:~$ cat ${filename}\n${JSON.stringify(data, null, 2)}`;
 
   return (
     <div className="min-h-screen w-full bg-black p-4 font-mono sm:p-8">

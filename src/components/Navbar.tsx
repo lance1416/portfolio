@@ -4,15 +4,11 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useCommandPalette } from '@/context/CommandPaletteContext';
 import { useTerminal } from '@/context/TerminalContext';
+import { NAV_LINKS } from '@/data/navigation';
+import { profile } from '@/data/profile';
 import { useScrollLock } from '@/hooks/useScrollLock';
 import { cn } from '@/utils/cn';
 import { useTheme } from './ThemeProvider';
-
-const NAV_LINKS = [
-  { name: 'Experience', path: '/experience' },
-  { name: 'Projects', path: '/projects' },
-  { name: 'Research', path: '/research' },
-];
 
 export function Navbar() {
   const { pathname } = useLocation();
@@ -52,7 +48,7 @@ export function Navbar() {
               onClick={() => setIsMobileMenuOpen(false)}
               className="z-10 font-display font-normal text-zinc-900 transition-transform active:scale-[0.96] dark:text-zinc-50"
             >
-              Sinan Li
+              {profile.name}
             </Link>
           </div>
 
@@ -175,7 +171,7 @@ export function Navbar() {
               </button>
 
               <a
-                href="/resume.pdf"
+                href={profile.resumeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex flex-col items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm font-semibold text-zinc-900 transition-transform active:scale-[0.96] dark:bg-zinc-900 dark:text-zinc-50"
