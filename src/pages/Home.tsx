@@ -215,17 +215,17 @@ export default function Home() {
             style={subtitleStyle}
             className="text-base leading-relaxed text-zinc-600 dark:text-zinc-400"
           >
-            I trained at the{' '}
+            I did my MSc at the{' '}
             <span className="font-serif italic text-[#002147] dark:text-[#6b9ae6]">
               University of Oxford
             </span>{' '}
-            in quantum error correction and diagrammatic reasoning, then applied
-            the same mathematics to AI interpretability. I also architect robust
-            software—from{' '}
+            on quantum error correction, then spent the summer pointing the same
+            diagrams at neural networks. Outside research I build software,
+            anything from{' '}
             <span className="font-mono text-sm tracking-tight text-orange-600 dark:text-orange-400">
-              bare-metal OS kernels to production web platforms
-            </span>
-            —to push the limits of the machine.
+              Rust kernel drivers to the course platform
+            </span>{' '}
+            I run with my team.
           </p>
         </motion.section>
 
