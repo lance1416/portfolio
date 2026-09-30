@@ -12,6 +12,7 @@ Live at **[lance1416.com](https://www.lance1416.com)**.
 - **Tailwind CSS v4** (configured entirely in `src/index.css` via `@theme`)
 - **Motion** (`motion/react`, formerly Framer Motion) for transitions and micro-interactions
 - **React Router** for routing
+- **Vitest** + **Testing Library** (jsdom) for tests
 - **Biome** for linting/formatting, **Husky** + **commitlint** for git hooks
 
 ## Getting started
@@ -33,6 +34,8 @@ pnpm preview    # preview the production build
 | `pnpm lint`    | Lint with Biome                             |
 | `pnpm format`  | Format with Biome                          |
 | `pnpm check`   | Lint, format, and organize imports (write)  |
+| `pnpm test`    | Run Vitest in watch mode                    |
+| `pnpm test:run`| Run the test suite once                     |
 
 ## Project structure
 
