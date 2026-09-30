@@ -1,10 +1,23 @@
-import { motion } from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
 import { PageHeader } from '@/components/PageHeader';
-import { ProjectCard } from '@/components/ProjectCard';
+import { ProjectRing } from '@/components/ProjectRing';
+import { ProjectStrip } from '@/components/ProjectStrip';
 import { projectsData } from '@/data/projects';
-import { revealOnScroll, stagger } from '@/utils/variants';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { stagger } from '@/utils/variants';
 
 export default function Projects() {
+  // The one-screen 3D ring needs room; small or short screens and reduced
+  // motion get a regular page with a swipe strip instead.
+  const roomyScreen = useMediaQuery(
+    '(min-width: 768px) and (min-height: 800px)',
+  );
+  const prefersReducedMotion = useReducedMotion();
+
+  if (roomyScreen && !prefersReducedMotion) {
+    return <ProjectRing projects={projectsData} />;
+  }
+
   return (
     <motion.main
       variants={stagger}
@@ -17,12 +30,7 @@ export default function Projects() {
         title="Projects"
         subtitle="Engineering challenges spanning low-level systems to multidisciplinary game design."
       />
-
-      <motion.div variants={stagger} {...revealOnScroll}>
-        {projectsData.map((project, index) => (
-          <ProjectCard key={project.id} project={project} index={index} />
-        ))}
-      </motion.div>
+      <ProjectStrip projects={projectsData} />
     </motion.main>
   );
 }

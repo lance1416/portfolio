@@ -1,11 +1,12 @@
 import { ExternalLink } from 'lucide-react';
-import { motion } from 'motion/react';
-import type * as React from 'react';
+import { motion, type Variants } from 'motion/react';
+import type { CSSProperties } from 'react';
 import { FaGithub, FaItchIo } from 'react-icons/fa6';
 import type { LinkType, ProjectItem } from '@/data/projects';
-import { fadeUp } from '@/utils/variants';
+import { cn } from '@/utils/cn';
 import { NumberedList } from './NumberedList';
 import { SkillPill } from './SkillPill';
+import { SplitText } from './SplitText';
 
 const renderLinkIcon = (type: LinkType) => {
   switch (type) {
@@ -18,6 +19,108 @@ const renderLinkIcon = (type: LinkType) => {
   }
 };
 
+/** Title, then subtitle, each entering character by character. */
+export const TITLE_SEQUENCE: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.15 } },
+};
+
+export const projectAccent = (project: ProjectItem) =>
+  project.color ?? '#71717a';
+
+export const projectNumber = (index: number) =>
+  String(index + 1).padStart(2, '0');
+
+/** Icon links (GitHub, itch.io, …) with 40px hit areas. */
+export function ProjectLinks({ project }: { project: ProjectItem }) {
+  if (!project.links?.length) return null;
+  return (
+    // -mr-3 pulls the 40px hit areas back so icons align to the edge
+    <div className="-mr-3 flex items-center">
+      {project.links.map((link) => (
+        <a
+          key={link.url}
+          href={link.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ '--hover-color': projectAccent(project) } as CSSProperties}
+          className="flex h-10 w-10 items-center justify-center text-zinc-400 transition-[color,scale] duration-150 ease-out hover:text-(--hover-color) active:scale-[0.96] dark:text-zinc-500"
+          aria-label={`Link to ${link.type}`}
+        >
+          {renderLinkIcon(link.type)}
+        </a>
+      ))}
+    </div>
+  );
+}
+
+/** Screenshot, or a numbered gradient placeholder when there is none. */
+export function ProjectImage({
+  project,
+  index,
+  className,
+}: {
+  project: ProjectItem;
+  index: number;
+  className?: string;
+}) {
+  const accentColor = projectAccent(project);
+  const frame = cn(
+    'overflow-hidden rounded-2xl border border-black/10 dark:border-white/10',
+    className,
+  );
+
+  return project.imageUrl ? (
+    <div className={frame}>
+      <img
+        src={project.imageUrl}
+        alt={`Preview of ${project.title}`}
+        className="h-full w-full object-cover"
+        loading="lazy"
+      />
+    </div>
+  ) : (
+    <div
+      className={cn(frame, 'flex items-center justify-center')}
+      style={{
+        backgroundImage: `linear-gradient(135deg, ${accentColor}1f, transparent 70%)`,
+      }}
+    >
+      <span
+        aria-hidden="true"
+        className="select-none font-display text-[6rem] font-bold leading-none tracking-tighter"
+        style={{ color: `${accentColor}33` }}
+      >
+        {projectNumber(index)}
+      </span>
+    </div>
+  );
+}
+
+/** Bullet points and skills. */
+export function ProjectDetails({ project }: { project: ProjectItem }) {
+  return (
+    <>
+      <NumberedList items={project.description} className="mb-5" />
+      <div className="flex flex-wrap gap-2">
+        {project.skills.map((skill) => (
+          <SkillPill
+            key={skill}
+            skill={skill}
+            activeColor={projectAccent(project)}
+          />
+        ))}
+      </div>
+    </>
+  );
+}
+
+/**
+ * A full project card for the swipe strip. Its title and subtitle play as it
+ * comes into view. Visibility is measured against the page viewport, which
+ * still respects the strip's horizontal clipping; the threshold stays low
+ * because a card can be taller than a phone screen.
+ */
 export function ProjectCard({
   project,
   index,
@@ -25,90 +128,37 @@ export function ProjectCard({
   project: ProjectItem;
   index: number;
 }) {
-  const accentColor = project.color ?? '#71717a';
-  const num = String(index + 1).padStart(2, '0');
-
   return (
     <motion.article
-      variants={fadeUp}
-      className="group relative border-b border-zinc-200 py-12 pl-3 first:border-t dark:border-zinc-800"
+      variants={TITLE_SEQUENCE}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ amount: 0.3 }}
+      className="h-full rounded-3xl bg-white/80 p-5 shadow-floating sm:p-6 dark:bg-zinc-900/70"
     >
-      {/* Accent left-border reveal on hover */}
-      <span
-        aria-hidden="true"
-        className="absolute inset-y-0 left-0 w-[3px] origin-top scale-y-0 transition-transform duration-300 ease-out group-hover:scale-y-100"
-        style={{ backgroundColor: accentColor }}
-      />
-
-      {/* Meta row */}
-      <div className="mb-4 flex items-center justify-between">
-        <span className="label-overline">Project {num}</span>
+      <div className="mb-3 flex items-center justify-between">
+        <span className="label-overline">Project {projectNumber(index)}</span>
         <div className="flex items-center gap-2">
           <span className="mono-meta">{project.year}</span>
-          {project.links?.length ? (
-            // -mr-3 pulls the 40px hit areas back so icons align to the card edge
-            <div className="-mr-3 flex items-center">
-              {project.links.map((link) => (
-                <a
-                  key={link.url}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={
-                    { '--hover-color': accentColor } as React.CSSProperties
-                  }
-                  className="flex h-10 w-10 items-center justify-center text-zinc-400 transition-[color,scale] duration-150 ease-out hover:text-(--hover-color) active:scale-[0.96] dark:text-zinc-500"
-                  aria-label={`Link to ${link.type}`}
-                >
-                  {renderLinkIcon(link.type)}
-                </a>
-              ))}
-            </div>
-          ) : null}
+          <ProjectLinks project={project} />
         </div>
       </div>
 
-      {/* Title + subtitle */}
-      <h3 className="font-display text-4xl font-normal tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-5xl">
-        {project.title}
+      <h3 className="font-display text-3xl font-normal tracking-tight text-zinc-900 sm:text-4xl dark:text-zinc-50">
+        <SplitText text={project.title} stagger={0.04} />
       </h3>
       <p className="mt-1 font-mono text-sm text-zinc-500 dark:text-zinc-400">
-        {project.subtitle}
+        <SplitText text={project.subtitle} stagger={0.012} />
       </p>
 
-      {/* Image */}
-      {project.imageUrl ? (
-        <div className="my-8 aspect-[16/7] overflow-hidden rounded-2xl border border-black/10 dark:border-white/10">
-          <img
-            src={project.imageUrl}
-            alt={`Preview of ${project.title}`}
-            className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-            loading="lazy"
-          />
-        </div>
-      ) : (
-        <div
-          className="my-8 flex aspect-[16/7] items-center justify-center overflow-hidden rounded-2xl border border-black/10 dark:border-white/10"
-          style={{
-            backgroundImage: `linear-gradient(135deg, ${accentColor}1f, transparent 70%)`,
-          }}
-        >
-          <span
-            aria-hidden="true"
-            className="select-none font-display text-[8rem] font-bold leading-none tracking-tighter"
-            style={{ color: `${accentColor}33` }}
-          >
-            {num}
-          </span>
-        </div>
-      )}
+      <ProjectImage
+        project={project}
+        index={index}
+        className="mt-5 aspect-video"
+      />
 
-      <NumberedList items={project.description} className="mb-8 max-w-2xl" />
-
-      <div className="flex flex-wrap gap-2">
-        {project.skills.map((skill) => (
-          <SkillPill key={skill} skill={skill} activeColor={accentColor} />
-        ))}
+      <div className="mt-6">
+        <ProjectDetails project={project} />
       </div>
     </motion.article>
   );
