@@ -1,14 +1,60 @@
-import { FileText, Menu, Moon, Search, TerminalSquare, X } from 'lucide-react';
+import {
+  FileText,
+  type LucideIcon,
+  Menu,
+  Moon,
+  Search,
+  TerminalSquare,
+  X,
+} from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useCommandPalette } from '@/context/CommandPaletteContext';
 import { useTerminal } from '@/context/TerminalContext';
+import { useTheme } from '@/context/ThemeContext';
 import { NAV_LINKS } from '@/data/navigation';
 import { profile } from '@/data/profile';
 import { useScrollLock } from '@/hooks/useScrollLock';
 import { cn } from '@/utils/cn';
-import { useTheme } from './ThemeProvider';
+
+const MOBILE_ACTION_CLASS =
+  'flex flex-col items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm font-semibold text-zinc-900 transition-transform active:scale-[0.96] dark:bg-zinc-900 dark:text-zinc-50';
+
+/** Tile in the mobile menu's action grid: a button, or a new-tab link when `href` is set. */
+function MobileAction({
+  icon: Icon,
+  label,
+  onClick,
+  href,
+}: {
+  icon: LucideIcon;
+  label: string;
+  onClick?: () => void;
+  href?: string;
+}) {
+  const content = (
+    <>
+      <Icon className="h-6 w-6 text-zinc-500 dark:text-zinc-400" />
+      {label}
+    </>
+  );
+
+  return href ? (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={MOBILE_ACTION_CLASS}
+    >
+      {content}
+    </a>
+  ) : (
+    <button type="button" onClick={onClick} className={MOBILE_ACTION_CLASS}>
+      {content}
+    </button>
+  );
+}
 
 export function Navbar() {
   const { pathname } = useLocation();
@@ -98,7 +144,7 @@ export function Navbar() {
 
             <button
               type="button"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              onClick={() => setIsMobileMenuOpen((open) => !open)}
               className="flex h-9 w-9 items-center justify-center rounded-full border border-zinc-200/50 bg-white/50 text-zinc-600 transition-colors hover:bg-zinc-100 dark:border-zinc-700/50 dark:bg-zinc-800/50 dark:text-zinc-400 dark:hover:bg-zinc-800 sm:hidden"
               aria-label="Toggle mobile menu"
             >
@@ -161,42 +207,22 @@ export function Navbar() {
               transition={{ delay: 0.3, duration: 0.4 }}
               className="grid grid-cols-2 gap-3 border-t border-zinc-200/60 pt-6 dark:border-zinc-800/60"
             >
-              <button
-                type="button"
+              <MobileAction
+                icon={Search}
+                label="Search"
                 onClick={openCommandPalette}
-                className="flex flex-col items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm font-semibold text-zinc-900 transition-transform active:scale-[0.96] dark:bg-zinc-900 dark:text-zinc-50"
-              >
-                <Search className="h-6 w-6 text-zinc-500 dark:text-zinc-400" />
-                Search
-              </button>
-
-              <a
+              />
+              <MobileAction
+                icon={FileText}
+                label="Resume"
                 href={profile.resumeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex flex-col items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm font-semibold text-zinc-900 transition-transform active:scale-[0.96] dark:bg-zinc-900 dark:text-zinc-50"
-              >
-                <FileText className="h-6 w-6 text-zinc-500 dark:text-zinc-400" />
-                Resume
-              </a>
-
-              <button
-                type="button"
-                onClick={toggleTheme}
-                className="flex flex-col items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm font-semibold text-zinc-900 transition-transform active:scale-[0.96] dark:bg-zinc-900 dark:text-zinc-50"
-              >
-                <Moon className="h-6 w-6 text-zinc-500 dark:text-zinc-400" />
-                Theme
-              </button>
-
-              <button
-                type="button"
+              />
+              <MobileAction icon={Moon} label="Theme" onClick={toggleTheme} />
+              <MobileAction
+                icon={TerminalSquare}
+                label="Terminal"
                 onClick={toggleTerminal}
-                className="flex flex-col items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm font-semibold text-zinc-900 transition-transform active:scale-[0.96] dark:bg-zinc-900 dark:text-zinc-50"
-              >
-                <TerminalSquare className="h-6 w-6 text-zinc-500 dark:text-zinc-400" />
-                Terminal
-              </button>
+              />
             </motion.div>
           </motion.div>
         )}

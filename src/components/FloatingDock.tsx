@@ -9,8 +9,8 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 import { useCommandPalette } from '@/context/CommandPaletteContext';
 import { useTerminal } from '@/context/TerminalContext';
+import { useTheme } from '@/context/ThemeContext';
 import { profile } from '@/data/profile';
-import { useTheme } from './ThemeProvider';
 
 // A reusable Dock Button component with a built-in tooltip
 function DockItem({

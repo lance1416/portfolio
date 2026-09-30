@@ -2,7 +2,7 @@ import { motion } from 'motion/react';
 import { ExperienceRow } from '@/components/ExperienceRow';
 import { PageHeader } from '@/components/PageHeader';
 import { experienceData } from '@/data/experience';
-import { stagger } from '@/utils/variants';
+import { revealOnScroll, stagger } from '@/utils/variants';
 
 export default function Experience() {
   return (
@@ -18,12 +18,7 @@ export default function Experience() {
         subtitle="A chronological record of professional and academic roles."
       />
 
-      <motion.div
-        variants={stagger}
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, margin: '-80px' }}
-      >
+      <motion.div variants={stagger} {...revealOnScroll}>
         {experienceData.map((job) => (
           <ExperienceRow key={job.id} job={job} />
         ))}

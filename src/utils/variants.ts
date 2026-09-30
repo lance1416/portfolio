@@ -16,6 +16,13 @@ export const stagger: Variants = {
   show: { transition: { staggerChildren: 0.12 } },
 };
 
+/** Spread onto a stagger container to play it once as it scrolls into view. */
+export const revealOnScroll = {
+  initial: 'hidden',
+  whileInView: 'show',
+  viewport: { once: true, margin: '-80px' },
+} as const;
+
 /** Faster stagger for home page where content appears on first load. */
 export const staggerFast: Variants = {
   hidden: {},

@@ -1,16 +1,10 @@
 import { motion } from 'motion/react';
-import type { RefObject } from 'react';
 import { PageHeader } from '@/components/PageHeader';
 import { AwardRow, EducationCard } from '@/components/ResearchComponents';
 import { SkillPill } from '@/components/SkillPill';
-import {
-  type AwardItem,
-  awardsData,
-  dissertationData,
-  educationData,
-} from '@/data/research';
+import { awardsData, dissertationData, educationData } from '@/data/research';
 import { useBalancedText } from '@/hooks/useBalancedText';
-import { fadeUp, stagger } from '@/utils/variants';
+import { fadeUp, revealOnScroll, stagger } from '@/utils/variants';
 
 export default function Research() {
   const { ref: titleRef, style: titleStyle } =
@@ -36,7 +30,7 @@ export default function Research() {
 
           <div className="border-l-2 border-accent pl-6">
             <h2
-              ref={titleRef as RefObject<HTMLHeadingElement>}
+              ref={titleRef}
               style={titleStyle}
               className="font-display text-3xl font-normal leading-snug text-zinc-900 dark:text-zinc-50 sm:text-4xl"
             >
@@ -63,12 +57,7 @@ export default function Research() {
         </motion.section>
 
         {/* Academic Background */}
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: '-80px' }}
-        >
+        <motion.div variants={stagger} {...revealOnScroll}>
           <motion.p variants={fadeUp} className="label-overline mb-0">
             Academic Background
           </motion.p>
@@ -80,17 +69,12 @@ export default function Research() {
         </motion.div>
 
         {/* Awards & Honours */}
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: '-80px' }}
-        >
+        <motion.div variants={stagger} {...revealOnScroll}>
           <motion.p variants={fadeUp} className="label-overline mb-6">
             Awards & Honours
           </motion.p>
           <div className="border-t border-zinc-200 dark:border-zinc-800">
-            {awardsData.map((award: AwardItem) => (
+            {awardsData.map((award) => (
               <AwardRow key={award.id} award={award} />
             ))}
           </div>

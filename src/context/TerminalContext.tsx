@@ -1,4 +1,10 @@
-import { createContext, type ReactNode, useContext, useState } from 'react';
+import {
+  createContext,
+  type ReactNode,
+  useCallback,
+  useContext,
+  useState,
+} from 'react';
 
 interface TerminalContextType {
   isTerminal: boolean;
@@ -11,11 +17,10 @@ const TerminalContext = createContext<TerminalContextType | undefined>(
 
 export function TerminalProvider({ children }: { children: ReactNode }) {
   const [isTerminal, setIsTerminal] = useState(false);
+  const toggleTerminal = useCallback(() => setIsTerminal((prev) => !prev), []);
 
   return (
-    <TerminalContext.Provider
-      value={{ isTerminal, toggleTerminal: () => setIsTerminal(!isTerminal) }}
-    >
+    <TerminalContext.Provider value={{ isTerminal, toggleTerminal }}>
       {children}
     </TerminalContext.Provider>
   );

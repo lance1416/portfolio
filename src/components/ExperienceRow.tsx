@@ -1,11 +1,14 @@
 import { ArrowUpRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import type { ExperienceItem } from '@/data/experience';
+import { cn } from '@/utils/cn';
 import { fadeUp } from '@/utils/variants';
 import { NumberedList } from './NumberedList';
 import { SkillPill } from './SkillPill';
 
 export function ExperienceRow({ job }: { job: ExperienceItem }) {
+  const accentColor = job.color ?? 'var(--color-accent)';
+
   return (
     <motion.article
       variants={fadeUp}
@@ -19,8 +22,11 @@ export function ExperienceRow({ job }: { job: ExperienceItem }) {
       {/* Left border: always visible for active, hover-only for inactive */}
       <span
         aria-hidden="true"
-        className={`absolute inset-y-0 left-0 w-[3px] origin-top transition-transform duration-300 ease-out ${job.isActive ? 'scale-y-100' : 'scale-y-0 group-hover:scale-y-100'}`}
-        style={{ backgroundColor: job.color ?? 'var(--color-accent)' }}
+        className={cn(
+          'absolute inset-y-0 left-0 w-[3px] origin-top transition-transform duration-300 ease-out',
+          job.isActive ? 'scale-y-100' : 'scale-y-0 group-hover:scale-y-100',
+        )}
+        style={{ backgroundColor: accentColor }}
       />
 
       {/* Header */}
@@ -50,21 +56,14 @@ export function ExperienceRow({ job }: { job: ExperienceItem }) {
               <span className="relative flex h-2 w-2">
                 <span
                   className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60"
-                  style={{
-                    backgroundColor: job.color ?? 'var(--color-accent)',
-                  }}
+                  style={{ backgroundColor: accentColor }}
                 />
                 <span
                   className="relative inline-flex h-2 w-2 rounded-full"
-                  style={{
-                    backgroundColor: job.color ?? 'var(--color-accent)',
-                  }}
+                  style={{ backgroundColor: accentColor }}
                 />
               </span>
-              <span
-                className="label-overline"
-                style={{ color: job.color ?? 'var(--color-accent)' }}
-              >
+              <span className="label-overline" style={{ color: accentColor }}>
                 Live
               </span>
             </span>

@@ -48,10 +48,9 @@ export function ProjectCard({
           {project.links?.length ? (
             // -mr-3 pulls the 40px hit areas back so icons align to the card edge
             <div className="-mr-3 flex items-center">
-              {project.links.map((link, i) => (
+              {project.links.map((link) => (
                 <a
-                  // biome-ignore lint/suspicious/noArrayIndexKey: static ordered data
-                  key={i}
+                  key={link.url}
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"

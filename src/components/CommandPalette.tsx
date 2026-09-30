@@ -11,11 +11,11 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCommandPalette } from '@/context/CommandPaletteContext';
+import { useTheme } from '@/context/ThemeContext';
 import { NAV_LINKS } from '@/data/navigation';
 import { profile } from '@/data/profile';
 import { useScrollLock } from '@/hooks/useScrollLock';
 import { cn } from '@/utils/cn';
-import { useTheme } from './ThemeProvider';
 
 interface Action {
   id: string;

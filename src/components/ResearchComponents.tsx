@@ -1,12 +1,9 @@
 import { motion } from 'motion/react';
-import type * as React from 'react';
 import type { AwardItem, EducationItem } from '@/data/research';
 import { cn } from '@/utils/cn';
 import { fadeUp } from '@/utils/variants';
 
 export function EducationCard({ item }: { item: EducationItem }) {
-  const accentColor = item.color ?? '#71717a';
-
   return (
     <motion.article
       variants={fadeUp}
@@ -50,7 +47,6 @@ export function EducationCard({ item }: { item: EducationItem }) {
               src={item.logoUrl}
               alt={`${item.institution} seal`}
               className="h-20 w-20 object-contain opacity-20 grayscale transition-[opacity,filter] duration-500 group-hover:opacity-60 group-hover:grayscale-0"
-              style={{ '--accent': accentColor } as React.CSSProperties}
             />
           </div>
         )}

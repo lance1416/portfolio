@@ -1,6 +1,8 @@
 import { motion, useMotionValue } from 'motion/react';
 import { useEffect, useState } from 'react';
 
+const INTERACTIVE_SELECTOR = 'a, button, [role="button"]';
+
 export function CustomCursor() {
   const x = useMotionValue(-100);
   const y = useMotionValue(-100);
@@ -12,21 +14,14 @@ export function CustomCursor() {
       y.set(e.clientY);
     };
 
-    const onOver = (e: MouseEvent) => {
-      if (
-        (e.target as HTMLElement | null)?.closest('a, button, [role="button"]')
-      ) {
-        setHovered(true);
+    // Grow while over anything clickable.
+    const trackHover = (hovering: boolean) => (e: MouseEvent) => {
+      if ((e.target as Element | null)?.closest(INTERACTIVE_SELECTOR)) {
+        setHovered(hovering);
       }
     };
-
-    const onOut = (e: MouseEvent) => {
-      if (
-        (e.target as HTMLElement | null)?.closest('a, button, [role="button"]')
-      ) {
-        setHovered(false);
-      }
-    };
+    const onOver = trackHover(true);
+    const onOut = trackHover(false);
 
     window.addEventListener('mousemove', onMove);
     document.addEventListener('mouseover', onOver);

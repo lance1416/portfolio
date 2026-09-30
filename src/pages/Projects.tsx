@@ -2,7 +2,7 @@ import { motion } from 'motion/react';
 import { PageHeader } from '@/components/PageHeader';
 import { ProjectCard } from '@/components/ProjectCard';
 import { projectsData } from '@/data/projects';
-import { stagger } from '@/utils/variants';
+import { revealOnScroll, stagger } from '@/utils/variants';
 
 export default function Projects() {
   return (
@@ -18,12 +18,7 @@ export default function Projects() {
         subtitle="Engineering challenges spanning low-level systems to multidisciplinary game design."
       />
 
-      <motion.div
-        variants={stagger}
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, margin: '-80px' }}
-      >
+      <motion.div variants={stagger} {...revealOnScroll}>
         {projectsData.map((project, index) => (
           <ProjectCard key={project.id} project={project} index={index} />
         ))}
