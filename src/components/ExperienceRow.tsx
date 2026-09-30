@@ -37,7 +37,8 @@ export function ExperienceRow({ job }: { job: ExperienceItem }) {
               href={job.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="link-underline label-overline mb-2 inline-flex items-center gap-1 transition-colors hover:text-zinc-900 dark:hover:text-zinc-100"
+              // after: widens the 10px label to a ~40px hit area
+              className="link-underline label-overline relative mb-2 inline-flex items-center gap-1 transition-colors after:absolute after:-inset-x-2 after:-inset-y-3.5 hover:text-zinc-900 dark:hover:text-zinc-100"
             >
               {job.company}
               <ArrowUpRight className="h-2.5 w-2.5" />
@@ -55,7 +56,7 @@ export function ExperienceRow({ job }: { job: ExperienceItem }) {
             <span className="inline-flex items-center gap-1.5">
               <span className="relative flex h-2 w-2">
                 <span
-                  className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60"
+                  className="absolute inline-flex h-full w-full rounded-full opacity-60 motion-safe:animate-ping"
                   style={{ backgroundColor: accentColor }}
                 />
                 <span

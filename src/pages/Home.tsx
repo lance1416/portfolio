@@ -175,15 +175,16 @@ export default function Home() {
 
         <div>
           <p className="label-overline mb-3">Elsewhere</p>
-          <ul className="flex flex-col gap-2">
+          {/* Each link is a 40px-tall block (py-3 around 16px text); -my-3 keeps the section's outer spacing. */}
+          <ul className="-my-3 flex flex-col">
             {ELSEWHERE.map(({ label, href, ext }) => (
               <li key={label}>
                 <a
                   href={href}
                   {...(ext && { target: '_blank', rel: 'noreferrer' })}
-                  className="link-underline font-mono text-xs text-zinc-500 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+                  className="group block py-3 font-mono text-xs text-zinc-500 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
                 >
-                  {label}
+                  <span className="link-underline">{label}</span>
                   {ext && <span className="ml-0.5 opacity-40">↗</span>}
                 </a>
               </li>

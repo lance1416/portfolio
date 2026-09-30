@@ -17,6 +17,7 @@ import { NAV_LINKS } from '@/data/navigation';
 import { profile } from '@/data/profile';
 import { useScrollLock } from '@/hooks/useScrollLock';
 import { cn } from '@/utils/cn';
+import { IconSwap } from './IconSwap';
 
 const MOBILE_ACTION_CLASS =
   'flex flex-col items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm font-semibold text-zinc-900 transition-transform active:scale-[0.96] dark:bg-zinc-900 dark:text-zinc-50';
@@ -86,12 +87,12 @@ export function Navbar() {
         transition={{ type: 'spring', stiffness: 300, damping: 20 }}
         className="fixed inset-x-4 top-4 z-[60] mx-auto max-w-3xl"
       >
-        <nav className="relative flex items-center justify-between rounded-full border border-zinc-200/50 bg-white/60 px-4 py-2.5 shadow-sm backdrop-blur-md dark:border-zinc-800/50 dark:bg-zinc-950/60 sm:px-6">
+        <nav className="relative flex items-center justify-between rounded-full bg-white/60 px-4 py-2.5 shadow-border backdrop-blur-md dark:bg-zinc-950/60 sm:px-6">
           <div className="flex w-32 items-center">
             <Link
               to="/"
               onClick={closeMobileMenu}
-              className="z-10 font-display font-normal text-zinc-900 transition-transform active:scale-[0.96] dark:text-zinc-50"
+              className="z-10 -my-2 py-2 font-display font-normal text-zinc-900 transition-transform active:scale-[0.96] dark:text-zinc-50"
             >
               {profile.name}
             </Link>
@@ -132,7 +133,7 @@ export function Navbar() {
             <button
               type="button"
               onClick={openCommandPalette}
-              className="group hidden sm:flex items-center gap-2 rounded-full border border-zinc-200/50 bg-white/50 pl-3 pr-2 py-1.5 text-xs font-medium text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:border-zinc-700/50 dark:bg-zinc-800/50 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+              className="group hidden sm:flex items-center gap-2 rounded-full bg-white/50 pl-3 pr-2 py-2 text-xs font-medium text-zinc-500 shadow-border transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:bg-zinc-800/50 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
             >
               <Search className="h-3.5 w-3.5" />
               <span>Menu</span>
@@ -146,20 +147,18 @@ export function Navbar() {
               onClick={() =>
                 setMenuOpenedAt(isMobileMenuOpen ? null : pathname)
               }
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-zinc-200/50 bg-white/50 text-zinc-600 transition-colors hover:bg-zinc-100 dark:border-zinc-700/50 dark:bg-zinc-800/50 dark:text-zinc-400 dark:hover:bg-zinc-800 sm:hidden"
+              // after: extends the 36px button to a 44px touch target
+              className="relative flex h-9 w-9 items-center justify-center rounded-full bg-white/50 text-zinc-600 shadow-border transition-colors after:absolute after:-inset-1 hover:bg-zinc-100 dark:bg-zinc-800/50 dark:text-zinc-400 dark:hover:bg-zinc-800 sm:hidden"
               aria-label="Toggle mobile menu"
+              aria-expanded={isMobileMenuOpen}
             >
-              <motion.div
-                initial={false}
-                animate={{ rotate: isMobileMenuOpen ? 90 : 0 }}
-                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-              >
+              <IconSwap swapKey={isMobileMenuOpen ? 'close' : 'menu'}>
                 {isMobileMenuOpen ? (
                   <X className="h-4 w-4" />
                 ) : (
                   <Menu className="h-4 w-4" />
                 )}
-              </motion.div>
+              </IconSwap>
             </button>
           </div>
         </nav>
@@ -174,9 +173,13 @@ export function Navbar() {
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            exit={{
+              opacity: 0,
+              y: -8,
+              transition: { duration: 0.15, ease: 'easeOut' },
+            }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-[50] flex flex-col bg-white/95 px-6 pb-8 pt-32 backdrop-blur-3xl dark:bg-zinc-950/95 sm:hidden"
+            className="fixed inset-0 z-[50] flex flex-col bg-white/95 px-6 pb-8 pt-32 backdrop-blur-md dark:bg-zinc-950/95 sm:hidden"
           >
             {/* Massive Typography Links */}
             <div className="flex flex-1 flex-col justify-center gap-6">

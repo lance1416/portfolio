@@ -22,10 +22,45 @@
     0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
 }
 
+@utility shadow-border {
+  box-shadow: var(--elevation-border);
+}
+
+@utility shadow-floating {
+  box-shadow: var(--elevation-floating);
+}
+
+@utility shadow-overlay {
+  box-shadow: var(--elevation-overlay);
+}
+
 @layer base {
+  /*
+   * Elevation for floating surfaces: a 1px ring stands in for a border so it
+   * reads cleanly over any content scrolling underneath. Kept out of @theme
+   * because Tailwind inlines theme shadows, which would ignore the .dark
+   * overrides below.
+   */
+  :root {
+    --elevation-border:
+      0 0 0 1px oklch(0 0 0 / 0.06), 0 1px 2px -1px oklch(0 0 0 / 0.06),
+      0 2px 4px 0 oklch(0 0 0 / 0.04);
+    --elevation-floating:
+      0 0 0 1px oklch(0 0 0 / 0.06), 0 10px 15px -3px oklch(0 0 0 / 0.08),
+      0 4px 6px -2px oklch(0 0 0 / 0.04);
+    --elevation-overlay:
+      0 0 0 1px oklch(0 0 0 / 0.06), 0 25px 50px -12px oklch(0 0 0 / 0.25);
+  }
+
   .dark {
     --color-accent: oklch(72% 0.14 268);
     --color-accent-subtle: oklch(18% 0.06 268);
+
+    /* Depth shadows vanish on dark backgrounds; keep only the ring. */
+    --elevation-border: 0 0 0 1px oklch(1 0 0 / 0.08);
+    --elevation-floating: 0 0 0 1px oklch(1 0 0 / 0.08);
+    --elevation-overlay:
+      0 0 0 1px oklch(1 0 0 / 0.08), 0 25px 50px -12px oklch(0 0 0 / 0.5);
   }
 
   html {
@@ -33,6 +68,10 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     scroll-behavior: smooth;
+
+    @media (prefers-reduced-motion: reduce) {
+      scroll-behavior: auto;
+    }
   }
 
   /* Hide native cursor on precise-pointer devices — replaced by CustomCursor */
@@ -119,7 +158,8 @@
     font-optical-sizing: auto;
   }
 
-  /* Animated underline — grows left-to-right on hover */
+  /* Animated underline — grows left-to-right on hover (of itself, or of a
+     padded `.group` link wrapping it) */
   .link-underline {
     background-image: linear-gradient(currentColor, currentColor);
     background-position: 0% 100%;
@@ -127,7 +167,8 @@
     background-size: 0% 1px;
     transition: background-size 0.3s ease;
 
-    &:hover {
+    &:hover,
+    .group:hover > & {
       background-size: 100% 1px;
     }
   }

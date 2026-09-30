@@ -57,7 +57,7 @@ export function ProjectCard({
                   style={
                     { '--hover-color': accentColor } as React.CSSProperties
                   }
-                  className="flex h-10 w-10 items-center justify-center text-zinc-400 transition-[color,transform] hover:scale-110 hover:text-(--hover-color) active:scale-[0.96] dark:text-zinc-500"
+                  className="flex h-10 w-10 items-center justify-center text-zinc-400 transition-[color,scale] duration-150 ease-out hover:text-(--hover-color) active:scale-[0.96] dark:text-zinc-500"
                   aria-label={`Link to ${link.type}`}
                 >
                   {renderLinkIcon(link.type)}

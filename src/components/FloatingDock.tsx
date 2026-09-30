@@ -12,7 +12,7 @@ import { useTerminal } from '@/context/TerminalContext';
 import { useTheme } from '@/context/ThemeContext';
 import { openResume } from '@/utils/resume';
 
-// A reusable Dock Button component with a built-in tooltip
+/** Icon button with a tooltip shown on hover and on keyboard focus. */
 function DockItem({
   icon: Icon,
   label,
@@ -25,22 +25,19 @@ function DockItem({
   shortcut?: string;
 }) {
   const [isHovered, setIsHovered] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
 
   return (
-    // biome-ignore lint/a11y/noStaticElementInteractions: Set hovering state
-    <div
-      className="relative flex items-center justify-center"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
+    <div className="relative flex items-center justify-center">
       <AnimatePresence>
-        {isHovered && (
+        {(isHovered || isFocused) && (
           <motion.div
+            aria-hidden="true"
             initial={{ opacity: 0, y: 10, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 2, scale: 0.9 }}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            className="absolute -top-12 flex items-center gap-2 whitespace-nowrap rounded-lg border border-zinc-200/50 bg-white/90 px-3 py-1.5 text-xs font-medium text-zinc-700 shadow-sm backdrop-blur-md dark:border-zinc-700/50 dark:bg-zinc-800/90 dark:text-zinc-300"
+            className="absolute -top-12 flex items-center gap-2 whitespace-nowrap rounded-lg bg-white/90 px-3 py-1.5 text-xs font-medium text-zinc-700 shadow-border backdrop-blur-md dark:bg-zinc-800/90 dark:text-zinc-300"
           >
             {label}
             {shortcut && (
@@ -54,8 +51,15 @@ function DockItem({
 
       <button
         type="button"
+        aria-label={label}
+        aria-keyshortcuts={shortcut === '⌘K' ? 'Meta+K Control+K' : undefined}
         onClick={onClick}
-        className="group relative flex h-12 w-12 items-center justify-center rounded-2xl transition-[transform,background-color] duration-300 hover:bg-zinc-100 hover:scale-110 active:scale-[0.96] dark:hover:bg-zinc-800"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        // Mouse clicks also focus the button; only keyboard focus shows the tooltip.
+        onFocus={(e) => setIsFocused(e.currentTarget.matches(':focus-visible'))}
+        onBlur={() => setIsFocused(false)}
+        className="group relative flex h-12 w-12 items-center justify-center rounded-2xl transition-[scale,background-color] duration-150 ease-out hover:bg-zinc-100 active:scale-[0.96] dark:hover:bg-zinc-800"
       >
         <Icon className="h-5 w-5 text-zinc-500 transition-colors group-hover:text-zinc-900 dark:text-zinc-400 dark:group-hover:text-zinc-50" />
       </button>
@@ -73,7 +77,7 @@ export function FloatingDock() {
       initial={{ y: 100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ type: 'spring', stiffness: 300, damping: 24, delay: 0.2 }}
-      className="fixed bottom-6 left-1/2 z-50 hidden -translate-x-1/2 items-center gap-2 rounded-3xl border border-zinc-200/50 bg-white/60 p-2 shadow-apple-lg backdrop-blur-xl dark:border-zinc-800/50 dark:bg-zinc-900/60 sm:flex"
+      className="fixed bottom-6 left-1/2 z-50 hidden -translate-x-1/2 items-center gap-2 rounded-3xl bg-white/60 p-2 shadow-floating backdrop-blur-xl dark:bg-zinc-900/60 sm:flex"
     >
       <DockItem
         icon={Search}

@@ -17,6 +17,7 @@ import { profile } from '@/data/profile';
 import { useScrollLock } from '@/hooks/useScrollLock';
 import { cn } from '@/utils/cn';
 import { openResume } from '@/utils/resume';
+import { IconSwap } from './IconSwap';
 
 interface Action {
   id: string;
@@ -153,7 +154,10 @@ export function CommandPalette() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            exit={{
+              opacity: 0,
+              transition: { duration: 0.15, ease: 'easeOut' },
+            }}
             onClick={close}
             className="fixed inset-0 z-[100] bg-zinc-900/20 backdrop-blur-sm dark:bg-black/40"
           />
@@ -162,9 +166,13 @@ export function CommandPalette() {
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: -20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: -20 }}
+              exit={{
+                opacity: 0,
+                y: -8,
+                transition: { duration: 0.15, ease: 'easeOut' },
+              }}
               transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-              className="w-full max-w-xl overflow-hidden rounded-2xl border border-zinc-200/60 bg-white/80 shadow-2xl backdrop-blur-xl dark:border-zinc-800/60 dark:bg-zinc-900/80 pointer-events-auto"
+              className="w-full max-w-xl overflow-hidden rounded-2xl bg-white/80 shadow-overlay backdrop-blur-xl dark:bg-zinc-900/80 pointer-events-auto"
             >
               <div className="flex items-center border-b border-zinc-200/60 px-4 dark:border-zinc-800/60">
                 <Search className="h-5 w-5 text-zinc-400 dark:text-zinc-500" />
@@ -209,14 +217,17 @@ export function CommandPalette() {
                             : 'text-zinc-600 dark:text-zinc-400',
                         )}
                       >
-                        <Icon
-                          className={cn(
-                            'h-4 w-4 transition-colors',
-                            isSelected
-                              ? 'text-zinc-900 dark:text-zinc-50'
-                              : 'text-zinc-400',
-                          )}
-                        />
+                        {/* Keyed by name so state changes (Copy → Copied) cross-fade the icon. */}
+                        <IconSwap swapKey={action.name}>
+                          <Icon
+                            className={cn(
+                              'h-4 w-4 transition-colors',
+                              isSelected
+                                ? 'text-zinc-900 dark:text-zinc-50'
+                                : 'text-zinc-400',
+                            )}
+                          />
+                        </IconSwap>
                         {action.name}
                       </button>
                     );
