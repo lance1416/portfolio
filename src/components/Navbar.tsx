@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useCommandPalette } from '@/context/CommandPaletteContext';
 import { useTerminal } from '@/context/TerminalContext';
+import { useScrollLock } from '@/hooks/useScrollLock';
 import { cn } from '@/utils/cn';
 import { useTheme } from './ThemeProvider';
 
@@ -20,14 +21,7 @@ export function Navbar() {
   const { open } = useCommandPalette();
   const { toggleTheme } = useTheme();
 
-  // Lock body scroll when full-screen menu is open
-  useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
-  }, [isMobileMenuOpen]);
+  useScrollLock(isMobileMenuOpen);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: Intentional
   useEffect(() => {
