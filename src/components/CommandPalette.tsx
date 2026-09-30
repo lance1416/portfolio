@@ -6,6 +6,7 @@ import {
   FileText,
   GraduationCap,
   Home,
+  type LucideIcon,
   Moon,
   Search,
 } from 'lucide-react';
@@ -13,8 +14,17 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCommandPalette } from '@/context/CommandPaletteContext';
+import { useScrollLock } from '@/hooks/useScrollLock';
 import { cn } from '@/utils/cn';
 import { useTheme } from './ThemeProvider';
+
+interface Action {
+  id: string;
+  name: string;
+  icon: LucideIcon;
+  onSelect: () => void;
+  keepOpen?: boolean;
+}
 
 export function CommandPalette() {
   const { isOpen, close } = useCommandPalette();
@@ -29,23 +39,21 @@ export function CommandPalette() {
   const listRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
-  // Lock scroll + focus the input when opening; reset state when closing.
+  useScrollLock(isOpen);
+
+  // Focus the input when opening; reset state when closing.
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
       setTimeout(() => inputRef.current?.focus(), 50);
     } else {
-      document.body.style.overflow = 'auto';
       setQuery('');
       setSelectedIndex(0);
     }
   }, [isOpen]);
 
-  const runCommand = (command: () => void) => {
-    command();
-    if (command.name !== 'copyEmail') {
-      close();
-    }
+  const runAction = (action: Action) => {
+    action.onSelect();
+    if (!action.keepOpen) close();
   };
 
   const copyEmail = () => {
@@ -57,7 +65,7 @@ export function CommandPalette() {
     }, 1500);
   };
 
-  const actions = [
+  const actions: Action[] = [
     {
       id: 'home',
       name: 'Go to Home',
@@ -99,6 +107,8 @@ export function CommandPalette() {
       name: copied ? 'Email Copied!' : 'Copy Email Address',
       icon: copied ? Check : Copy,
       onSelect: copyEmail,
+      // Stays open to show the "copied" confirmation, then closes itself.
+      keepOpen: true,
     },
   ];
 
@@ -109,13 +119,7 @@ export function CommandPalette() {
           action.name.toLowerCase().includes(query.toLowerCase()),
         );
 
-  // 3. Reset selection when search query changes
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Intentional
-  useEffect(() => {
-    setSelectedIndex(0);
-  }, [query]);
-
-  // 4. Auto-scroll logic: keeps the highlighted item visible in the scrollable list
+  // Keep the highlighted item visible in the scrollable list.
   useEffect(() => {
     if (!isOpen) return;
     const activeElement = document.getElementById(
@@ -127,7 +131,6 @@ export function CommandPalette() {
     }
   }, [selectedIndex, isOpen]);
 
-  // 5. The Keyboard Navigation Engine
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (filteredActions.length === 0) return;
 
@@ -141,7 +144,7 @@ export function CommandPalette() {
       );
     } else if (e.key === 'Enter') {
       e.preventDefault();
-      runCommand(filteredActions[selectedIndex].onSelect);
+      runAction(filteredActions[selectedIndex]);
     }
   };
 
@@ -170,8 +173,11 @@ export function CommandPalette() {
                 <input
                   ref={inputRef}
                   value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  onKeyDown={handleKeyDown} // Hooked up the listener here
+                  onChange={(e) => {
+                    setQuery(e.target.value);
+                    setSelectedIndex(0);
+                  }}
+                  onKeyDown={handleKeyDown}
                   placeholder="Type a command or search..."
                   className="h-14 w-full bg-transparent px-4 font-mono text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none dark:text-zinc-50 dark:placeholder:text-zinc-500"
                 />
@@ -180,7 +186,6 @@ export function CommandPalette() {
                 </kbd>
               </div>
 
-              {/* Added a ref to the list container for scrolling */}
               <div ref={listRef} className="max-h-[60vh] overflow-y-auto p-2">
                 {filteredActions.length === 0 ? (
                   <p className="p-4 text-center text-sm text-zinc-500 dark:text-zinc-400">
@@ -189,7 +194,6 @@ export function CommandPalette() {
                 ) : (
                   filteredActions.map((action, index) => {
                     const Icon = action.icon;
-                    // Check if this item is currently highlighted via keyboard
                     const isSelected = index === selectedIndex;
 
                     return (
@@ -197,7 +201,7 @@ export function CommandPalette() {
                         type="button"
                         key={action.id}
                         id={`command-item-${index}`}
-                        onClick={() => runCommand(action.onSelect)}
+                        onClick={() => runAction(action)}
                         // Sync mouse hover with keyboard selection
                         onMouseEnter={() => setSelectedIndex(index)}
                         className={cn(
