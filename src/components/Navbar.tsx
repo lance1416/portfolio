@@ -1,5 +1,5 @@
-import { AnimatePresence, motion } from 'framer-motion';
 import { FileText, Menu, Moon, Search, TerminalSquare, X } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useCommandPalette } from '@/context/CommandPaletteContext';

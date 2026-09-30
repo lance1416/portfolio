@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
+import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 
 export default function NotFound() {

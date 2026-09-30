@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
 import { ExternalLink } from 'lucide-react';
+import { motion } from 'motion/react';
 import type * as React from 'react';
 import { FaGithub, FaItchIo } from 'react-icons/fa6';
 import type { LinkType, ProjectItem } from '@/data/projects';

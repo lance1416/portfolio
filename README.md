@@ -10,7 +10,7 @@ Live at **[lance1416.com](https://www.lance1416.com)**.
 
 - **React 19** + **TypeScript** + **Vite**
 - **Tailwind CSS v4** (configured entirely in `src/index.css` via `@theme`)
-- **Framer Motion** for transitions and micro-interactions
+- **Motion** (`motion/react`, formerly Framer Motion) for transitions and micro-interactions
 - **React Router** for routing
 - **Biome** for linting/formatting, **Husky** + **commitlint** for git hooks
 

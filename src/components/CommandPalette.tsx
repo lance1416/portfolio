@@ -1,4 +1,3 @@
-import { AnimatePresence, motion } from 'framer-motion';
 import {
   Briefcase,
   Check,
@@ -10,6 +9,7 @@ import {
   Moon,
   Search,
 } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCommandPalette } from '@/context/CommandPaletteContext';

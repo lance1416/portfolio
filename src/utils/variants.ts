@@ -1,4 +1,4 @@
-import type { Variants } from 'framer-motion';
+import type { Variants } from 'motion/react';
 
 /** Standard fade-up for individual items inside a stagger container. */
 export const fadeUp: Variants = {

@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import type * as React from 'react';
 import type { AwardItem, EducationItem } from '@/data/research';
 import { cn } from '@/utils/cn';

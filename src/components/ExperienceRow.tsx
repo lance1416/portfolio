@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
+import { motion } from 'motion/react';
 import type { ExperienceItem } from '@/data/experience';
 import { fadeUp } from '@/utils/variants';
 import { NumberedList } from './NumberedList';

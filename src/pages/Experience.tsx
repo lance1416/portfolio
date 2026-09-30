@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { ExperienceRow } from '@/components/ExperienceRow';
 import { PageHeader } from '@/components/PageHeader';
 import { experienceData } from '@/data/experience';

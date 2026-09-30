@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
 import { AlertCircle, RotateCcw } from 'lucide-react';
+import { motion } from 'motion/react';
 import { isRouteErrorResponse, Link, useRouteError } from 'react-router-dom';
 
 export default function ErrorPage() {
