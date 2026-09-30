@@ -33,7 +33,9 @@ export function TerminalView() {
   const { pathname } = useLocation();
   const { toggleTerminal } = useTerminal();
 
-  const { filename, data } = FILES_BY_PATH[pathname] ?? WHOAMI;
+  // React Router also matches '/projects/', so ignore trailing slashes.
+  const route = pathname.replace(/\/+$/, '') || '/';
+  const { filename, data } = FILES_BY_PATH[route] ?? WHOAMI;
   const output = `sinan@macbook-pro:~$ cat ${filename}\n${JSON.stringify(data, null, 2)}`;
 
   return (
