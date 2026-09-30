@@ -87,11 +87,10 @@
     }
   }
 
-  /* Hide native cursor on precise-pointer devices — replaced by CustomCursor */
-  @media (pointer: fine) {
-    * {
-      cursor: none;
-    }
+  /* Tailwind v4 resets buttons to the default cursor; restore the pointer */
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
   }
 
   body {

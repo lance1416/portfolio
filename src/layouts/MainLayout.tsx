@@ -1,6 +1,5 @@
 import { Outlet, ScrollRestoration } from 'react-router-dom';
 import { CommandPalette } from '@/components/CommandPalette';
-import { CustomCursor } from '@/components/CustomCursor';
 import { FloatingDock } from '@/components/FloatingDock';
 import { Footer } from '@/components/Footer';
 import { Navbar } from '@/components/Navbar';
@@ -27,7 +26,6 @@ export default function MainLayout() {
       <Footer />
       <FloatingDock />
       <ScrollRestoration />
-      <CustomCursor />
       <ScrollProgress />
     </div>
   );
