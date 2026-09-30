@@ -42,23 +42,23 @@ export const LOCATIONS: Location[] = [
 
 export const ELSEWHERE: ElsewhereLink[] = [
   { label: 'github', href: profile.links.github, ext: true },
-  { label: 'scholar', href: profile.links.scholar, ext: true },
+  { label: 'linkedin', href: profile.links.linkedin, ext: true },
   { label: 'email', href: `mailto:${profile.email}`, ext: false },
   { label: 'cv.pdf', href: profile.resumeUrl, ext: true },
 ];
 
 export const NOW_ITEMS: NowItem[] = [
   {
-    label: 'Oxford',
-    detail: 'Quantum decodability dissertation',
-    lightColor: '#002147',
-    darkColor: '#5b8fdf',
-  },
-  {
     label: 'IQBank',
-    detail: 'Shipping Phase 2',
+    detail: 'Leading the 10-person dev team',
     lightColor: '#3b5fb2',
     darkColor: '#7baae8',
+  },
+  {
+    label: 'Oxford',
+    detail: 'MSc awaiting conferral',
+    lightColor: '#002147',
+    darkColor: '#5b8fdf',
   },
 ];
 
@@ -66,15 +66,16 @@ export const FIELDS: Field[] = [
   {
     domain: 'Research',
     detail:
-      'MSc Oxford · Quantum Group · quantum error correction & ZX-calculus',
+      'MSc Oxford · quantum error correction & ZX-calculus · AI interpretability at Fabrial Labs',
   },
   {
     domain: 'Systems',
-    detail: 'KidneyOS Rust kernel · storage subsystem lead · IDE driver & I/O',
+    detail:
+      'KidneyOS Rust kernel · storage subsystem author · ATA driver & block layer',
   },
   {
     domain: 'Product',
-    detail: 'IQBank co-founder · 11-person team · ~100 beta users',
+    detail: 'IQBank co-founder · 10-person team · 379 users',
   },
 ];
 
@@ -84,7 +85,7 @@ export const INDEX_ENTRIES: IndexEntry[] = [
   {
     number: '01',
     category: 'Research',
-    title: 'Fault-equivalence rewrites & quantum decodability',
+    title: 'Fault-equivalence rewrites & quantum error decodability',
     year: '2026',
     to: '/research',
   },
@@ -98,7 +99,7 @@ export const INDEX_ENTRIES: IndexEntry[] = [
   {
     number: '03',
     category: 'Product',
-    title: 'IQBank — Full-stack education platform',
+    title: 'IQBank — Course study platform',
     year: '2025',
     to: '/experience',
   },

@@ -20,13 +20,13 @@ export default function Research() {
       <PageHeader
         chapter="§ 03"
         title="Research"
-        subtitle="Academic background and current investigations in quantum computation."
+        subtitle="Academic background and research in quantum computation."
       />
 
       <div className="space-y-24">
         {/* Dissertation — journal abstract style */}
         <motion.section variants={fadeUp}>
-          <p className="label-overline mb-8">Current Dissertation</p>
+          <p className="label-overline mb-8">MSc Dissertation</p>
 
           <div className="border-l-2 border-accent pl-6">
             <h2
