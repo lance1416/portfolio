@@ -42,18 +42,21 @@ function findBalancedWidth(
  * that keeps the same line count as the natural layout — eliminating orphans
  * without manual <br> tags or CSS `text-wrap: balance` guesswork.
  *
- * The hook reads the element's own computed font (weight, size, family) so
- * it stays correct across responsive breakpoints. It observes the *parent*
+ * The hook measures the element's own rendered text and computed font
+ * (weight, size, family), so there is no separate copy of the text to keep in
+ * sync and it stays correct across responsive breakpoints. Text is read on
+ * mount and on resize, which suits static copy. It observes the *parent*
  * element's width to avoid feedback loops when the inline style changes the
  * element's own size.
  *
  * Usage:
- *   const { ref, style } = useBalancedText<HTMLParagraphElement>(text);
+ *   const { ref, style } = useBalancedText<HTMLParagraphElement>();
  *   <p ref={ref} style={style} className="max-w-xl ...">...</p>
  */
-export function useBalancedText<T extends HTMLElement = HTMLElement>(
-  text: string,
-): { ref: RefObject<T | null>; style: CSSProperties | undefined } {
+export function useBalancedText<T extends HTMLElement = HTMLElement>(): {
+  ref: RefObject<T | null>;
+  style: CSSProperties | undefined;
+} {
   const ref = useRef<T>(null);
   const [balancedWidth, setBalancedWidth] = useState<number | null>(null);
 
@@ -85,6 +88,7 @@ export function useBalancedText<T extends HTMLElement = HTMLElement>(
         .filter(Boolean)
         .join(' ');
 
+      const text = el.textContent ?? '';
       const width = findBalancedWidth(text, font, availableWidth);
       if (!cancelled) setBalancedWidth(width);
     }
@@ -99,7 +103,7 @@ export function useBalancedText<T extends HTMLElement = HTMLElement>(
       cancelled = true;
       ro?.disconnect();
     };
-  }, [text]);
+  }, []);
 
   return {
     ref,

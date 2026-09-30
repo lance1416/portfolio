@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { useCommandPalette } from '@/context/CommandPaletteContext';
 import { useTerminal } from '@/context/TerminalContext';
 import { useTheme } from '@/context/ThemeContext';
-import { profile } from '@/data/profile';
+import { openResume } from '@/utils/resume';
 
 // A reusable Dock Button component with a built-in tooltip
 function DockItem({
@@ -68,10 +68,6 @@ export function FloatingDock() {
   const { open: openCommandPalette } = useCommandPalette();
   const { toggleTheme } = useTheme();
 
-  const downloadResume = () => {
-    window.open(profile.resumeUrl, '_blank');
-  };
-
   return (
     <motion.div
       initial={{ y: 100, opacity: 0 }}
@@ -89,11 +85,7 @@ export function FloatingDock() {
       {/* Separator */}
       <div className="h-8 w-px bg-zinc-200/60 dark:bg-zinc-700/50" />
 
-      <DockItem
-        icon={FileText}
-        label="Download Resume"
-        onClick={downloadResume}
-      />
+      <DockItem icon={FileText} label="Download Resume" onClick={openResume} />
       <DockItem
         icon={TerminalSquare}
         label="Terminal Mode"

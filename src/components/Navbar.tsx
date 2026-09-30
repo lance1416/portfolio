@@ -8,7 +8,7 @@ import {
   X,
 } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useCommandPalette } from '@/context/CommandPaletteContext';
 import { useTerminal } from '@/context/TerminalContext';
@@ -58,21 +58,20 @@ function MobileAction({
 
 export function Navbar() {
   const { pathname } = useLocation();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  // The menu is open only on the path it was opened from, so any navigation
+  // (links, palette, browser back) closes it without an effect.
+  const [menuOpenedAt, setMenuOpenedAt] = useState<string | null>(null);
+  const isMobileMenuOpen = menuOpenedAt === pathname;
+  const closeMobileMenu = () => setMenuOpenedAt(null);
   const { toggleTerminal } = useTerminal();
   const { open } = useCommandPalette();
   const { toggleTheme } = useTheme();
 
   useScrollLock(isMobileMenuOpen);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Intentional
-  useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [pathname]);
-
   const openCommandPalette = () => {
     open();
-    setIsMobileMenuOpen(false); // Close the mobile menu if opening search there
+    closeMobileMenu();
   };
 
   return (
@@ -91,7 +90,7 @@ export function Navbar() {
           <div className="flex w-32 items-center">
             <Link
               to="/"
-              onClick={() => setIsMobileMenuOpen(false)}
+              onClick={closeMobileMenu}
               className="z-10 font-display font-normal text-zinc-900 transition-transform active:scale-[0.96] dark:text-zinc-50"
             >
               {profile.name}
@@ -144,7 +143,9 @@ export function Navbar() {
 
             <button
               type="button"
-              onClick={() => setIsMobileMenuOpen((open) => !open)}
+              onClick={() =>
+                setMenuOpenedAt(isMobileMenuOpen ? null : pathname)
+              }
               className="flex h-9 w-9 items-center justify-center rounded-full border border-zinc-200/50 bg-white/50 text-zinc-600 transition-colors hover:bg-zinc-100 dark:border-zinc-700/50 dark:bg-zinc-800/50 dark:text-zinc-400 dark:hover:bg-zinc-800 sm:hidden"
               aria-label="Toggle mobile menu"
             >

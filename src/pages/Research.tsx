@@ -8,7 +8,7 @@ import { fadeUp, revealOnScroll, stagger } from '@/utils/variants';
 
 export default function Research() {
   const { ref: titleRef, style: titleStyle } =
-    useBalancedText<HTMLHeadingElement>(dissertationData.title);
+    useBalancedText<HTMLHeadingElement>();
 
   return (
     <motion.main

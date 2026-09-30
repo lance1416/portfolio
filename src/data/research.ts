@@ -5,7 +5,6 @@ export interface EducationItem {
   period: string;
   details: string[];
   logoUrl?: string;
-  color?: string;
   isActive?: boolean;
 }
 
@@ -24,7 +23,6 @@ export const educationData: EducationItem[] = [
     period: '2025 – 2026',
     logoUrl:
       'https://public.lance1416.com/portfolio/coat/Arms_of_University_of_Oxford.svg',
-    color: '#002147',
     isActive: true,
     details: [
       'Supervisor: Professor Aleks Kissinger.',
@@ -37,7 +35,6 @@ export const educationData: EducationItem[] = [
     degree: 'BSc Computer Science Specialist, Mathematics Minor',
     period: '2021 – 2025',
     logoUrl: 'https://public.lance1416.com/portfolio/coat/Utoronto_coa.svg',
-    color: '#1E3765',
     details: [
       'Graduated with High Distinction.',
       'Cumulative GPA: 3.94 / 4.0.',

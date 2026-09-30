@@ -14,10 +14,6 @@ import { profile } from '@/data/profile';
 import { useBalancedText } from '@/hooks/useBalancedText';
 import { fadeUp, staggerFast } from '@/utils/variants';
 
-// Plain text for pretext line-balance measurement (styled spans stripped out).
-const SUBTITLE_TEXT =
-  'I research quantum error correction and ZX-calculus at the University of Oxford to map the theoretical bounds of computation, and I architect robust software—from bare-metal OS kernels to intelligent web applications—to push the limits of the machine.';
-
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function LocalTime() {
@@ -36,9 +32,14 @@ function LocalTime() {
       }
       setTimes(next);
     };
-    update();
-    const id = setInterval(update, 1000);
-    return () => clearInterval(id);
+    // Only minutes are shown, so re-render on each minute boundary.
+    let timer: number;
+    const tick = () => {
+      update();
+      timer = window.setTimeout(tick, 60_000 - (Date.now() % 60_000));
+    };
+    tick();
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -118,7 +119,7 @@ function IndexList({ compact = false }: { compact?: boolean }) {
 export default function Home() {
   const { isDark } = useTheme();
   const { ref: subtitleRef, style: subtitleStyle } =
-    useBalancedText<HTMLParagraphElement>(SUBTITLE_TEXT);
+    useBalancedText<HTMLParagraphElement>();
 
   return (
     <motion.div
