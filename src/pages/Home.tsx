@@ -2,80 +2,17 @@ import { motion } from 'motion/react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '@/components/ThemeProvider';
+import {
+  ELSEWHERE,
+  FIELDS,
+  INDEX_ENTRIES,
+  LOCATIONS,
+  NOW_ITEMS,
+  SELECTED_WORK_PERIOD,
+} from '@/data/home';
+import { profile } from '@/data/profile';
 import { useBalancedText } from '@/hooks/useBalancedText';
 import { fadeUp, staggerFast } from '@/utils/variants';
-
-// ─── Data ────────────────────────────────────────────────────────────────────
-
-const LOCATIONS = [
-  { name: 'Beijing', tz: 'Asia/Shanghai' },
-  { name: 'Toronto', tz: 'America/Toronto' },
-  { name: 'Oxford', tz: 'Europe/London' },
-];
-
-const ELSEWHERE = [
-  { label: 'github', href: 'https://github.com/lance1416', ext: true },
-  { label: 'scholar', href: 'https://scholar.google.com', ext: true },
-  { label: 'email', href: 'mailto:lanceli1416@gmail.com', ext: false },
-  { label: 'cv.pdf', href: '/resume.pdf', ext: true },
-];
-
-const NOW_ITEMS = [
-  {
-    label: 'Oxford',
-    detail: 'Quantum decodability dissertation',
-    lightColor: '#002147',
-    darkColor: '#5b8fdf',
-    delay: 0,
-  },
-  {
-    label: 'IQBank',
-    detail: 'Shipping Phase 2',
-    lightColor: '#3b5fb2',
-    darkColor: '#7baae8',
-    delay: 0.9,
-  },
-];
-
-const FIELDS = [
-  {
-    domain: 'Research',
-    detail:
-      'MSc Oxford · Quantum Group · quantum error correction & ZX-calculus',
-  },
-  {
-    domain: 'Systems',
-    detail: 'KidneyOS Rust kernel · storage subsystem lead · IDE driver & I/O',
-  },
-  {
-    domain: 'Product',
-    detail: 'IQBank co-founder · 11-person team · ~100 beta users',
-  },
-];
-
-const INDEX_ENTRIES = [
-  {
-    number: '01',
-    category: 'Research',
-    title: 'Fault-equivalence rewrites & quantum decodability',
-    year: '2026',
-    to: '/research',
-  },
-  {
-    number: '02',
-    category: 'Systems',
-    title: 'KidneyOS — Rust-based operating system kernel',
-    year: '2024',
-    to: '/projects',
-  },
-  {
-    number: '03',
-    category: 'Product',
-    title: 'IQBank — Full-stack education platform',
-    year: '2025',
-    to: '/experience',
-  },
-];
 
 // Plain text for pretext line-balance measurement (styled spans stripped out).
 const SUBTITLE_TEXT =
@@ -113,6 +50,15 @@ function LocalTime() {
         </li>
       ))}
     </ul>
+  );
+}
+
+function SelectedWorkHeader() {
+  return (
+    <div className="mb-5 flex items-baseline justify-between">
+      <span className="label-overline">Selected work</span>
+      <span className="mono-meta">{SELECTED_WORK_PERIOD}</span>
+    </div>
   );
 }
 
@@ -189,7 +135,7 @@ export default function Home() {
         <div>
           <p className="label-overline mb-2">Portfolio</p>
           <h1 className="font-display text-2xl font-normal text-zinc-900 dark:text-zinc-100">
-            Sinan Li
+            {profile.name}
           </h1>
           <p className="mt-1 font-mono text-xs text-zinc-400 dark:text-zinc-500">
             Research · Systems · Product
@@ -233,7 +179,7 @@ export default function Home() {
               <li key={label}>
                 <a
                   href={href}
-                  {...(ext ? { target: '_blank', rel: 'noreferrer' } : {})}
+                  {...(ext && { target: '_blank', rel: 'noreferrer' })}
                   className="link-underline font-mono text-xs text-zinc-500 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
                 >
                   {label}
@@ -299,10 +245,7 @@ export default function Home() {
 
         {/* Index — mobile / tablet only; desktop shows it in the right column */}
         <motion.section variants={fadeUp} className="lg:hidden">
-          <div className="mb-5 flex items-baseline justify-between">
-            <span className="label-overline">Selected work</span>
-            <span className="mono-meta">2024 – 26</span>
-          </div>
+          <SelectedWorkHeader />
           <IndexList />
         </motion.section>
       </main>
@@ -312,10 +255,7 @@ export default function Home() {
         variants={fadeUp}
         className="hidden lg:flex lg:flex-col lg:sticky lg:top-32 lg:self-start lg:border-l lg:border-zinc-200 lg:pl-10 dark:lg:border-zinc-800"
       >
-        <div className="mb-5 flex items-baseline justify-between">
-          <span className="label-overline">Selected work</span>
-          <span className="mono-meta">2024–26</span>
-        </div>
+        <SelectedWorkHeader />
         <IndexList compact />
       </motion.nav>
     </motion.div>
