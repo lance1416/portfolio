@@ -16,7 +16,7 @@ export default function MainLayout() {
   }
 
   return (
-    <div className="relative flex min-h-screen flex-col overflow-x-hidden selection:bg-zinc-200 selection:text-zinc-900 dark:selection:bg-zinc-800 dark:selection:text-white">
+    <div className="relative flex min-h-screen flex-col overflow-x-clip selection:bg-zinc-200 selection:text-zinc-900 dark:selection:bg-zinc-800 dark:selection:text-white">
       <CommandPalette />
       <Navbar />
 
