@@ -27,7 +27,7 @@ beforeEach(() => {
   Element.prototype.scrollIntoView = vi.fn();
 });
 
-/** Observers used by Motion's whileInView and useBalancedText; never fire. */
+/** Observers used by Motion's whileInView; never fire. */
 class NoopObserver {
   observe() {}
   unobserve() {}

@@ -45,7 +45,7 @@ src/
   components/   Reusable UI (Navbar, CommandPalette, FloatingDock, cards…)
   context/      React contexts (Theme, Terminal mode, Command palette)
   data/         Content as typed data (profile, home, nav, experience, projects, research)
-  hooks/        Custom hooks (useBalancedText, useScrollLock)
+  hooks/        Custom hooks (useScrollLock, useMediaQuery)
   layouts/      MainLayout — shared chrome around routed pages
   pages/        Route-level views (Home, Experience, Projects, Research…)
   utils/        Helpers (cn, motion variants)

@@ -4,10 +4,12 @@ import { CommandPaletteProvider } from '@/context/CommandPaletteContext';
 import { TerminalProvider } from '@/context/TerminalContext';
 import MainLayout from '@/layouts/MainLayout';
 import ErrorPage from '@/pages/ErrorPage';
+// Home is where most visits land, so it ships in the main bundle rather than
+// costing a second round trip before the first paint.
+import Home from '@/pages/Home';
 
-/** Each page is its own chunk; calling a loader again reuses the cached module. */
+/** Each other page is its own chunk; calling a loader again reuses the cached module. */
 const PAGES = {
-  home: () => import('./pages/Home'),
   experience: () => import('./pages/Experience'),
   projects: () => import('./pages/Projects'),
   research: () => import('./pages/Research'),
@@ -29,7 +31,7 @@ const router = createBrowserRouter([
     // Shown only until the first page's chunk arrives on initial load.
     hydrateFallbackElement: null,
     children: [
-      { index: true, lazy: lazyPage(PAGES.home) },
+      { index: true, Component: Home },
       { path: 'experience', lazy: lazyPage(PAGES.experience) },
       { path: 'projects', lazy: lazyPage(PAGES.projects) },
       { path: 'research', lazy: lazyPage(PAGES.research) },

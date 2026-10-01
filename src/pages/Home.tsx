@@ -11,7 +11,6 @@ import {
   SELECTED_WORK_PERIOD,
 } from '@/data/home';
 import { profile } from '@/data/profile';
-import { useBalancedText } from '@/hooks/useBalancedText';
 import { usePageEntrance } from '@/utils/pageTransition';
 import { fadeUp, staggerFast } from '@/utils/variants';
 
@@ -121,9 +120,6 @@ function IndexList({ compact = false }: { compact?: boolean }) {
 export default function Home() {
   const entrance = usePageEntrance();
   const { isDark } = useTheme();
-  const { ref: subtitleRef, style: subtitleStyle } =
-    useBalancedText<HTMLParagraphElement>();
-
   return (
     <motion.div
       variants={staggerFast}
@@ -215,9 +211,9 @@ export default function Home() {
           <div className="my-8 h-px w-10 bg-zinc-300 dark:bg-zinc-700" />
 
           <p
-            ref={subtitleRef}
-            style={subtitleStyle}
-            className="text-base leading-relaxed text-zinc-600 dark:text-zinc-400"
+            // Balanced lines from sm up; browsers only balance ≤6 lines, so
+            // phones (~9 lines) just avoid a lone last word.
+            className="text-pretty text-base leading-relaxed text-zinc-600 sm:text-balance dark:text-zinc-400"
           >
             I did my MSc at the{' '}
             <span className="font-serif italic text-[#002147] dark:text-[#6b9ae6]">

@@ -4,6 +4,11 @@ import { createRoot } from 'react-dom/client';
 import App from '@/App.tsx';
 import { ThemeProvider } from '@/context/ThemeContext.tsx';
 
+// Self-hosted variable fonts (latin and other subsets load on demand via
+// unicode-range). Inter with its optical-size axis, as on Google Fonts.
+import '@fontsource-variable/inter/opsz.css';
+import '@fontsource-variable/playfair-display/wght.css';
+import '@fontsource-variable/jetbrains-mono/wght.css';
 import '@/index.css';
 
 // biome-ignore lint/style/noNonNullAssertion: 'root' must exist

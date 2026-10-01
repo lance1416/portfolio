@@ -5,12 +5,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import App from '@/App';
 import { ThemeProvider } from '@/context/ThemeContext';
 
-// jsdom has no canvas text measurement for useBalancedText.
-vi.mock('@chenglou/pretext', () => ({
-  prepareWithSegments: () => ({}),
-  walkLineRanges: () => {},
-}));
-
 function navigate(path: string) {
   act(() => {
     window.history.pushState({}, '', path);

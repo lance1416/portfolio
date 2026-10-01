@@ -3,15 +3,11 @@ import { PageHeader } from '@/components/PageHeader';
 import { AwardRow, EducationCard } from '@/components/ResearchComponents';
 import { SkillPill } from '@/components/SkillPill';
 import { awardsData, dissertationData, educationData } from '@/data/research';
-import { useBalancedText } from '@/hooks/useBalancedText';
 import { usePageEntrance } from '@/utils/pageTransition';
 import { fadeUp, revealOnScroll, stagger } from '@/utils/variants';
 
 export default function Research() {
   const entrance = usePageEntrance();
-  const { ref: titleRef, style: titleStyle } =
-    useBalancedText<HTMLHeadingElement>();
-
   return (
     <motion.main
       variants={stagger}
@@ -31,11 +27,7 @@ export default function Research() {
           <p className="label-overline mb-8">MSc Dissertation</p>
 
           <div className="border-l-2 border-accent pl-6">
-            <h2
-              ref={titleRef}
-              style={titleStyle}
-              className="font-display text-3xl font-normal leading-snug text-zinc-900 dark:text-zinc-50 sm:text-4xl"
-            >
+            <h2 className="font-display text-3xl font-normal leading-snug text-zinc-900 dark:text-zinc-50 sm:text-4xl">
               {dissertationData.title}
             </h2>
           </div>
