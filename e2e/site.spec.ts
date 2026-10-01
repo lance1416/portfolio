@@ -12,7 +12,8 @@ const ROUTES = [
 function trackErrors(page: Page) {
   const errors: string[] = [];
   page.on('console', (msg) => {
-    if (msg.type() === 'error') errors.push(msg.text());
+    if (msg.type() === 'error')
+      errors.push(`${msg.text()} (${msg.location().url})`);
   });
   page.on('pageerror', (err) => errors.push(err.message));
   return errors;

@@ -2,6 +2,9 @@ import { defineConfig, devices } from '@playwright/test';
 
 // A port of its own, so tests never touch a dev server already on 5173.
 const PORT = 4174;
+// An explicit IPv4 host: `localhost` lets Vite bind only ::1 while WebKit
+// sometimes tries 127.0.0.1 first, failing the odd request under load.
+const ORIGIN = `http://127.0.0.1:${PORT}`;
 
 export default defineConfig({
   testDir: './e2e',
@@ -10,7 +13,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   reporter: process.env.CI ? 'github' : 'list',
   use: {
-    baseURL: `http://localhost:${PORT}`,
+    baseURL: ORIGIN,
     trace: 'on-first-retry',
   },
   projects: [
@@ -40,8 +43,8 @@ export default defineConfig({
   ],
   // Tests run against the production build, like the deployed site.
   webServer: {
-    command: `pnpm build && pnpm preview --port ${PORT} --strictPort`,
-    url: `http://localhost:${PORT}`,
+    command: `pnpm build && pnpm preview --host 127.0.0.1 --port ${PORT} --strictPort`,
+    url: ORIGIN,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },
