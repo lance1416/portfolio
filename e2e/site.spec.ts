@@ -144,3 +144,31 @@ test.describe('mobile menu', () => {
       .toBe('');
   });
 });
+
+test('terminal mode browses the site and exits where it ends up', async ({
+  page,
+  viewport,
+}) => {
+  await page.goto('/projects');
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  if (hasMobileMenu(viewport)) {
+    await page.getByRole('button', { name: 'Toggle mobile menu' }).click();
+    await page.getByRole('button', { name: 'Terminal' }).click();
+  } else {
+    await page.getByRole('button', { name: 'Terminal Mode' }).click();
+  }
+
+  const prompt = page.getByRole('textbox', { name: 'Command' });
+  await expect(prompt).toBeFocused();
+  await prompt.fill('cd ../res');
+  await prompt.press('Tab');
+  await expect(prompt).toHaveValue('cd ../research/');
+  await prompt.press('Enter');
+  await expect(page).toHaveURL(/\/research$/);
+
+  await prompt.fill('exit');
+  await prompt.press('Enter');
+  await expect(
+    page.getByRole('heading', { level: 1, name: 'Research' }),
+  ).toBeVisible();
+});

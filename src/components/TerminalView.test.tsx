@@ -1,30 +1,55 @@
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { profile } from '@/data/profile';
 import { renderWithProviders } from '@/test/render';
 import { TerminalView } from './TerminalView';
 
-const firstLine = () =>
-  screen.getByText(/sinan@macbook-pro/).textContent?.split('\n')[0];
+const log = () => screen.getByRole('log');
+const prompt = () => screen.getByRole('textbox', { name: 'Command' });
 
 describe('TerminalView', () => {
-  it.each([
-    ['/', 'whoami.json'],
-    ['/experience', 'experience.json'],
-    ['/projects', 'projects.json'],
-    ['/research', 'research.json'],
-    // React Router also matches a trailing slash; the file should follow it.
-    ['/projects/', 'projects.json'],
-    ['/unknown', 'whoami.json'],
-  ])('%s → cat %s', (route, file) => {
-    renderWithProviders(<TerminalView />, { route });
-    expect(firstLine()).toBe(`sinan@macbook-pro:~$ cat ${file}`);
+  it('greets with whoami at home and a listing on a page', () => {
+    renderWithProviders(<TerminalView />, { route: '/' });
+    expect(log()).toHaveTextContent(profile.email);
   });
 
-  it('prints the data as JSON', () => {
+  it('opens in the current page’s directory', () => {
+    renderWithProviders(<TerminalView />, { route: '/projects' });
+    expect(screen.getByRole('heading')).toHaveTextContent('~/projects');
+    expect(log()).toHaveTextContent('ls');
+  });
+
+  it('cd navigates the site and the prompt follows', async () => {
+    const user = userEvent.setup();
     renderWithProviders(<TerminalView />, { route: '/' });
-    const output = screen.getByText(/whoami\.json/).textContent ?? '';
-    const json = JSON.parse(output.slice(output.indexOf('\n') + 1, -1));
-    expect(json).toMatchObject({ name: profile.name, email: profile.email });
+    await user.type(prompt(), 'cd research{Enter}');
+    expect(screen.getByTestId('location')).toHaveTextContent('/research');
+    expect(screen.getByRole('heading')).toHaveTextContent('~/research');
+  });
+
+  it('completes with Tab and recalls history with the arrow keys', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<TerminalView />, { route: '/' });
+    await user.type(prompt(), 'pw{Tab}');
+    expect(prompt()).toHaveValue('pwd ');
+    await user.keyboard('{Enter}');
+    expect(prompt()).toHaveValue('');
+    await user.keyboard('{ArrowUp}');
+    expect(prompt()).toHaveValue('pwd ');
+  });
+
+  it('runs a listed entry when it is clicked', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<TerminalView />, { route: '/research' });
+    await user.click(screen.getByRole('button', { name: 'awards.json' }));
+    expect(log()).toHaveTextContent('cat ~/research/awards.json');
+  });
+
+  it('clear empties the screen', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<TerminalView />, { route: '/' });
+    await user.type(prompt(), 'clear{Enter}');
+    expect(log()).toBeEmptyDOMElement();
   });
 });
