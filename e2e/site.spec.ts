@@ -62,8 +62,16 @@ test('the command palette navigates from the keyboard', async ({ page }) => {
   await page.goto('/');
   // Wait for the app, so the shortcut isn't pressed before its listener exists.
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-  await page.keyboard.press('ControlOrMeta+k');
-  await page.getByPlaceholder('Type a command or search...').fill('res');
+  // Under parallel load WebKit can take the first keystroke before React has
+  // committed; press again only while the palette is still closed (the
+  // shortcut toggles, so blind retries could close it).
+  const input = page.getByPlaceholder('Type a command or search...');
+  await expect(async () => {
+    if (!(await input.isVisible()))
+      await page.keyboard.press('ControlOrMeta+k');
+    await expect(input).toBeVisible({ timeout: 1000 });
+  }).toPass();
+  await input.fill('res');
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/\/research$/);
 });
