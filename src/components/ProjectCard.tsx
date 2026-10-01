@@ -126,8 +126,9 @@ export function ProjectDetails({ project }: { project: ProjectItem }) {
 /**
  * A full project card for the swipe strip. Its title and subtitle play as it
  * comes into view. Visibility is measured against the page viewport, which
- * still respects the strip's horizontal clipping; the threshold stays low
- * because a card can be taller than a phone screen.
+ * still respects the strip's horizontal clipping. It triggers on any overlap
+ * past the bottom fifth of the screen rather than a fraction of the card,
+ * which can be several screens tall on a phone.
  */
 export function ProjectCard({
   project,
@@ -141,7 +142,7 @@ export function ProjectCard({
       variants={TITLE_SEQUENCE}
       initial="hidden"
       whileInView="show"
-      viewport={{ amount: 0.3 }}
+      viewport={{ margin: '0px 0px -20% 0px' }}
       className="h-full rounded-3xl bg-white/80 p-5 shadow-floating sm:p-6 dark:bg-zinc-900/70"
     >
       <div className="mb-3 flex items-center justify-between">

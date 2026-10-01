@@ -13,9 +13,9 @@ export const showsRing = (viewport: ViewportSize | null) =>
 export const hasMobileMenu = (viewport: ViewportSize | null) =>
   !!viewport && viewport.width < 640;
 
-/** The floating dock appears from `sm` up. */
+/** The floating dock appears from `sm` up, except on short (landscape phone) screens. */
 export const hasDock = (viewport: ViewportSize | null) =>
-  !!viewport && viewport.width >= 640;
+  !!viewport && viewport.width >= 640 && viewport.height > 480;
 
 /** Experience entries use the two-column, sticky date rail from `md` up. */
 export const hasStickyRail = (viewport: ViewportSize | null) =>

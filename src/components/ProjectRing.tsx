@@ -227,8 +227,8 @@ export function ProjectRing({ projects }: { projects: ProjectItem[] }) {
                     onClick={() => setActive(i)}
                     aria-label={`Show ${p.title}`}
                     aria-current={i === active}
-                    // after: extends the 4px bar to a 40px-tall hit area
-                    className="relative h-1 w-8 rounded-full bg-zinc-200 transition-colors after:absolute after:-inset-x-0.5 after:-inset-y-[18px] dark:bg-zinc-800"
+                    // after: extends the 32×4 bar to a 38×40 hit area, meeting its neighbours
+                    className="relative h-1 w-8 rounded-full bg-zinc-200 transition-colors after:absolute after:-inset-x-[3px] after:-inset-y-[18px] dark:bg-zinc-800"
                     style={
                       i === active
                         ? { backgroundColor: projectAccent(p) }
