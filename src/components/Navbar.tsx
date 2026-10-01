@@ -108,8 +108,9 @@ export function Navbar() {
                   key={link.name}
                   to={link.path}
                   viewTransition
+                  // after: extends the 32px pill to a 40px hit area
                   className={cn(
-                    'relative px-4 py-1.5 text-sm font-medium transition-colors duration-300',
+                    'relative px-4 py-1.5 text-sm font-medium transition-colors duration-300 after:absolute after:inset-x-0 after:-inset-y-1',
                     isActive
                       ? 'text-zinc-900 dark:text-zinc-50'
                       : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50',
@@ -140,7 +141,8 @@ export function Navbar() {
               type="button"
               onClick={openCommandPalette}
               aria-keyshortcuts={PALETTE_SHORTCUT.aria}
-              className="group hidden sm:flex items-center gap-2 rounded-full bg-white/50 pl-3 pr-2 py-2 text-xs font-medium text-zinc-500 shadow-border transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:bg-zinc-800/50 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+              // after: extends the 33px button to a 41px hit area
+              className="group relative hidden sm:flex after:absolute after:inset-x-0 after:-inset-y-1 items-center gap-2 rounded-full bg-white/50 pl-3 pr-2 py-2 text-xs font-medium text-zinc-500 shadow-border transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:bg-zinc-800/50 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
             >
               <Search className="h-3.5 w-3.5" />
               <span>Menu</span>
