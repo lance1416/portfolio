@@ -12,6 +12,7 @@ import {
 } from '@/data/home';
 import { profile } from '@/data/profile';
 import { useBalancedText } from '@/hooks/useBalancedText';
+import { usePageEntrance } from '@/utils/pageTransition';
 import { fadeUp, staggerFast } from '@/utils/variants';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -76,7 +77,7 @@ function IndexList({ compact = false }: { compact?: boolean }) {
         compact ? (
           // Right-column compact layout
           <li key={entry.number}>
-            <Link to={entry.to} className="group block">
+            <Link to={entry.to} viewTransition className="group block">
               <div className="mb-1 flex items-center gap-1.5">
                 <span className="font-mono text-[10px] text-accent">
                   {entry.number}
@@ -94,6 +95,7 @@ function IndexList({ compact = false }: { compact?: boolean }) {
           <li key={entry.number}>
             <Link
               to={entry.to}
+              viewTransition
               className="group flex items-baseline gap-5 border-b border-zinc-200 px-1 py-5 transition-colors hover:bg-zinc-100/60 dark:border-zinc-800 dark:hover:bg-zinc-900/40"
             >
               <span className="w-5 shrink-0 font-mono text-xs text-accent">
@@ -117,6 +119,7 @@ function IndexList({ compact = false }: { compact?: boolean }) {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function Home() {
+  const entrance = usePageEntrance();
   const { isDark } = useTheme();
   const { ref: subtitleRef, style: subtitleStyle } =
     useBalancedText<HTMLParagraphElement>();
@@ -124,7 +127,7 @@ export default function Home() {
   return (
     <motion.div
       variants={staggerFast}
-      initial="hidden"
+      initial={entrance}
       animate="show"
       className="mx-auto grid max-w-5xl grid-cols-1 gap-16 px-6 sm:px-8 lg:grid-cols-[210px_1fr_210px] lg:gap-0"
     >

@@ -3,13 +3,15 @@ import { ExperienceEntry } from '@/components/ExperienceEntry';
 import { ExperienceTimeline } from '@/components/ExperienceTimeline';
 import { PageHeader } from '@/components/PageHeader';
 import { experienceData } from '@/data/experience';
+import { usePageEntrance } from '@/utils/pageTransition';
 import { stagger } from '@/utils/variants';
 
 export default function Experience() {
+  const entrance = usePageEntrance();
   return (
     <motion.main
       variants={stagger}
-      initial="hidden"
+      initial={entrance}
       animate="show"
       className="mx-auto max-w-4xl px-6"
     >

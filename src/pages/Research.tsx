@@ -4,16 +4,18 @@ import { AwardRow, EducationCard } from '@/components/ResearchComponents';
 import { SkillPill } from '@/components/SkillPill';
 import { awardsData, dissertationData, educationData } from '@/data/research';
 import { useBalancedText } from '@/hooks/useBalancedText';
+import { usePageEntrance } from '@/utils/pageTransition';
 import { fadeUp, revealOnScroll, stagger } from '@/utils/variants';
 
 export default function Research() {
+  const entrance = usePageEntrance();
   const { ref: titleRef, style: titleStyle } =
     useBalancedText<HTMLHeadingElement>();
 
   return (
     <motion.main
       variants={stagger}
-      initial="hidden"
+      initial={entrance}
       animate="show"
       className="mx-auto max-w-4xl px-6"
     >

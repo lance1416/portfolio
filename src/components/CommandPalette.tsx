@@ -81,13 +81,13 @@ export function CommandPalette() {
       id: 'home',
       name: 'Go to Home',
       icon: Home,
-      onSelect: () => navigate('/'),
+      onSelect: () => navigate('/', { viewTransition: true }),
     },
     ...NAV_LINKS.map((link) => ({
       id: link.path,
       name: `Go to ${link.name}`,
       icon: link.icon,
-      onSelect: () => navigate(link.path),
+      onSelect: () => navigate(link.path, { viewTransition: true }),
     })),
     {
       id: 'theme',

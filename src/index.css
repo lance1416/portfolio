@@ -55,6 +55,7 @@
    * overrides below.
    */
   :root {
+    --page-bg: #fafaf8;
     --elevation-border:
       0 0 0 1px oklch(0 0 0 / 0.06), 0 1px 2px -1px oklch(0 0 0 / 0.06),
       0 2px 4px 0 oklch(0 0 0 / 0.04);
@@ -66,6 +67,7 @@
   }
 
   .dark {
+    --page-bg: #0c0c0c;
     --color-accent: oklch(72% 0.14 268);
     --color-accent-subtle: oklch(18% 0.06 268);
 
@@ -94,8 +96,8 @@
   }
 
   body {
-    /* Warm off-white instead of cold zinc-50 */
-    background-color: #fafaf8;
+    /* Warm off-white instead of cold zinc-50 (near-black in dark mode) */
+    background-color: var(--page-bg);
     @apply text-zinc-900 transition-colors duration-300;
     @apply dark:text-zinc-50;
 
@@ -120,10 +122,6 @@
     opacity: 0.06;
   }
 
-  .dark body {
-    /* Near-black with no blue cast */
-    background-color: #0c0c0c;
-  }
 
   h1,
   h2,
@@ -183,5 +181,69 @@
     .group:hover > & {
       background-size: 100% 1px;
     }
+  }
+}
+
+/*
+ * ─── Page transitions ─────────────────────────────────────────────────────
+ * Same-document View Transitions, started by React Router links with
+ * `viewTransition`. The root snapshot (exactly the viewport) turns like a
+ * page: out one way, in from the other, in chapter order — MainLayout sets
+ * data-nav-direction. The navbar, dock and progress bar have their own names
+ * so they stay put (the navbar is a live snapshot, so its Motion pill still
+ * glides). The page title's odometer roll runs in the live DOM (PageHeader),
+ * not on view-transition images, which WebKit renders unreliably for the new
+ * state. Only transform/opacity/filter
+ * animate, all on the compositor.
+ */
+:root {
+  --turn: 1;
+}
+
+:root[data-nav-direction="back"] {
+  --turn: -1;
+}
+
+/* Backs the sliding snapshots, so their edges never reveal a blank canvas */
+::view-transition {
+  background-color: var(--page-bg);
+}
+
+::view-transition-old(root) {
+  animation: 200ms cubic-bezier(0.4, 0, 1, 1) both page-out;
+}
+
+::view-transition-new(root) {
+  animation: 420ms cubic-bezier(0.22, 1, 0.36, 1) 80ms both page-in;
+}
+
+@keyframes page-out {
+  to {
+    opacity: 0;
+    translate: calc(var(--turn) * -40px) 0;
+  }
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    translate: calc(var(--turn) * 56px) 0;
+  }
+}
+
+/* Chrome stays still. Old and new are near-identical, so the default
+   crossfade reads as static. (Hiding the old image with display: none makes
+   WebKit drop the whole group, navbar included.) */
+::view-transition-group(navbar),
+::view-transition-group(dock),
+::view-transition-group(scroll-progress) {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
   }
 }

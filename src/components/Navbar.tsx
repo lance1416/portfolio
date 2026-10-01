@@ -85,12 +85,13 @@ export function Navbar() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-        className="fixed inset-x-4 top-4 z-[60] mx-auto max-w-3xl"
+        className="fixed inset-x-4 top-4 z-[60] mx-auto max-w-3xl [view-transition-name:navbar]"
       >
         <nav className="relative flex items-center justify-between rounded-full bg-white/60 px-4 py-2.5 shadow-border backdrop-blur-md dark:bg-zinc-950/60 sm:px-6">
           <div className="flex w-32 items-center">
             <Link
               to="/"
+              viewTransition
               onClick={closeMobileMenu}
               className="z-10 -my-2 py-2 font-display font-normal text-zinc-900 transition-transform active:scale-[0.96] dark:text-zinc-50"
             >
@@ -105,6 +106,7 @@ export function Navbar() {
                 <Link
                   key={link.name}
                   to={link.path}
+                  viewTransition
                   className={cn(
                     'relative px-4 py-1.5 text-sm font-medium transition-colors duration-300',
                     isActive
@@ -113,6 +115,9 @@ export function Navbar() {
                   )}
                 >
                   {isActive && (
+                    // Animated by Motion in the live DOM: during a page turn
+                    // the navbar is a live snapshot, so the glide still shows,
+                    // and the label stays above the pill.
                     <motion.div
                       layoutId="nav-pill"
                       className="absolute inset-0 z-0 rounded-full bg-zinc-100 dark:bg-zinc-800/50"
@@ -196,6 +201,9 @@ export function Navbar() {
                 >
                   <Link
                     to={link.path}
+                    // No view transition from inside the menu: WebKit crashes
+                    // when the tapped link unmounts mid-transition. The menu's
+                    // own fade is the transition here.
                     className="text-4xl font-bold tracking-tight text-zinc-900 transition-colors active:text-zinc-500 dark:text-zinc-50 dark:active:text-zinc-400"
                   >
                     {link.name}

@@ -11,7 +11,7 @@ export function ScrollProgress() {
   return (
     <motion.div
       aria-hidden="true"
-      className="fixed left-0 top-0 z-[99998] h-[2px] w-full origin-left bg-accent"
+      className="fixed left-0 top-0 z-[99998] h-[2px] w-full origin-left bg-accent [view-transition-name:scroll-progress]"
       style={{ scaleX }}
     />
   );
