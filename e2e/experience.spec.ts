@@ -1,8 +1,11 @@
 import { expect, test } from '@playwright/test';
+import { hasStickyRail } from './layout';
 
 test('a timeline bar jumps to its entry, below the navbar, and focuses it', async ({
   page,
 }) => {
+  // Instant scrolling, so the landing spot doesn't depend on animation timing.
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/experience');
   await page.getByRole('link', { name: /^IQBank, .*jump to details$/ }).click();
 
@@ -25,9 +28,9 @@ test('a timeline bar jumps to its entry, below the navbar, and focuses it', asyn
 
 test('the date rail stays pinned while reading a long entry', async ({
   page,
-  isMobile,
+  viewport,
 }) => {
-  test.skip(isMobile, 'the rail is only sticky on wide screens');
+  test.skip(!hasStickyRail(viewport), 'the rail is only sticky from md up');
   await page.goto('/experience');
 
   const entry = page.locator('article#iqbank');

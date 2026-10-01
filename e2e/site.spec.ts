@@ -1,4 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
+import { hasDock, hasMobileMenu } from './layout';
 
 const ROUTES = [
   ['/', 'Sinan Li'],
@@ -59,34 +60,39 @@ test('navigating across every page and back raises no errors', async ({
 
 test('the command palette navigates from the keyboard', async ({ page }) => {
   await page.goto('/');
+  // Wait for the app, so the shortcut isn't pressed before its listener exists.
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   await page.keyboard.press('ControlOrMeta+k');
   await page.getByPlaceholder('Type a command or search...').fill('res');
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/\/research$/);
 });
 
-test.describe('desktop', () => {
-  test.skip(({ isMobile }) => isMobile, 'desktop chrome only');
+test.describe('floating dock', () => {
+  test.skip(({ viewport }) => !hasDock(viewport), 'the dock shows from sm up');
 
   test('dark mode applies, persists and uses the dark elevation ring', async ({
     page,
   }) => {
     await page.goto('/');
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
     await page.getByRole('button', { name: 'Toggle Theme' }).click();
     await expect(page.locator('html')).toHaveClass(/\bdark\b/);
 
     await page.reload();
     await expect(page.locator('html')).toHaveClass(/\bdark\b/);
     // The navbar's ring comes from --elevation-border, overridden in .dark.
+    // The navbar is the first <nav>; Home also has one for "Selected work".
     const navShadow = await page
       .locator('nav')
+      .first()
       .evaluate((el) => getComputedStyle(el).boxShadow);
     expect(navShadow).toMatch(/oklch\(1 0 0 \/ 0\.08\)/);
   });
 });
 
-test.describe('mobile', () => {
-  test.skip(({ isMobile }) => !isMobile, 'phone layout only');
+test.describe('mobile menu', () => {
+  test.skip(({ viewport }) => !hasMobileMenu(viewport), 'phones only');
 
   test('the menu locks scrolling and closes on navigation', async ({
     page,
@@ -105,6 +111,9 @@ test.describe('mobile', () => {
       .click();
     await expect(page).toHaveURL(/\/experience$/);
     await expect(toggle).toHaveAttribute('aria-expanded', 'false');
-    expect(await page.evaluate(() => document.body.style.overflow)).toBe('');
+    // The lock is released in an effect, a beat after the attribute changes.
+    await expect
+      .poll(() => page.evaluate(() => document.body.style.overflow))
+      .toBe('');
   });
 });

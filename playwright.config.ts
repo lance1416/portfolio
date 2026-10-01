@@ -25,6 +25,18 @@ export default defineConfig({
       name: 'mobile',
       use: { ...devices['Pixel 7'] },
     },
+    // Apple devices in WebKit (Safari's engine). Viewports are what Safari
+    // leaves for the page, e.g. a 1440×900 MacBook screen minus browser chrome.
+    {
+      name: 'macbook',
+      use: {
+        ...devices['Desktop Safari'],
+        viewport: { width: 1440, height: 790 },
+      },
+    },
+    { name: 'ipad-portrait', use: { ...devices['iPad Pro 11'] } },
+    { name: 'ipad-landscape', use: { ...devices['iPad Pro 11 landscape'] } },
+    { name: 'iphone', use: { ...devices['iPhone 15'] } },
   ],
   // Tests run against the production build, like the deployed site.
   webServer: {

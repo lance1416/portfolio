@@ -1,4 +1,5 @@
 import { expect, type Page, test } from '@playwright/test';
+import { showsRing } from './layout';
 
 /** The progress bar marked current names the front project. */
 const front = (page: Page) => page.locator('[aria-current="true"]');
@@ -11,8 +12,8 @@ const faceOpacities = (page: Page) =>
     ),
   );
 
-test.describe('3D ring (desktop)', () => {
-  test.skip(({ isMobile }) => isMobile, 'the ring needs a roomy screen');
+test.describe('3D ring', () => {
+  test.skip(({ viewport }) => !showsRing(viewport), 'roomy landscape only');
 
   test.beforeEach(async ({ page }) => {
     await page.goto('/projects');
@@ -22,7 +23,9 @@ test.describe('3D ring (desktop)', () => {
 
   test('the wheel turns the ring; the page itself never scrolls', async ({
     page,
+    hasTouch,
   }) => {
+    test.skip(hasTouch, 'touch devices swipe instead (see below)');
     await page.mouse.wheel(0, 120);
     await expect(front(page)).toHaveAttribute('aria-label', 'Show Evogami');
 
@@ -34,12 +37,30 @@ test.describe('3D ring (desktop)', () => {
     expect(await page.evaluate(() => window.scrollY)).toBe(0);
   });
 
-  test('a burst of wheel events moves only one card', async ({ page }) => {
+  test('a burst of wheel events moves only one card', async ({
+    page,
+    hasTouch,
+  }) => {
+    test.skip(hasTouch, 'touch devices swipe instead (see below)');
     for (let i = 0; i < 10; i++) await page.mouse.wheel(0, 40);
     await page.waitForTimeout(300);
     await expect(front(page)).toHaveAttribute('aria-label', 'Show Evogami');
     // Evogami is the last project; also proves nothing overshot past it.
     await expect(page.locator('.transform-3d > button')).toHaveCount(2);
+  });
+
+  test('dragging sideways swipes between projects', async ({ page }) => {
+    const drag = async (dx: number) => {
+      await page.mouse.move(800, 450);
+      await page.mouse.down();
+      await page.mouse.move(800 + dx / 2, 450, { steps: 5 });
+      await page.mouse.move(800 + dx, 450, { steps: 5 });
+      await page.mouse.up();
+    };
+    await drag(-200);
+    await expect(front(page)).toHaveAttribute('aria-label', 'Show Evogami');
+    await drag(200);
+    await expect(front(page)).toHaveAttribute('aria-label', 'Show KidneyOS');
   });
 
   test('passed cards vanish behind the text; the next one waits half-lit', async ({
@@ -53,6 +74,11 @@ test.describe('3D ring (desktop)', () => {
   });
 
   test('the stage fits between the navbar and the dock', async ({ page }) => {
+    // Measure the settled layout: webfonts loaded, entrance animations done.
+    await page.evaluate(() => document.fonts.ready);
+    await expect.poll(() => faceOpacities(page)).toEqual([1, 0.5]);
+    await page.waitForTimeout(500);
+
     const box = (selector: string) =>
       page
         .locator(selector)
@@ -92,8 +118,11 @@ test.describe('3D ring (desktop)', () => {
   });
 });
 
-test.describe('swipe strip (phone)', () => {
-  test.skip(({ isMobile }) => !isMobile, 'phone layout only');
+test.describe('swipe strip', () => {
+  test.skip(
+    ({ viewport }) => showsRing(viewport),
+    'shown when the ring is not',
+  );
 
   test('snaps card by card and peeks the next one', async ({ page }) => {
     await page.goto('/projects');
