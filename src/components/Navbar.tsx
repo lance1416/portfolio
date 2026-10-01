@@ -147,7 +147,7 @@ export function Navbar() {
               <Search className="h-3.5 w-3.5" />
               <span>Menu</span>
               {/* Touch-first devices (an iPad without a keyboard) have no shortcut to show. */}
-              <kbd className="rounded bg-zinc-200/50 px-1.5 py-0.5 font-sans text-[10px] text-zinc-400 transition-colors group-hover:text-zinc-500 pointer-coarse:hidden dark:bg-zinc-700/50 dark:group-hover:text-zinc-300">
+              <kbd className="rounded bg-zinc-200/50 px-1.5 py-0.5 font-sans text-[10px] text-zinc-600 transition-colors group-hover:text-zinc-700 pointer-coarse:hidden dark:text-zinc-400 dark:bg-zinc-700/50 dark:group-hover:text-zinc-300">
                 {PALETTE_SHORTCUT.label}
               </kbd>
             </button>

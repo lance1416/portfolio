@@ -42,7 +42,7 @@ const ROUTES = [
   ['/experience', { level: 1, name: 'Experience' }],
   ['/projects', { level: 1, name: 'Projects' }],
   ['/research', { level: 1, name: 'Research' }],
-  ['/no-such-page', { level: 1, name: '404' }],
+  ['/no-such-page', { level: 1, name: 'Page not found' }],
 ] as const;
 
 describe('App', () => {

@@ -272,7 +272,7 @@ export function TerminalView() {
           <span className="h-3 w-3 rounded-full bg-[#febc2e]" />
           <span className="h-3 w-3 rounded-full bg-[#28c840]" />
         </div>
-        <h1 className="truncate text-xs text-zinc-500">
+        <h1 className="truncate text-xs text-zinc-400">
           guest@lance1416: {display(cwd)}
         </h1>
         <button
@@ -285,9 +285,8 @@ export function TerminalView() {
         </button>
       </header>
 
-      {/* biome-ignore lint/a11y/noStaticElementInteractions: a convenience; the input is reachable by Tab */}
-      {/* biome-ignore lint/a11y/useKeyWithClickEvents: as above */}
-      <div className="flex-1 px-4 py-4 sm:px-6" onClick={focusPrompt}>
+      {/* biome-ignore lint/a11y/useKeyWithClickEvents: a mouse convenience; the input is reachable by Tab */}
+      <main className="flex-1 px-4 py-4 sm:px-6" onClick={focusPrompt}>
         <div
           role="log"
           aria-live="polite"
@@ -332,7 +331,7 @@ export function TerminalView() {
             className="min-w-0 flex-1 bg-transparent text-base text-zinc-100 caret-emerald-400 outline-none sm:text-sm"
           />
         </div>
-      </div>
+      </main>
     </div>
   );
 }

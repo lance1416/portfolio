@@ -10,15 +10,18 @@ export default function NotFound() {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ type: 'spring', duration: 0.5 }}
       >
-        {/* Large stylized 404 */}
-        <h1 className="text-9xl font-black tracking-tighter text-zinc-200 dark:text-zinc-800/50">
+        {/* Large stylized 404: decoration; the heading below says it in words */}
+        <p
+          aria-hidden="true"
+          className="text-9xl font-black tracking-tighter text-zinc-200 dark:text-zinc-800/50"
+        >
           404
-        </h1>
+        </p>
 
         <div className="relative -mt-12">
-          <h2 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+          <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
             Page not found
-          </h2>
+          </h1>
           <p className="mt-4 mx-auto max-w-md text-lg text-zinc-600 dark:text-zinc-400">
             There's nothing at this address.
           </p>

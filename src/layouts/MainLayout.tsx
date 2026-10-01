@@ -49,6 +49,18 @@ export default function MainLayout() {
 
   return (
     <div className="relative flex min-h-screen flex-col overflow-x-clip selection:bg-zinc-200 selection:text-zinc-900 dark:selection:bg-zinc-800 dark:selection:text-white">
+      {/* A button rather than a #hash link: ScrollRestoration swallows those. */}
+      <button
+        type="button"
+        onClick={() => {
+          const main = document.querySelector('main');
+          main?.setAttribute('tabindex', '-1');
+          main?.focus();
+        }}
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-full focus:bg-zinc-900 focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-white dark:focus:bg-zinc-100 dark:focus:text-zinc-900"
+      >
+        Skip to content
+      </button>
       <CommandPalette />
       <Navbar />
 

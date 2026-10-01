@@ -78,7 +78,7 @@ export function ExperienceTimeline({ jobs }: { jobs: ExperienceItem[] }) {
           .map((m) => (
             <span
               key={`month-${m}`}
-              className="absolute bottom-2.5 hidden -translate-x-1/2 font-mono text-[9px] text-zinc-400 sm:block dark:text-zinc-600"
+              className="absolute bottom-2.5 hidden -translate-x-1/2 font-mono text-[9px] text-zinc-500 sm:block dark:text-zinc-400"
               style={{ left: `${pct(m + 0.5)}%` }}
             >
               {monthName(m)[0]}

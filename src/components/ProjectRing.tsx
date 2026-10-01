@@ -213,7 +213,7 @@ export function ProjectRing({ projects }: { projects: ProjectItem[] }) {
             <h1 className="label-overline">Projects</h1>
             {/* Position in the carousel; each bar jumps to its project */}
             <div className="flex items-center gap-3">
-              <p className="font-mono text-sm tabular-nums text-zinc-400 dark:text-zinc-500">
+              <p className="font-mono text-sm tabular-nums text-zinc-500 dark:text-zinc-400">
                 <span className="text-zinc-900 dark:text-zinc-100">
                   {projectNumber(active)}
                 </span>{' '}

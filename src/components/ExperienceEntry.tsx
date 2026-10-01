@@ -26,7 +26,7 @@ export function ExperienceEntry({ job }: { job: ExperienceItem }) {
         <p className="font-mono text-xs tabular-nums text-zinc-600 dark:text-zinc-300">
           {formatPeriod(job.start, job.end)}
         </p>
-        <p className="text-xs text-zinc-400 md:mt-1 dark:text-zinc-500">
+        <p className="text-xs text-zinc-500 md:mt-1 dark:text-zinc-400">
           {formatDuration(months)}
         </p>
       </div>

@@ -137,7 +137,7 @@ export default function Home() {
           <h1 className="font-display text-2xl font-normal text-zinc-900 dark:text-zinc-100">
             {profile.name}
           </h1>
-          <p className="mt-1 font-mono text-xs text-zinc-400 dark:text-zinc-500">
+          <p className="mt-1 font-mono text-xs text-zinc-500 dark:text-zinc-400">
             Research · Systems · Product
           </p>
         </div>
@@ -202,9 +202,7 @@ export default function Home() {
             <br />
             Product engineering.
             <br />
-            <span className="text-zinc-400 dark:text-zinc-600">
-              At every layer.
-            </span>
+            <span className="text-zinc-500">At every layer.</span>
           </h2>
 
           {/* Short rule — typographic pause between poem and prose */}
@@ -222,7 +220,7 @@ export default function Home() {
             on quantum error correction, then spent the summer pointing the same
             diagrams at neural networks. Outside research I build software,
             anything from{' '}
-            <span className="font-mono text-sm tracking-tight text-orange-600 dark:text-orange-400">
+            <span className="font-mono text-sm tracking-tight text-orange-700 dark:text-orange-400">
               Rust kernel drivers to the course platform
             </span>{' '}
             I run with my team.
