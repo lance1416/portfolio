@@ -7,10 +7,13 @@ import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { stagger } from '@/utils/variants';
 
 export default function Projects() {
-  // The one-screen 3D ring needs room; small or short screens and reduced
-  // motion get a regular page with a swipe strip instead.
+  // The one-screen 3D ring needs a landscape screen with room for two columns
+  // and ~740px of height (its content plus the navbar and dock), which covers
+  // MacBooks (~790px tall in Safari) and landscape iPads. Phones, portrait
+  // tablets, short windows and reduced motion get a regular page with a swipe
+  // strip instead.
   const roomyScreen = useMediaQuery(
-    '(min-width: 768px) and (min-height: 800px)',
+    '(min-width: 1024px) and (min-height: 740px) and (orientation: landscape)',
   );
   const prefersReducedMotion = useReducedMotion();
 

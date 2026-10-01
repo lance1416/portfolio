@@ -77,6 +77,8 @@ export function ProjectImage({
         alt={`Preview of ${project.title}`}
         className="h-full w-full object-cover"
         loading="lazy"
+        // A native image drag would hijack the ring's swipe gesture.
+        draggable={false}
       />
     </div>
   ) : (
