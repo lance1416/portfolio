@@ -11,7 +11,11 @@ export function PageHeader({ chapter, title, subtitle }: PageHeaderProps) {
   const num = chapter.replace('§ ', '');
 
   return (
-    <motion.header variants={fadeUp} className="relative mb-16 overflow-hidden">
+    // min-h fits the 9rem ghost number, which would be clipped without a subtitle
+    <motion.header
+      variants={fadeUp}
+      className="relative mb-16 min-h-36 overflow-hidden"
+    >
       {/* Decorative ghost number — editorial depth */}
       <span
         aria-hidden="true"
