@@ -81,7 +81,7 @@ describe('App', () => {
         }
       }
 
-      expect(screen.queryByText('Systems Error')).not.toBeInTheDocument();
+      expect(screen.queryByText('Something broke')).not.toBeInTheDocument();
       expect(consoleError).not.toHaveBeenCalled();
     },
   );

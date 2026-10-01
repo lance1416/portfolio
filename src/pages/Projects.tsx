@@ -30,11 +30,7 @@ export default function Projects() {
       animate="show"
       className="mx-auto max-w-4xl px-6"
     >
-      <PageHeader
-        chapter="§ 02"
-        title="Projects"
-        subtitle="Engineering challenges spanning low-level systems to multidisciplinary game design."
-      />
+      <PageHeader chapter="§ 02" title="Projects" />
       <ProjectStrip projects={projectsData} />
     </motion.main>
   );

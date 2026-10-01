@@ -17,7 +17,7 @@ export default function ErrorPage() {
   } else if (typeof error === 'string') {
     errorMessage = error;
   } else {
-    errorMessage = 'An unknown technical error occurred.';
+    errorMessage = 'Unknown error.';
   }
 
   return (
@@ -32,17 +32,16 @@ export default function ErrorPage() {
         </div>
 
         <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-          Systems Error
+          Something broke
         </h1>
 
         <p className="mt-4 text-zinc-600 dark:text-zinc-400 prose-academic">
-          The application encountered an unexpected exception while processing
-          your request.
+          This page crashed. Reloading usually fixes it.
         </p>
 
         {/* Technical details box */}
         <div className="mt-8 rounded-2xl border border-zinc-200 bg-zinc-100/50 p-4 text-left font-mono text-xs text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-zinc-400">
-          <p className="uppercase tracking-widest opacity-50 mb-2">Error Log</p>
+          <p className="uppercase tracking-widest opacity-50 mb-2">Details</p>
           <p className="break-all">{errorMessage}</p>
         </div>
 
@@ -53,7 +52,7 @@ export default function ErrorPage() {
             className="inline-flex items-center justify-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-sm font-medium text-white shadow-apple-lg transition-transform hover:scale-105 active:scale-[0.96] dark:bg-zinc-100 dark:text-zinc-950"
           >
             <RotateCcw className="h-4 w-4" />
-            Reload Application
+            Reload
           </button>
 
           <Link

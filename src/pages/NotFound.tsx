@@ -20,8 +20,7 @@ export default function NotFound() {
             Page not found
           </h2>
           <p className="mt-4 mx-auto max-w-md text-lg text-zinc-600 dark:text-zinc-400">
-            The page you are looking for doesn't exist or has been moved to a
-            new digital coordinate.
+            There's nothing at this address.
           </p>
         </div>
 

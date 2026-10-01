@@ -5,13 +5,12 @@ import { fadeUp } from '@/utils/variants';
 interface PageHeaderProps {
   chapter: string;
   title: string;
-  subtitle?: string;
 }
 
 /** Odometer roll: a snappy settle, landing as the page turn does. */
 const ROLL = { duration: 0.48, ease: [0.22, 1, 0.36, 1] } as const;
 
-export function PageHeader({ chapter, title, subtitle }: PageHeaderProps) {
+export function PageHeader({ chapter, title }: PageHeaderProps) {
   const num = chapter.replace('§ ', '');
   const { entrance, direction } = usePageTransition();
 
@@ -22,7 +21,7 @@ export function PageHeader({ chapter, title, subtitle }: PageHeaderProps) {
   const from = direction === 'forward' ? '100%' : '-100%';
 
   return (
-    // min-h fits the 9rem ghost number, which would be clipped without a subtitle
+    // min-h fits the 9rem ghost number, which is taller than the title block
     <motion.header
       variants={fadeUp}
       className="relative mb-16 min-h-36 overflow-hidden"
@@ -53,11 +52,6 @@ export function PageHeader({ chapter, title, subtitle }: PageHeaderProps) {
           </motion.span>
         </span>
       </h1>
-      {subtitle && (
-        <p className="mt-4 max-w-lg text-base text-zinc-500 dark:text-zinc-400">
-          {subtitle}
-        </p>
-      )}
     </motion.header>
   );
 }

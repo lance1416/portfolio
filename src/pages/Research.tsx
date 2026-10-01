@@ -15,11 +15,7 @@ export default function Research() {
       animate="show"
       className="mx-auto max-w-4xl px-6"
     >
-      <PageHeader
-        chapter="§ 03"
-        title="Research"
-        subtitle="Academic background and research in quantum computation."
-      />
+      <PageHeader chapter="§ 03" title="Research" />
 
       <div className="space-y-24">
         {/* Dissertation — journal abstract style */}
