@@ -1,15 +1,46 @@
 @import "tailwindcss";
 
+/*
+ * Metric-matched fallbacks for the self-hosted fonts: local fonts scaled to
+ * the web fonts' widths and line metrics, so text doesn't reflow (layout
+ * shift) when the web font swaps in. Values from @capsizecss/metrics +
+ * createFontStack; regenerate if a font changes.
+ */
+@font-face {
+  font-family: "Inter Fallback";
+  src: local("Arial"), local("ArialMT");
+  ascent-override: 90.4365%;
+  descent-override: 22.518%;
+  line-gap-override: 0%;
+  size-adjust: 107.1194%;
+}
+
+@font-face {
+  font-family: "Playfair Display Fallback";
+  src: local("Georgia");
+  ascent-override: 106.716%;
+  descent-override: 24.7558%;
+  size-adjust: 101.3906%;
+}
+
+@font-face {
+  font-family: "JetBrains Mono Fallback";
+  src: local("Courier New"), local("CourierNewPSMT");
+  ascent-override: 102.0166%;
+  descent-override: 30.0049%;
+  size-adjust: 99.9837%;
+}
+
 @variant dark (&:where(.dark, .dark *));
 
 @theme {
   --font-display:
-    "Playfair Display Variable", Georgia, "Times New Roman", serif;
+    "Playfair Display Variable", "Playfair Display Fallback", Georgia, "Times New Roman", serif;
   --font-sans:
-    "Inter Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    "Inter Variable", "Inter Fallback", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
     Arial, sans-serif;
   --font-mono:
-    "JetBrains Mono Variable", "SF Mono", "Fira Code", ui-monospace, monospace;
+    "JetBrains Mono Variable", "JetBrains Mono Fallback", "SF Mono", "Fira Code", ui-monospace, monospace;
 
   /* Quantum indigo — derived from Oxford blue, calibrated for screen */
   --color-accent: oklch(42% 0.22 268);
