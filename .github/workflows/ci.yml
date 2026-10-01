@@ -1,0 +1,65 @@
+# Checks only. Deploys stay with the Cloudflare Pages Git integration, which
+# builds every push on its own; nothing here publishes anything.
+name: CI
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['**.md']
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec biome ci .
+      - run: pnpm tsc -b
+      - run: pnpm test:run
+
+  e2e:
+    needs: check
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: chromium
+            os: ubuntu-latest
+            browser: chromium
+            projects: --project=desktop --project=mobile
+          # Real Apple: WebKit on macOS is the closest Playwright gets to Safari
+          # (fonts, platform, ⌘ shortcut). macOS minutes bill at 10×, so only
+          # the Apple device projects run here.
+          - name: webkit-macos
+            os: macos-latest
+            browser: webkit
+            projects: --project=macbook --project=ipad-portrait --project=ipad-landscape --project=iphone
+    name: e2e (${{ matrix.name }})
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
+      - run: pnpm test:e2e ${{ matrix.projects }}
+      - if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-results-${{ matrix.name }}
+          path: test-results/
+          retention-days: 7
