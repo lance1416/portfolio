@@ -17,6 +17,7 @@ import { NAV_LINKS } from '@/data/navigation';
 import { profile } from '@/data/profile';
 import { useScrollLock } from '@/hooks/useScrollLock';
 import { cn } from '@/utils/cn';
+import { PALETTE_SHORTCUT } from '@/utils/shortcut';
 import { IconSwap } from './IconSwap';
 
 const MOBILE_ACTION_CLASS =
@@ -138,12 +139,14 @@ export function Navbar() {
             <button
               type="button"
               onClick={openCommandPalette}
+              aria-keyshortcuts={PALETTE_SHORTCUT.aria}
               className="group hidden sm:flex items-center gap-2 rounded-full bg-white/50 pl-3 pr-2 py-2 text-xs font-medium text-zinc-500 shadow-border transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:bg-zinc-800/50 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
             >
               <Search className="h-3.5 w-3.5" />
               <span>Menu</span>
-              <kbd className="flex items-center gap-1 rounded bg-zinc-200/50 px-1.5 py-0.5 font-sans text-[10px] text-zinc-400 transition-colors group-hover:text-zinc-500 dark:bg-zinc-700/50 dark:group-hover:text-zinc-300">
-                <span className="text-sm">⌘</span>K
+              {/* Touch-first devices (an iPad without a keyboard) have no shortcut to show. */}
+              <kbd className="rounded bg-zinc-200/50 px-1.5 py-0.5 font-sans text-[10px] text-zinc-400 transition-colors group-hover:text-zinc-500 pointer-coarse:hidden dark:bg-zinc-700/50 dark:group-hover:text-zinc-300">
+                {PALETTE_SHORTCUT.label}
               </kbd>
             </button>
 

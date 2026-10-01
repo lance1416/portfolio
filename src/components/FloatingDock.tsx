@@ -11,6 +11,7 @@ import { useCommandPalette } from '@/context/CommandPaletteContext';
 import { useTerminal } from '@/context/TerminalContext';
 import { useTheme } from '@/context/ThemeContext';
 import { openResume } from '@/utils/resume';
+import { PALETTE_SHORTCUT } from '@/utils/shortcut';
 
 /** Icon button with a tooltip shown on hover and on keyboard focus. */
 function DockItem({
@@ -22,7 +23,7 @@ function DockItem({
   icon: LucideIcon;
   label: string;
   onClick: () => void;
-  shortcut?: string;
+  shortcut?: { label: string; aria: string };
 }) {
   const [isHovered, setIsHovered] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -42,7 +43,7 @@ function DockItem({
             {label}
             {shortcut && (
               <kbd className="font-sans text-[10px] text-zinc-400 dark:text-zinc-500">
-                {shortcut}
+                {shortcut.label}
               </kbd>
             )}
           </motion.div>
@@ -52,7 +53,7 @@ function DockItem({
       <button
         type="button"
         aria-label={label}
-        aria-keyshortcuts={shortcut === '⌘K' ? 'Meta+K Control+K' : undefined}
+        aria-keyshortcuts={shortcut?.aria}
         onClick={onClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
@@ -82,7 +83,7 @@ export function FloatingDock() {
       <DockItem
         icon={Search}
         label="Command Palette"
-        shortcut="⌘K"
+        shortcut={PALETTE_SHORTCUT}
         onClick={openCommandPalette}
       />
 

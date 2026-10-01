@@ -76,6 +76,24 @@ test('the command palette navigates from the keyboard', async ({ page }) => {
   await expect(page).toHaveURL(/\/research$/);
 });
 
+test('the menu button advertises the platform’s shortcut', async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(isMobile, 'touch devices show no shortcut');
+  await page.goto('/');
+  const button = page.getByRole('button', { name: /Menu/ });
+  await expect(button).toBeVisible();
+  const apple = await page.evaluate(() =>
+    /mac|iphone|ipad|ipod/i.test(navigator.platform),
+  );
+  await expect(button).toHaveAttribute(
+    'aria-keyshortcuts',
+    apple ? 'Meta+K' : 'Control+K',
+  );
+  await expect(button.locator('kbd')).toHaveText(apple ? '⌘K' : 'Ctrl K');
+});
+
 test.describe('floating dock', () => {
   test.skip(({ viewport }) => !hasDock(viewport), 'the dock shows from sm up');
 
