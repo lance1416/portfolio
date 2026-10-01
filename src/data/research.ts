@@ -21,8 +21,7 @@ export const educationData: EducationItem[] = [
     institution: 'University of Oxford',
     degree: 'MSc in Advanced Computer Science (awaiting conferral)',
     period: '2025 – 2026',
-    logoUrl:
-      'https://public.lance1416.com/portfolio/coat/Arms_of_University_of_Oxford.svg',
+    logoUrl: '/coat/oxford.webp',
     details: [
       'Dissertation: The Effect of Fault-Equivalence Rewrites on Quantum Error Decodability. Supervisor: Professor Aleks Kissinger.',
       'Areas: Quantum computing, formal verification, databases, uncertainty in deep learning, geometric deep learning.',
@@ -33,7 +32,7 @@ export const educationData: EducationItem[] = [
     institution: 'University of Toronto',
     degree: 'BSc, Computer Science Specialist; Mathematics Minor',
     period: '2021 – 2025',
-    logoUrl: 'https://public.lance1416.com/portfolio/coat/Utoronto_coa.svg',
+    logoUrl: '/coat/uoft.webp',
     details: [
       'Graduated with High Distinction; GPA: 3.94 / 4.0.',
       'Areas: Operating systems, machine learning, artificial intelligence, deep learning.',

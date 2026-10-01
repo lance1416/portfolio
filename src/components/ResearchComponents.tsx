@@ -46,6 +46,10 @@ export function EducationCard({ item }: { item: EducationItem }) {
             <img
               src={item.logoUrl}
               alt={`${item.institution} seal`}
+              width={80}
+              height={80}
+              loading="lazy"
+              decoding="async"
               className="h-20 w-20 object-contain opacity-20 grayscale transition-[opacity,filter] duration-500 group-hover:opacity-60 group-hover:grayscale-0"
             />
           </div>

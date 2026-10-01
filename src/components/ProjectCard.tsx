@@ -70,10 +70,16 @@ export function ProjectImage({
     className,
   );
 
-  return project.imageUrl ? (
+  const { image } = project;
+  const url = (width: number) => `/projects/${image?.name}-${width}.webp`;
+
+  return image ? (
     <div className={frame}>
       <img
-        src={project.imageUrl}
+        src={url(image.widths[image.widths.length - 1])}
+        srcSet={image.widths.map((w) => `${url(w)} ${w}w`).join(', ')}
+        // Ring card at 560/440px on wide screens; strip cards span most of the viewport.
+        sizes="(min-width: 1280px) 560px, (min-width: 1024px) 440px, (min-width: 640px) 70vw, 85vw"
         alt={`Preview of ${project.title}`}
         className="h-full w-full object-cover"
         loading="lazy"

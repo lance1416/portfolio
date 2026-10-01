@@ -14,7 +14,11 @@ export interface ProjectItem {
   links?: ProjectLink[];
   description: string[];
   skills: string[];
-  imageUrl?: string;
+  /**
+   * Screenshot in public/projects as `${name}-${width}.webp`, one file per
+   * width (ascending); the browser picks one via srcset.
+   */
+  image?: { name: string; widths: number[] };
   color?: string;
 }
 
@@ -25,7 +29,7 @@ export const projectsData: ProjectItem[] = [
     subtitle: 'Rust-Based Toy Operating System',
     year: '2024',
     color: '#d34516',
-    imageUrl: 'projects/kidney-os.png',
+    image: { name: 'kidney-os', widths: [640, 1280] },
     description: [
       'Principal author of the storage subsystem below the VFS layer in a from-scratch Rust kernel built by eight people, and sole author of its PS/2 keyboard driver. Supervised by Professor Kuei Sun at the University of Toronto.',
       'Wrote an ATA driver whose interrupt handlers wake semaphore-blocked threads, a block-device layer that hid hardware specifics from the filesystem above, and MBR partition parsing and registration.',
@@ -52,7 +56,7 @@ export const projectsData: ProjectItem[] = [
     subtitle: '3D Puzzle Platformer',
     year: '2024',
     color: '#fa5c5c',
-    imageUrl: 'projects/evogami.png',
+    image: { name: 'evogami', widths: [640, 960] },
     description: [
       'Programming Lead on a 12-person team of computer science, art, and music students across the University of Toronto and Sheridan College, shipping an original game in Unity for Windows and macOS.',
       'Wrote 94% of the game’s C# gameplay code: the origami transformation state machine behind the core mechanic, character movement with ground and wall detection, the UI, and an input layer covering keyboard, mouse, and Xbox and PlayStation controllers.',
