@@ -2,9 +2,11 @@ import { ArrowUpRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import type { CSSProperties } from 'react';
 import { type ExperienceItem, roleSpan } from '@/data/experience';
+import { cn } from '@/utils/cn';
 import { formatDuration, formatPeriod } from '@/utils/months';
 import { fadeUp, revealOnScroll } from '@/utils/variants';
 import { DashList } from './DashList';
+import { RAIL_GRID } from './Page';
 import { SkillPill } from './SkillPill';
 
 export function ExperienceEntry({ job }: { job: ExperienceItem }) {
@@ -18,7 +20,10 @@ export function ExperienceEntry({ job }: { job: ExperienceItem }) {
       {...revealOnScroll}
       // Focus target for the timeline's jump links; not in the tab order.
       tabIndex={-1}
-      className="role-scope grid scroll-mt-32 outline-none gap-5 border-t border-zinc-200 py-12 md:grid-cols-[10rem_1fr] md:gap-10 dark:border-zinc-800"
+      className={cn(
+        RAIL_GRID,
+        'role-scope scroll-mt-32 gap-5 border-t border-zinc-200 py-12 outline-none dark:border-zinc-800',
+      )}
       style={{ '--role-base': job.color } as CSSProperties}
     >
       {/* Date rail: the swatch matches this role's bar in the timeline; sticky

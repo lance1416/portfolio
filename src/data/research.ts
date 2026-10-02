@@ -22,7 +22,6 @@ export const educationData: EducationItem[] = [
     period: '2025 – 2026',
     logoUrl: '/coat/oxford.webp',
     details: [
-      'Dissertation: The Effect of Fault-Equivalence Rewrites on Quantum Error Decodability. Supervisor: Professor Aleks Kissinger.',
       'Areas: Quantum computing, formal verification, databases, uncertainty in deep learning, geometric deep learning.',
     ],
   },
@@ -61,6 +60,9 @@ export const awardsData: AwardItem[] = [
 ];
 
 export const dissertationData = {
+  institution: 'University of Oxford',
+  year: '2026',
+  supervisor: 'Professor Aleks Kissinger',
   title:
     'The Effect of Fault-Equivalence Rewrites on Quantum Error Decodability',
   abstract:
