@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { type CSSProperties, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Page } from '@/components/Page';
+import { RollLine } from '@/components/RollLine';
 import { Section } from '@/components/Section';
 import {
   ELSEWHERE,
@@ -23,6 +24,24 @@ const KIDNEYOS = projectsData.find((p) => p.id === 'kidneyos')?.color;
 /** Inline `role-scope` colour, lightened in dark mode like every item colour. */
 const tint = (color: string | undefined) =>
   ({ '--role-base': color }) as CSSProperties;
+
+const HERO_LINES = [
+  'Quantum research.',
+  'Systems architecture.',
+  'Product engineering.',
+  'At every layer.',
+];
+
+const NBSP = String.fromCodePoint(0xa0);
+const NB_HYPHEN = String.fromCodePoint(0x2011);
+
+/**
+ * Keeps short lines from breaking in odd places: each " · " separator sticks
+ * to the word before it (no line starts with a dot) and hyphenated words
+ * ("10-person", "ZX-calculus") never split at the hyphen.
+ */
+const noBreaks = (text: string) =>
+  text.replaceAll(' · ', `${NBSP}· `).replace(/(\w)-(\w)/g, `$1${NB_HYPHEN}$2`);
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -95,8 +114,8 @@ function IndexList({ compact = false }: { compact?: boolean }) {
                 </span>
                 <span className="label-overline">{entry.category}</span>
               </div>
-              <p className="text-xs leading-snug text-zinc-600 transition-colors group-hover:text-zinc-900 dark:text-zinc-400 dark:group-hover:text-zinc-100">
-                {entry.title}
+              <p className="text-balance text-xs leading-snug text-zinc-600 transition-colors group-hover:text-zinc-900 dark:text-zinc-400 dark:group-hover:text-zinc-100">
+                {noBreaks(entry.title)}
               </p>
               <span className="mono-meta mt-1 block">{entry.year}</span>
             </Link>
@@ -115,7 +134,7 @@ function IndexList({ compact = false }: { compact?: boolean }) {
               <div className="min-w-0 flex-1">
                 <p className="label-overline mb-1">{entry.category}</p>
                 <p className="text-sm font-medium leading-snug text-zinc-900 transition-colors group-hover:text-accent dark:text-zinc-100">
-                  {entry.title}
+                  {noBreaks(entry.title)}
                 </p>
               </div>
               <span className="mono-meta shrink-0">{entry.year}</span>
@@ -131,18 +150,18 @@ function IndexList({ compact = false }: { compact?: boolean }) {
 
 export default function Home() {
   return (
-    <Page className="grid grid-cols-1 gap-16 lg:grid-cols-[210px_1fr_210px] lg:gap-0">
+    <Page className="grid grid-cols-1 gap-16 lg:grid-cols-[13rem_minmax(0,1fr)_14.5rem] lg:gap-0">
       {/* ── LEFT: Identity sidebar ── */}
       <motion.aside
         variants={fadeUp}
-        className="order-2 flex flex-col gap-10 lg:order-none lg:sticky lg:top-32 lg:self-start lg:border-r lg:border-zinc-200 lg:pr-10 dark:lg:border-zinc-800"
+        className="order-2 flex flex-col gap-10 lg:order-none lg:sticky lg:top-32 lg:self-start lg:border-r lg:border-zinc-200 lg:pr-8 dark:lg:border-zinc-800"
       >
         <div>
           <p className="label-overline mb-3">Portfolio</p>
           <h1 className="font-display text-2xl font-normal text-zinc-900 dark:text-zinc-50">
             {profile.name}
           </h1>
-          <p className="mono-meta mt-1">Research · Systems · Product</p>
+          <p className="mono-meta mt-1">{profile.role}</p>
         </div>
 
         <div>
@@ -167,8 +186,8 @@ export default function Home() {
                   <p className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
                     {item.label}
                   </p>
-                  <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                    {item.detail}
+                  <p className="text-balance text-xs text-zinc-500 dark:text-zinc-400">
+                    {noBreaks(item.detail)}
                   </p>
                 </div>
               </li>
@@ -199,16 +218,20 @@ export default function Home() {
       </motion.aside>
 
       {/* ── CENTER: Hero ── */}
-      <div className="order-1 lg:order-none lg:px-12">
+      <div className="order-1 lg:order-none lg:px-10">
         <motion.section variants={fadeUp} className="mb-24">
+          {/* Home's title: each line rolls in after a page turn, like every
+              other page's PageHeader title. */}
           <h2 className="font-display text-4xl font-normal leading-[1.15] tracking-tight text-zinc-900 sm:text-5xl dark:text-zinc-50">
-            Quantum research.
-            <br />
-            Systems architecture.
-            <br />
-            Product engineering.
-            <br />
-            <span className="text-zinc-500">At every layer.</span>
+            {HERO_LINES.map((line, i) => (
+              <RollLine key={line} delay={0.06 + i * 0.05}>
+                {i === HERO_LINES.length - 1 ? (
+                  <span className="text-zinc-500">{line}</span>
+                ) : (
+                  line
+                )}
+              </RollLine>
+            ))}
           </h2>
 
           {/* Short rule — typographic pause between poem and prose */}
@@ -247,7 +270,9 @@ export default function Home() {
                 <span className="label-overline min-w-[4.5rem] shrink-0">
                   {domain}
                 </span>
-                <span className="text-body">{detail}</span>
+                <span className="text-body text-pretty">
+                  {noBreaks(detail)}
+                </span>
               </div>
             ))}
           </div>
@@ -267,7 +292,7 @@ export default function Home() {
       <motion.nav
         variants={fadeUp}
         aria-label="Selected work"
-        className="hidden lg:flex lg:flex-col lg:sticky lg:top-32 lg:self-start lg:border-l lg:border-zinc-200 lg:pl-10 dark:lg:border-zinc-800"
+        className="hidden lg:flex lg:flex-col lg:sticky lg:top-32 lg:self-start lg:border-l lg:border-zinc-200 lg:pl-8 dark:lg:border-zinc-800"
       >
         <SelectedWorkHeader />
         <IndexList compact />
