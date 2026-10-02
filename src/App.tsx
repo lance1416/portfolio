@@ -28,8 +28,9 @@ const router = createBrowserRouter([
     path: '/',
     element: <MainLayout />,
     errorElement: <ErrorPage />,
-    // Shown only until the first page's chunk arrives on initial load.
-    hydrateFallbackElement: null,
+    // Blank until the first page's chunk arrives on initial load. A component,
+    // not `hydrateFallbackElement: null`, which the router treats as missing.
+    HydrateFallback: () => null,
     children: [
       { index: true, Component: Home },
       { path: 'experience', lazy: lazyPage(PAGES.experience) },
