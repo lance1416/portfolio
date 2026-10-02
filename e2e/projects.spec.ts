@@ -90,19 +90,22 @@ test.describe('3D ring', () => {
 
     const nav = await box('nav');
     const dock = await box('.fixed.bottom-6');
-    const text = await box('main .relative.z-10');
+    const header = await box('main header');
+    // The text block itself (its column cell stretches to the grid row).
+    const text = await box('main .relative.z-10 > div');
     const card = await box('.transform-3d > button[data-front]');
+    const counter = await box('[aria-current="true"]');
 
-    for (const part of [text, card]) {
-      expect(part.top).toBeGreaterThan(nav.bottom);
+    // The page header, then the stage, all between the navbar and the dock.
+    expect(header.top).toBeGreaterThan(nav.bottom);
+    expect(text.top).toBeGreaterThanOrEqual(header.bottom);
+    for (const part of [text, card, counter]) {
       expect(part.bottom).toBeLessThan(dock.top);
     }
-    // Text on the left, ring on the right, not overlapping.
+    // Text on the left, ring on the right, not overlapping; the counter
+    // sits under the ring.
     expect(text.right).toBeLessThan(card.left);
-    // Roughly even space above and below the text.
-    expect(
-      Math.abs(text.top - nav.bottom - (dock.top - text.bottom)),
-    ).toBeLessThan(60);
+    expect(counter.top).toBeGreaterThan(card.bottom);
   });
 
   test('reduced motion gets the swipe strip instead of the ring', async ({

@@ -14,7 +14,9 @@ import type { ProjectItem } from '@/data/projects';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useScrollLock } from '@/hooks/useScrollLock';
 import { cn } from '@/utils/cn';
-import { DURATION, fadeUp, timed } from '@/utils/variants';
+import { usePageEntrance } from '@/utils/pageTransition';
+import { DURATION, fadeUp, stagger, timed } from '@/utils/variants';
+import { PageHeader } from './PageHeader';
 import {
   ProjectDetails,
   ProjectImage,
@@ -199,118 +201,121 @@ export function ProjectRing({ projects }: { projects: ProjectItem[] }) {
   const radius =
     Math.round(cardWidth / 2 / Math.tan((STEP * Math.PI) / 360)) + 40;
 
+  const entrance = usePageEntrance();
+
+  // Position in the carousel; each bar jumps to its project.
+  const counter = (
+    <div className="flex items-center gap-3">
+      <p className="mono-meta">
+        <span className="text-zinc-900 dark:text-zinc-100">
+          {projectNumber(active)}
+        </span>{' '}
+        / {projectNumber(last)}
+      </p>
+      <div className="flex gap-1.5">
+        {projects.map((p, i) => {
+          const scope = projectScope(p);
+          return (
+            <button
+              key={p.id}
+              type="button"
+              onClick={() => setActive(i)}
+              aria-label={`Show ${p.title}`}
+              aria-current={i === active}
+              style={scope.style}
+              // after: extends the 32×4 bar to a 38×40 hit area, meeting its neighbours
+              className={cn(
+                scope.className,
+                'relative h-1 w-8 rounded-full transition-colors after:absolute after:-inset-x-[3px] after:-inset-y-[18px]',
+                i === active ? 'bg-(--role)' : 'bg-zinc-200 dark:bg-zinc-800',
+              )}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+
   return (
     // Cancels MainLayout's vertical padding so the page is exactly one
     // screen; the stage sits between the navbar and the dock.
     <motion.main
-      className="-mt-32 -mb-32 h-svh touch-pan-y overflow-x-clip pt-24 pb-28"
+      variants={stagger}
+      initial={entrance}
+      animate="show"
+      className="-mt-32 -mb-32 h-svh touch-pan-y overflow-x-clip pt-[88px] pb-28"
       onPanEnd={(_, info) => {
         if (Math.abs(info.offset.x) > SWIPE_THRESHOLD) {
           go(info.offset.x < 0 ? 1 : -1);
         }
       }}
     >
-      <div
-        className={cn(
-          PAGE_COLUMN,
-          'grid h-full grid-cols-[minmax(0,5fr)_minmax(0,7fr)] items-center gap-10 lg:gap-16',
-        )}
-      >
-        {/* Text column; sits above the ring so passed cards fade behind it */}
-        <div className="relative z-10">
-          <div className="mb-8 flex items-center justify-between gap-4">
-            {/* The chapter mark PageHeader shows elsewhere; the front project's
-                name is this page's big title. */}
-            <h1 className="label-overline">
-              <span aria-hidden="true">§ 02 · </span>Projects
-            </h1>
-            {/* Position in the carousel; each bar jumps to its project */}
-            <div className="flex items-center gap-3">
-              <p className="mono-meta">
-                <span className="text-zinc-900 dark:text-zinc-100">
-                  {projectNumber(active)}
-                </span>{' '}
-                / {projectNumber(last)}
-              </p>
-              <div className="flex gap-1.5">
-                {projects.map((p, i) => {
-                  const scope = projectScope(p);
-                  return (
-                    <button
-                      key={p.id}
-                      type="button"
-                      onClick={() => setActive(i)}
-                      aria-label={`Show ${p.title}`}
-                      aria-current={i === active}
-                      style={scope.style}
-                      // after: extends the 32×4 bar to a 38×40 hit area, meeting its neighbours
-                      className={cn(
-                        scope.className,
-                        'relative h-1 w-8 rounded-full transition-colors after:absolute after:-inset-x-[3px] after:-inset-y-[18px]',
-                        i === active
-                          ? 'bg-(--role)'
-                          : 'bg-zinc-200 dark:bg-zinc-800',
-                      )}
-                    />
-                  );
-                })}
-              </div>
-            </div>
+      <div className={cn(PAGE_COLUMN, 'flex h-full flex-col')}>
+        <PageHeader chapter="§ 02" title="Projects" compact />
+
+        <motion.div
+          variants={fadeUp}
+          className="grid min-h-0 flex-1 grid-cols-[minmax(0,5fr)_minmax(0,7fr)] items-center gap-10 lg:gap-16"
+        >
+          {/* Text column; sits above the ring so passed cards fade behind it */}
+          <div className="relative z-10">
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={project.id}
+                variants={PANEL}
+                initial="hidden"
+                animate="show"
+                exit="exit"
+                {...projectScope(project)}
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <h2 className="heading-feature">
+                    <SplitText text={project.title} stagger={0.04} />
+                  </h2>
+                  <div className="flex items-center gap-2">
+                    <span className="mono-meta">{project.year}</span>
+                    <ProjectLinks project={project} />
+                  </div>
+                </div>
+                <p className="mt-2 font-mono text-sm text-zinc-500 dark:text-zinc-400">
+                  <SplitText text={project.subtitle} stagger={0.012} />
+                </p>
+
+                <motion.div className="mt-5" variants={fadeUp}>
+                  <ProjectDetails project={project} />
+                </motion.div>
+              </motion.div>
+            </AnimatePresence>
           </div>
 
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={project.id}
-              variants={PANEL}
-              initial="hidden"
-              animate="show"
-              exit="exit"
-              {...projectScope(project)}
-            >
-              <div className="flex items-start justify-between gap-4">
-                <h2 className="heading-page">
-                  <SplitText text={project.title} stagger={0.04} />
-                </h2>
-                <div className="flex items-center gap-2 pt-2">
-                  <span className="mono-meta">{project.year}</span>
-                  <ProjectLinks project={project} />
-                </div>
-              </div>
-              <p className="mt-2 font-mono text-sm text-zinc-500 dark:text-zinc-400">
-                <SplitText text={project.subtitle} stagger={0.012} />
-              </p>
-
-              <motion.div className="mt-8" variants={fadeUp}>
-                <ProjectDetails project={project} />
+          {/* The ring, with its position underneath like any carousel */}
+          <div className="flex flex-col items-center gap-10">
+            <div className="flex justify-center perspective-[1600px]">
+              <motion.div
+                className="relative transform-3d"
+                style={{
+                  width: cardWidth,
+                  aspectRatio: '16 / 10',
+                  z: -radius,
+                  rotateY: rotation,
+                }}
+              >
+                {projects.map((p, i) => (
+                  <RingFace
+                    key={p.id}
+                    project={p}
+                    index={i}
+                    radius={radius}
+                    rotation={rotation}
+                    active={i === active}
+                    onSelect={() => setActive(i)}
+                  />
+                ))}
               </motion.div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/* The ring */}
-        <div className="flex justify-center perspective-[1600px]">
-          <motion.div
-            className="relative transform-3d"
-            style={{
-              width: cardWidth,
-              aspectRatio: '16 / 10',
-              z: -radius,
-              rotateY: rotation,
-            }}
-          >
-            {projects.map((p, i) => (
-              <RingFace
-                key={p.id}
-                project={p}
-                index={i}
-                radius={radius}
-                rotation={rotation}
-                active={i === active}
-                onSelect={() => setActive(i)}
-              />
-            ))}
-          </motion.div>
-        </div>
+            </div>
+            {counter}
+          </div>
+        </motion.div>
       </div>
     </motion.main>
   );
