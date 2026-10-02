@@ -12,6 +12,7 @@ import { useTerminal } from '@/context/TerminalContext';
 import { useTheme } from '@/context/ThemeContext';
 import { openResume } from '@/utils/resume';
 import { PALETTE_SHORTCUT } from '@/utils/shortcut';
+import { SPRING } from '@/utils/variants';
 
 /** Icon button with a tooltip shown on hover and on keyboard focus. */
 function DockItem({
@@ -37,7 +38,7 @@ function DockItem({
             initial={{ opacity: 0, y: 10, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 2, scale: 0.9 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            transition={SPRING.ui}
             className="absolute -top-12 flex items-center gap-2 whitespace-nowrap rounded-lg bg-white/90 px-3 py-1.5 text-xs font-medium text-zinc-700 shadow-border backdrop-blur-md dark:bg-zinc-800/90 dark:text-zinc-300"
           >
             {label}
@@ -79,7 +80,7 @@ export function FloatingDock() {
     <motion.div
       initial={{ y: 100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 24, delay: 0.2 }}
+      transition={{ ...SPRING.ui, delay: 0.2 }}
       className="fixed bottom-6 left-1/2 z-50 hidden [view-transition-name:dock] -translate-x-1/2 items-center gap-2 rounded-3xl bg-white/60 p-2 shadow-floating backdrop-blur-xl dark:bg-zinc-900/60 sm:flex short:hidden"
     >
       <DockItem

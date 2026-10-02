@@ -1,14 +1,12 @@
-import { motion, useReducedMotion } from 'motion/react';
+import { useReducedMotion } from 'motion/react';
+import { Page } from '@/components/Page';
 import { PageHeader } from '@/components/PageHeader';
 import { ProjectRing } from '@/components/ProjectRing';
 import { ProjectStrip } from '@/components/ProjectStrip';
 import { projectsData } from '@/data/projects';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { usePageEntrance } from '@/utils/pageTransition';
-import { stagger } from '@/utils/variants';
 
 export default function Projects() {
-  const entrance = usePageEntrance();
   // The one-screen 3D ring needs a landscape screen with room for two columns
   // and ~740px of height (its content plus the navbar and dock), which covers
   // MacBooks (~790px tall in Safari) and landscape iPads. Phones, portrait
@@ -24,14 +22,9 @@ export default function Projects() {
   }
 
   return (
-    <motion.main
-      variants={stagger}
-      initial={entrance}
-      animate="show"
-      className="mx-auto max-w-4xl px-6"
-    >
+    <Page>
       <PageHeader chapter="§ 02" title="Projects" />
       <ProjectStrip projects={projectsData} />
-    </motion.main>
+    </Page>
   );
 }

@@ -1,10 +1,10 @@
-import { ExternalLink } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { motion, type Variants } from 'motion/react';
 import type { CSSProperties } from 'react';
 import { FaGithub, FaItchIo } from 'react-icons/fa6';
 import type { LinkType, ProjectItem } from '@/data/projects';
 import { cn } from '@/utils/cn';
-import { NumberedList } from './NumberedList';
+import { DashList } from './DashList';
 import { SkillPill } from './SkillPill';
 import { SplitText } from './SplitText';
 
@@ -15,7 +15,7 @@ const renderLinkIcon = (type: LinkType) => {
     case 'itch':
       return <FaItchIo className="h-4 w-4" />;
     case 'live':
-      return <ExternalLink className="h-4 w-4" />;
+      return <ArrowUpRight className="h-4 w-4" />;
   }
 };
 
@@ -30,6 +30,15 @@ export const projectAccent = (project: ProjectItem) =>
 
 export const projectNumber = (index: number) =>
   String(index + 1).padStart(2, '0');
+
+/**
+ * Spread onto an element to colour its project's details: `role-scope` turns
+ * the project colour into `--role`, lightened in dark mode, as on Experience.
+ */
+export const projectScope = (project: ProjectItem) => ({
+  className: 'role-scope',
+  style: { '--role-base': projectAccent(project) } as CSSProperties,
+});
 
 const LINK_NAMES: Record<LinkType, string> = {
   github: 'GitHub',
@@ -49,8 +58,7 @@ export function ProjectLinks({ project }: { project: ProjectItem }) {
           href={link.url}
           target="_blank"
           rel="noopener noreferrer"
-          style={{ '--hover-color': projectAccent(project) } as CSSProperties}
-          className="flex h-10 w-10 items-center justify-center text-zinc-500 transition-[color,scale] duration-150 ease-out hover:text-(--hover-color) active:scale-[0.96] dark:text-zinc-400"
+          className="flex h-10 w-10 items-center justify-center text-zinc-500 transition-[color,scale] duration-150 ease-out hover:text-(--role) active:scale-[0.96] dark:text-zinc-400"
           aria-label={`${project.title} on ${LINK_NAMES[link.type]}`}
         >
           {renderLinkIcon(link.type)}
@@ -115,14 +123,10 @@ export function ProjectImage({
 export function ProjectDetails({ project }: { project: ProjectItem }) {
   return (
     <>
-      <NumberedList items={project.description} className="mb-5" />
-      <div className="flex flex-wrap gap-2">
+      <DashList items={project.description} />
+      <div className="mt-6 flex flex-wrap gap-2">
         {project.skills.map((skill) => (
-          <SkillPill
-            key={skill}
-            skill={skill}
-            activeColor={projectAccent(project)}
-          />
+          <SkillPill key={skill} skill={skill} activeColor="var(--role)" />
         ))}
       </div>
     </>
@@ -143,13 +147,19 @@ export function ProjectCard({
   project: ProjectItem;
   index: number;
 }) {
+  const scope = projectScope(project);
   return (
+    // A content surface (hairline, not a floating shadow) so swipes have edges.
     <motion.article
       variants={TITLE_SEQUENCE}
       initial="hidden"
       whileInView="show"
       viewport={{ margin: '0px 0px -20% 0px' }}
-      className="h-full rounded-3xl bg-white/80 p-5 shadow-floating sm:p-6 dark:bg-zinc-900/70"
+      style={scope.style}
+      className={cn(
+        scope.className,
+        'h-full rounded-3xl bg-white/60 p-5 shadow-border sm:p-6 dark:bg-zinc-900/60',
+      )}
     >
       <div className="mb-3 flex items-center justify-between">
         <span className="label-overline">Project {projectNumber(index)}</span>
@@ -159,10 +169,10 @@ export function ProjectCard({
         </div>
       </div>
 
-      <h3 className="font-display text-3xl font-normal tracking-tight text-zinc-900 sm:text-4xl dark:text-zinc-50">
+      <h3 className="heading-feature">
         <SplitText text={project.title} stagger={0.04} />
       </h3>
-      <p className="mt-1 font-mono text-sm text-zinc-500 dark:text-zinc-400">
+      <p className="mt-2 font-mono text-sm text-zinc-500 dark:text-zinc-400">
         <SplitText text={project.subtitle} stagger={0.012} />
       </p>
 

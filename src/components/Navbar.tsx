@@ -18,6 +18,7 @@ import { profile } from '@/data/profile';
 import { useScrollLock } from '@/hooks/useScrollLock';
 import { cn } from '@/utils/cn';
 import { PALETTE_SHORTCUT } from '@/utils/shortcut';
+import { DURATION, SPRING, timed } from '@/utils/variants';
 import { IconSwap } from './IconSwap';
 
 const MOBILE_ACTION_CLASS =
@@ -85,7 +86,7 @@ export function Navbar() {
       <motion.div
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+        transition={SPRING.ui}
         className="fixed inset-x-4 top-4 z-[60] mx-auto max-w-3xl [view-transition-name:navbar]"
       >
         <nav className="relative flex items-center justify-between rounded-full bg-white/60 px-4 py-2.5 shadow-border backdrop-blur-md dark:bg-zinc-950/60 sm:px-6">
@@ -123,11 +124,7 @@ export function Navbar() {
                     <motion.div
                       layoutId="nav-pill"
                       className="absolute inset-0 z-0 rounded-full bg-zinc-100 dark:bg-zinc-800/50"
-                      transition={{
-                        type: 'spring',
-                        stiffness: 350,
-                        damping: 30,
-                      }}
+                      transition={SPRING.ui}
                     />
                   )}
                   <span className="relative z-10">{link.name}</span>
@@ -186,30 +183,26 @@ export function Navbar() {
             exit={{
               opacity: 0,
               y: -8,
-              transition: { duration: 0.15, ease: 'easeOut' },
+              transition: timed(DURATION.exit),
             }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            transition={timed(DURATION.base)}
             className="fixed inset-0 z-[50] flex flex-col bg-white/95 px-6 pb-8 pt-32 backdrop-blur-md dark:bg-zinc-950/95 sm:hidden"
           >
-            {/* Massive Typography Links */}
+            {/* Section links, in the display face like every page title */}
             <div className="flex flex-1 flex-col justify-center gap-6">
               {NAV_LINKS.map((link, i) => (
                 <motion.div
                   key={link.name}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{
-                    delay: i * 0.1,
-                    duration: 0.4,
-                    ease: 'easeOut',
-                  }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ ...SPRING.content, delay: 0.05 + i * 0.1 }}
                 >
                   <Link
                     to={link.path}
                     // No view transition from inside the menu: WebKit crashes
                     // when the tapped link unmounts mid-transition. The menu's
                     // own fade is the transition here.
-                    className="text-4xl font-bold tracking-tight text-zinc-900 transition-colors active:text-zinc-500 dark:text-zinc-50 dark:active:text-zinc-400"
+                    className="font-display text-4xl font-normal tracking-tight text-zinc-900 transition-colors active:text-zinc-500 dark:text-zinc-50 dark:active:text-zinc-400"
                   >
                     {link.name}
                   </Link>
@@ -221,8 +214,8 @@ export function Navbar() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.4 }}
-              className="grid grid-cols-2 gap-3 border-t border-zinc-200/60 pt-6 dark:border-zinc-800/60"
+              transition={{ ...SPRING.content, delay: 0.35 }}
+              className="grid grid-cols-2 gap-3 border-t border-zinc-200 pt-6 dark:border-zinc-800"
             >
               <MobileAction
                 icon={Search}

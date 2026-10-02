@@ -49,11 +49,6 @@
   --color-accent: oklch(42% 0.22 268);
   --color-accent-muted: oklch(72% 0.14 268);
   --color-accent-subtle: oklch(97% 0.03 268);
-
-  --shadow-apple:
-    0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-  --shadow-apple-lg:
-    0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
 }
 
 @utility shadow-border {
@@ -73,11 +68,16 @@
  * Dark brand colours (e.g. navy) disappear on the dark background, so dark
  * mode mixes them toward white.
  */
+/* An item's own colour (a role, a project, Oxford blue). `--role` is for
+   fills (swatches, bars, dashes); `--role-text` is the same hue pushed far
+   enough from the background to read as text (4.5:1) in either theme. */
 @utility role-scope {
   --role: var(--role-base);
+  --role-text: color-mix(in oklch, var(--role-base) 85%, black);
 
   &:where(.dark, .dark *) {
     --role: color-mix(in oklch, var(--role-base) 60%, white);
+    --role-text: color-mix(in oklch, var(--role-base) 45%, white);
   }
 }
 
@@ -182,18 +182,50 @@
 
   /* Inline metadata — mono for years, periods, counts */
   .mono-meta {
-    @apply font-mono text-xs text-zinc-500 dark:text-zinc-400;
+    @apply font-mono text-xs tabular-nums text-zinc-500 dark:text-zinc-400;
   }
 
-  /* Glass — reserved for floating overlay elements (navbar, dock) only */
-  .glass {
-    @apply bg-white/70 backdrop-blur-xl border border-white/40 shadow-apple;
-    @apply dark:bg-zinc-900/70 dark:border-zinc-800/50 dark:shadow-none;
+  /* ── Type scale ─────────────────────────────────────────────────────────
+     Every heading on the site is one of these three, always in the display
+     face at normal weight; body copy is lead or body. */
+
+  /* A page's title (PageHeader, the ring's front project) */
+  .heading-page {
+    @apply font-display text-5xl font-normal leading-[1.05] tracking-tight text-zinc-900 sm:text-6xl short:text-5xl dark:text-zinc-50;
   }
 
-  /* Legacy prose utility */
-  .prose-academic {
-    @apply text-base leading-relaxed text-zinc-700 dark:text-zinc-300 max-w-[65ch];
+  /* One featured item: the dissertation, a project card */
+  .heading-feature {
+    @apply font-display text-3xl font-normal leading-tight tracking-tight text-zinc-900 sm:text-4xl dark:text-zinc-50;
+  }
+
+  /* An entry in a list: a role, a degree */
+  .heading-entry {
+    @apply font-display text-2xl font-normal leading-tight tracking-tight text-zinc-900 sm:text-3xl dark:text-zinc-50;
+  }
+
+  /* Opening paragraph of an item */
+  .text-lead {
+    @apply text-base leading-relaxed text-zinc-700 dark:text-zinc-300;
+  }
+
+  /* Supporting copy: bullets, details, descriptions */
+  .text-body {
+    @apply text-sm leading-relaxed text-zinc-600 dark:text-zinc-400;
+  }
+
+  /* ── Buttons: a pill, pressed in by the same 0.96 as every other control ── */
+  .btn-primary,
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition-[background-color,scale] duration-150 ease-out active:scale-[0.96];
+  }
+
+  .btn-primary {
+    @apply bg-zinc-900 text-white hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300;
+  }
+
+  .btn-secondary {
+    @apply bg-white/60 text-zinc-900 shadow-border hover:bg-zinc-100 dark:bg-zinc-900/60 dark:text-zinc-100 dark:hover:bg-zinc-800;
   }
 
   /* OpenType refinements for display type — oldstyle numerals, ligatures, optical sizing */

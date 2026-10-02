@@ -7,19 +7,34 @@ import {
   nowMonthPosition,
   yearOf,
 } from '@/utils/months';
+import { DURATION, timed } from '@/utils/variants';
 
 /**
  * Jump to a role's entry. Handled manually because the router's
  * ScrollRestoration resets the scroll on a plain hash navigation. Focus moves
- * to the entry so keyboard users continue from there; scrollIntoView follows
- * the CSS scroll-behavior, which already respects reduced motion.
+ * to the entry so keyboard users continue from there; the scroll follows the
+ * CSS scroll-behavior, which already respects reduced motion.
+ *
+ * The target comes from layout offsets, not getBoundingClientRect (which
+ * scrollIntoView uses): an entry that hasn't revealed yet still sits 20px low
+ * mid fade-up, and measuring that would land the jump 20px off once it rises.
  */
 function jumpToEntry(e: MouseEvent<HTMLAnchorElement>, id: string) {
   const entry = document.getElementById(id);
   if (!entry) return;
   e.preventDefault();
   entry.focus({ preventScroll: true });
-  entry.scrollIntoView();
+  let top = 0;
+  for (
+    let el: HTMLElement | null = entry;
+    el;
+    el = el.offsetParent as HTMLElement | null
+  ) {
+    top += el.offsetTop;
+  }
+  window.scrollTo({
+    top: top - Number.parseFloat(getComputedStyle(entry).scrollMarginTop),
+  });
   history.replaceState(history.state, '', `#${id}`);
 }
 
@@ -103,7 +118,7 @@ export function ExperienceTimeline({ jobs }: { jobs: ExperienceItem[] }) {
           className="absolute -top-8 bottom-0 w-px bg-accent/60"
           style={{ left: `${pct(now)}%` }}
         >
-          <span className="absolute -top-1 right-1.5 whitespace-nowrap text-[11px] font-medium text-accent">
+          <span className="absolute -top-1 right-1.5 whitespace-nowrap font-mono text-[11px] font-medium text-accent">
             Now
           </span>
         </div>
@@ -126,7 +141,7 @@ export function ExperienceTimeline({ jobs }: { jobs: ExperienceItem[] }) {
                   style={{ '--role-base': job.color } as CSSProperties}
                 >
                   <span
-                    className="absolute top-1 whitespace-nowrap text-xs font-medium text-zinc-600 transition-colors group-hover:text-(--role) dark:text-zinc-400"
+                    className="absolute top-1 whitespace-nowrap text-xs font-medium text-zinc-600 transition-colors group-hover:text-(--role-text) dark:text-zinc-400"
                     style={
                       labelFromEnd
                         ? { right: `${100 - left - width}%` }
@@ -140,11 +155,7 @@ export function ExperienceTimeline({ jobs }: { jobs: ExperienceItem[] }) {
                     style={{ left: `${left}%`, width: `${width}%` }}
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: 1 }}
-                    transition={{
-                      duration: 0.7,
-                      delay: 0.25 + i * 0.12,
-                      ease: [0.22, 1, 0.36, 1],
-                    }}
+                    transition={timed(DURATION.slow, 0.25 + i * 0.1)}
                   />
                 </a>
               </li>

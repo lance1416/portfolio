@@ -1,41 +1,24 @@
-import { motion } from 'motion/react';
+import { Page } from '@/components/Page';
 import { PageHeader } from '@/components/PageHeader';
-import { AwardRow, EducationCard } from '@/components/ResearchComponents';
+import { AwardRow, EducationEntry } from '@/components/ResearchComponents';
+import { Section } from '@/components/Section';
 import { SkillPill } from '@/components/SkillPill';
 import { awardsData, dissertationData, educationData } from '@/data/research';
-import { usePageEntrance } from '@/utils/pageTransition';
-import { fadeUp, revealOnScroll, stagger } from '@/utils/variants';
 
 export default function Research() {
-  const entrance = usePageEntrance();
   return (
-    <motion.main
-      variants={stagger}
-      initial={entrance}
-      animate="show"
-      className="mx-auto max-w-4xl px-6"
-    >
+    <Page>
       <PageHeader chapter="§ 03" title="Research" />
 
       <div className="space-y-24">
-        {/* Dissertation — journal abstract style */}
-        <motion.section variants={fadeUp}>
-          <p className="label-overline mb-8">MSc Dissertation</p>
-
-          <div className="border-l-2 border-accent pl-6">
-            <h2 className="font-display text-3xl font-normal leading-snug text-zinc-900 dark:text-zinc-50 sm:text-4xl">
-              {dissertationData.title}
-            </h2>
-          </div>
-
-          <div className="mt-8 border-l border-zinc-200 pl-6 dark:border-zinc-800">
-            <p className="label-overline mb-3">Abstract</p>
-            <p className="max-w-2xl text-base leading-relaxed text-zinc-600 dark:text-zinc-400">
-              {dissertationData.abstract}
-            </p>
-          </div>
-
-          <div className="mt-8 flex flex-wrap gap-2">
+        <Section label="MSc dissertation" first>
+          <h3 className="heading-feature max-w-[30ch]">
+            {dissertationData.title}
+          </h3>
+          <p className="text-lead mt-6 max-w-[62ch]">
+            {dissertationData.abstract}
+          </p>
+          <div className="mt-6 flex flex-wrap gap-2">
             {dissertationData.tags.map((tag) => (
               <SkillPill
                 key={tag}
@@ -44,32 +27,20 @@ export default function Research() {
               />
             ))}
           </div>
-        </motion.section>
+        </Section>
 
-        {/* Academic Background */}
-        <motion.div variants={stagger} {...revealOnScroll}>
-          <motion.p variants={fadeUp} className="label-overline mb-0">
-            Academic Background
-          </motion.p>
-          <div>
-            {educationData.map((item) => (
-              <EducationCard key={item.id} item={item} />
-            ))}
-          </div>
-        </motion.div>
+        <Section label="Education">
+          {educationData.map((item) => (
+            <EducationEntry key={item.id} item={item} />
+          ))}
+        </Section>
 
-        {/* Awards & Honours */}
-        <motion.div variants={stagger} {...revealOnScroll}>
-          <motion.p variants={fadeUp} className="label-overline mb-6">
-            Awards & Honours
-          </motion.p>
-          <div className="border-t border-zinc-200 dark:border-zinc-800">
-            {awardsData.map((award) => (
-              <AwardRow key={award.id} award={award} />
-            ))}
-          </div>
-        </motion.div>
+        <Section label="Awards & honours">
+          {awardsData.map((award) => (
+            <AwardRow key={award.id} award={award} />
+          ))}
+        </Section>
       </div>
-    </motion.main>
+    </Page>
   );
 }

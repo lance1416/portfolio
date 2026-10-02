@@ -1,11 +1,17 @@
-import { AlertCircle, RotateCcw } from 'lucide-react';
+import { RotateCcw } from 'lucide-react';
 import { motion } from 'motion/react';
 import { isRouteErrorResponse, Link, useRouteError } from 'react-router-dom';
+import { Page } from '@/components/Page';
+import { PageHeader } from '@/components/PageHeader';
+import { fadeUp } from '@/utils/variants';
 
+/**
+ * Replaces the whole layout when a route throws, so it has no navbar; it
+ * keeps the page column, header and type so it still reads as this site.
+ */
 export default function ErrorPage() {
   const error = useRouteError();
 
-  // Determine the error message
   let errorMessage: string;
   if (isRouteErrorResponse(error)) {
     errorMessage =
@@ -21,48 +27,37 @@ export default function ErrorPage() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center px-6 text-center bg-zinc-50 dark:bg-zinc-950">
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="max-w-md"
-      >
-        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-zinc-100 dark:bg-zinc-900">
-          <AlertCircle className="h-8 w-8 text-zinc-900 dark:text-zinc-50" />
-        </div>
+    <div className="min-h-screen py-32">
+      <Page>
+        <PageHeader chapter="§ Error" title="Something broke" />
 
-        <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-          Something broke
-        </h1>
+        <motion.div variants={fadeUp}>
+          <p className="text-lead">
+            This page crashed. Reloading usually fixes it.
+          </p>
 
-        <p className="mt-4 text-zinc-600 dark:text-zinc-400 prose-academic">
-          This page crashed. Reloading usually fixes it.
-        </p>
+          <div className="mt-8 max-w-[62ch] rounded-2xl p-4 shadow-border">
+            <p className="label-overline mb-2">Details</p>
+            <p className="break-all font-mono text-xs text-zinc-600 dark:text-zinc-400">
+              {errorMessage}
+            </p>
+          </div>
 
-        {/* Technical details box */}
-        <div className="mt-8 rounded-2xl border border-zinc-200 bg-zinc-100/50 p-4 text-left font-mono text-xs text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-zinc-400">
-          <p className="uppercase tracking-widest opacity-50 mb-2">Details</p>
-          <p className="break-all">{errorMessage}</p>
-        </div>
-
-        <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:justify-center">
-          <button
-            type="button"
-            onClick={() => window.location.reload()}
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-zinc-900 px-6 py-3 text-sm font-medium text-white shadow-apple-lg transition-transform hover:scale-105 active:scale-[0.96] dark:bg-zinc-100 dark:text-zinc-950"
-          >
-            <RotateCcw className="h-4 w-4" />
-            Reload
-          </button>
-
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center gap-2 rounded-full border border-zinc-200 bg-white px-6 py-3 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:hover:bg-zinc-900"
-          >
-            Return Home
-          </Link>
-        </div>
-      </motion.div>
-    </main>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <button
+              type="button"
+              onClick={() => window.location.reload()}
+              className="btn-primary"
+            >
+              <RotateCcw aria-hidden="true" className="h-4 w-4" />
+              Reload
+            </button>
+            <Link to="/" className="btn-secondary">
+              Back to home
+            </Link>
+          </div>
+        </motion.div>
+      </Page>
+    </div>
   );
 }

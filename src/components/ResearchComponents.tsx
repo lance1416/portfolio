@@ -1,77 +1,48 @@
-import { motion } from 'motion/react';
 import type { AwardItem, EducationItem } from '@/data/research';
-import { cn } from '@/utils/cn';
-import { fadeUp } from '@/utils/variants';
+import { DashList } from './DashList';
 
-export function EducationCard({ item }: { item: EducationItem }) {
+/** A degree, laid out like a role on the Experience page. */
+export function EducationEntry({ item }: { item: EducationItem }) {
   return (
-    <motion.article
-      variants={fadeUp}
-      className="group border-b border-zinc-200 py-10 first:border-t dark:border-zinc-800"
-    >
-      <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
-        {/* Left: institution details */}
-        <div className="flex-1">
-          {item.isActive && (
-            <p className="label-overline mb-2 text-accent">Current</p>
-          )}
-          <h3 className="font-display text-2xl font-normal text-zinc-900 dark:text-zinc-50">
+    <article className="group border-t border-zinc-200 py-12 first:border-t-0 first:pt-0 last:pb-0 dark:border-zinc-800">
+      <div className="flex items-start justify-between gap-6">
+        <div className="min-w-0">
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">
             {item.institution}
-          </h3>
-          <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-            {item.degree}
           </p>
-          <p className="mt-1 mono-meta">{item.period}</p>
-
-          <ul className="mt-6 space-y-2.5">
-            {item.details.map((detail) => (
-              <li
-                key={detail}
-                className={cn(
-                  'border-l-2 pl-4 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400',
-                  item.isActive
-                    ? 'border-accent'
-                    : 'border-zinc-200 dark:border-zinc-700',
-                )}
-              >
-                {detail}
-              </li>
-            ))}
-          </ul>
+          <h3 className="heading-entry mt-1">{item.degree}</h3>
+          <p className="mono-meta mt-2">{item.period}</p>
         </div>
 
-        {/* Right: coat of arms — grayscale until hover */}
+        {/* Coat of arms — greyed until hover */}
         {item.logoUrl && (
-          <div className="shrink-0">
-            <img
-              src={item.logoUrl}
-              alt={`${item.institution} seal`}
-              width={80}
-              height={80}
-              loading="lazy"
-              decoding="async"
-              className="h-20 w-20 object-contain opacity-20 grayscale transition-[opacity,filter] duration-500 group-hover:opacity-60 group-hover:grayscale-0"
-            />
-          </div>
+          <img
+            src={item.logoUrl}
+            alt={`${item.institution} coat of arms`}
+            width={56}
+            height={56}
+            loading="lazy"
+            decoding="async"
+            className="h-14 w-14 shrink-0 object-contain opacity-30 grayscale transition-[opacity,filter] duration-300 ease-out group-hover:opacity-70 group-hover:grayscale-0"
+          />
         )}
       </div>
-    </motion.article>
+
+      <DashList items={item.details} className="mt-5" />
+    </article>
   );
 }
 
 export function AwardRow({ award }: { award: AwardItem }) {
   return (
-    <motion.div
-      variants={fadeUp}
-      className="flex items-baseline justify-between border-b border-zinc-200/60 py-4 last:border-0 dark:border-zinc-800/60"
-    >
+    <div className="flex items-baseline justify-between gap-8 border-t border-zinc-200 py-5 first:border-t-0 first:pt-0 dark:border-zinc-800">
       <div>
         <p className="text-sm font-medium text-zinc-900 dark:text-zinc-50">
           {award.title}
         </p>
-        <p className="mono-meta mt-0.5">{award.issuer}</p>
+        <p className="mono-meta mt-1">{award.issuer}</p>
       </div>
-      <span className="mono-meta ml-8 shrink-0">{award.year}</span>
-    </motion.div>
+      <span className="mono-meta shrink-0">{award.year}</span>
+    </div>
   );
 }

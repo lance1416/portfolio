@@ -8,6 +8,8 @@ import { ThemeProvider } from '@/context/ThemeContext.tsx';
 // unicode-range). Inter with its optical-size axis, as on Google Fonts.
 import '@fontsource-variable/inter/opsz.css';
 import '@fontsource-variable/playfair-display/wght.css';
+// Italic only downloads where it's used (the Oxford mention on Home).
+import '@fontsource-variable/playfair-display/wght-italic.css';
 import '@fontsource-variable/jetbrains-mono/wght.css';
 import '@/index.css';
 

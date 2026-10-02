@@ -1,7 +1,9 @@
+import { ArrowUpRight } from 'lucide-react';
 import { motion } from 'motion/react';
-import { useEffect, useState } from 'react';
+import { type CSSProperties, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useTheme } from '@/context/ThemeContext';
+import { Page } from '@/components/Page';
+import { Section } from '@/components/Section';
 import {
   ELSEWHERE,
   FIELDS,
@@ -11,8 +13,16 @@ import {
   SELECTED_WORK_PERIOD,
 } from '@/data/home';
 import { profile } from '@/data/profile';
-import { usePageEntrance } from '@/utils/pageTransition';
-import { fadeUp, staggerFast } from '@/utils/variants';
+import { projectsData } from '@/data/projects';
+import { fadeUp } from '@/utils/variants';
+
+/** Colours the hero borrows: Oxford blue, and KidneyOS's from its project. */
+const OXFORD = '#002147';
+const KIDNEYOS = projectsData.find((p) => p.id === 'kidneyos')?.color;
+
+/** Inline `role-scope` colour, lightened in dark mode like every item colour. */
+const tint = (color: string | undefined) =>
+  ({ '--role-base': color }) as CSSProperties;
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -56,8 +66,8 @@ function LocalTime() {
 
 function SelectedWorkHeader() {
   return (
-    <div className="mb-5 flex items-baseline justify-between">
-      <span className="label-overline">Selected work</span>
+    <div className="mb-3 flex items-baseline justify-between">
+      <h2 className="label-overline">Selected work</h2>
       <span className="mono-meta">{SELECTED_WORK_PERIOD}</span>
     </div>
   );
@@ -69,7 +79,9 @@ function IndexList({ compact = false }: { compact?: boolean }) {
   return (
     <ol
       className={
-        compact ? 'space-y-6' : 'border-t border-zinc-200 dark:border-zinc-800'
+        compact
+          ? 'space-y-6'
+          : 'divide-y divide-zinc-200 dark:divide-zinc-800 [&>li:first-child>a]:pt-0'
       }
     >
       {INDEX_ENTRIES.map((entry) =>
@@ -78,7 +90,7 @@ function IndexList({ compact = false }: { compact?: boolean }) {
           <li key={entry.number}>
             <Link to={entry.to} viewTransition className="group block">
               <div className="mb-1 flex items-center gap-1.5">
-                <span className="font-mono text-[10px] text-accent">
+                <span className="font-mono text-[10px] tabular-nums text-accent">
                   {entry.number}
                 </span>
                 <span className="label-overline">{entry.category}</span>
@@ -95,9 +107,9 @@ function IndexList({ compact = false }: { compact?: boolean }) {
             <Link
               to={entry.to}
               viewTransition
-              className="group flex items-baseline gap-5 border-b border-zinc-200 px-1 py-5 transition-colors hover:bg-zinc-100/60 dark:border-zinc-800 dark:hover:bg-zinc-900/40"
+              className="group flex items-baseline gap-5 py-5"
             >
-              <span className="w-5 shrink-0 font-mono text-xs text-accent">
+              <span className="w-5 shrink-0 font-mono text-xs tabular-nums text-accent">
                 {entry.number}
               </span>
               <div className="min-w-0 flex-1">
@@ -118,73 +130,67 @@ function IndexList({ compact = false }: { compact?: boolean }) {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function Home() {
-  const entrance = usePageEntrance();
-  const { isDark } = useTheme();
   return (
-    <motion.div
-      variants={staggerFast}
-      initial={entrance}
-      animate="show"
-      className="mx-auto grid max-w-5xl grid-cols-1 gap-16 px-6 sm:px-8 lg:grid-cols-[210px_1fr_210px] lg:gap-0"
-    >
+    <Page className="grid grid-cols-1 gap-16 lg:grid-cols-[210px_1fr_210px] lg:gap-0">
       {/* ── LEFT: Identity sidebar ── */}
       <motion.aside
         variants={fadeUp}
         className="order-2 flex flex-col gap-10 lg:order-none lg:sticky lg:top-32 lg:self-start lg:border-r lg:border-zinc-200 lg:pr-10 dark:lg:border-zinc-800"
       >
         <div>
-          <p className="label-overline mb-2">Portfolio</p>
-          <h1 className="font-display text-2xl font-normal text-zinc-900 dark:text-zinc-100">
+          <p className="label-overline mb-3">Portfolio</p>
+          <h1 className="font-display text-2xl font-normal text-zinc-900 dark:text-zinc-50">
             {profile.name}
           </h1>
-          <p className="mt-1 font-mono text-xs text-zinc-500 dark:text-zinc-400">
-            Research · Systems · Product
-          </p>
+          <p className="mono-meta mt-1">Research · Systems · Product</p>
         </div>
 
         <div>
-          <p className="label-overline mb-3">Local time</p>
+          <h2 className="label-overline mb-3">Local time</h2>
           <LocalTime />
         </div>
 
         <div>
-          <p className="label-overline mb-3">Now</p>
+          <h2 className="label-overline mb-3">Now</h2>
           <ul className="space-y-3">
-            {NOW_ITEMS.map((item) => {
-              const color = isDark ? item.darkColor : item.lightColor;
-              return (
-                <li key={item.label} className="flex items-start gap-2.5">
-                  <div
-                    className="mt-[5px] h-1.5 w-1.5 shrink-0 rounded-full"
-                    style={{ backgroundColor: color }}
-                  />
-                  <div>
-                    <p className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
-                      {item.label}
-                    </p>
-                    <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                      {item.detail}
-                    </p>
-                  </div>
-                </li>
-              );
-            })}
+            {NOW_ITEMS.map((item) => (
+              <li
+                key={item.label}
+                className="role-scope flex items-start gap-2.5"
+                style={tint(item.color)}
+              >
+                <span
+                  aria-hidden="true"
+                  className="mt-[5px] h-1.5 w-1.5 shrink-0 rounded-full bg-(--role)"
+                />
+                <div>
+                  <p className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
+                    {item.label}
+                  </p>
+                  <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                    {item.detail}
+                  </p>
+                </div>
+              </li>
+            ))}
           </ul>
         </div>
 
         <div>
-          <p className="label-overline mb-3">Elsewhere</p>
+          <h2 className="label-overline mb-3">Elsewhere</h2>
           {/* Each link is a 40px-tall block (py-3 around 16px text); -my-3 keeps the section's outer spacing. */}
           <ul className="-my-3 flex flex-col">
             {ELSEWHERE.map(({ label, href, ext }) => (
               <li key={label}>
                 <a
                   href={href}
-                  {...(ext && { target: '_blank', rel: 'noreferrer' })}
-                  className="group block py-3 font-mono text-xs text-zinc-500 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+                  {...(ext && { target: '_blank', rel: 'noopener noreferrer' })}
+                  className="group flex items-center gap-0.5 py-3 font-mono text-xs text-zinc-500 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
                 >
                   <span className="link-underline">{label}</span>
-                  {ext && <span className="ml-0.5 opacity-40">↗</span>}
+                  {ext && (
+                    <ArrowUpRight aria-hidden="true" className="h-3 w-3" />
+                  )}
                 </a>
               </li>
             ))}
@@ -193,9 +199,9 @@ export default function Home() {
       </motion.aside>
 
       {/* ── CENTER: Hero ── */}
-      <main className="order-1 pb-16 lg:order-none lg:px-12">
-        <motion.section variants={fadeUp} className="mb-20">
-          <h2 className="font-display text-4xl font-normal leading-[1.15] tracking-tight text-zinc-900 dark:text-zinc-100 sm:text-5xl">
+      <div className="order-1 lg:order-none lg:px-12">
+        <motion.section variants={fadeUp} className="mb-24">
+          <h2 className="font-display text-4xl font-normal leading-[1.15] tracking-tight text-zinc-900 sm:text-5xl dark:text-zinc-50">
             Quantum research.
             <br />
             Systems architecture.
@@ -211,16 +217,22 @@ export default function Home() {
           <p
             // Balanced lines from sm up; browsers only balance ≤6 lines, so
             // phones (~9 lines) just avoid a lone last word.
-            className="text-pretty text-base leading-relaxed text-zinc-600 sm:text-balance dark:text-zinc-400"
+            className="text-lead text-pretty sm:text-balance"
           >
             I did my MSc at the{' '}
-            <span className="font-serif italic text-[#002147] dark:text-[#6b9ae6]">
+            <span
+              className="role-scope font-display italic text-(--role-text)"
+              style={tint(OXFORD)}
+            >
               University of Oxford
             </span>{' '}
             on quantum error correction, then spent the summer pointing the same
             diagrams at neural networks. Outside research I build software,
             anything from{' '}
-            <span className="font-mono text-sm tracking-tight text-orange-700 dark:text-orange-400">
+            <span
+              className="role-scope font-mono text-sm tracking-tight text-(--role-text)"
+              style={tint(KIDNEYOS)}
+            >
               Rust kernel drivers to the course platform
             </span>{' '}
             I run with my team.
@@ -228,36 +240,38 @@ export default function Home() {
         </motion.section>
 
         {/* Field credentials — unpacks "at every layer" with concrete context */}
-        <motion.section variants={fadeUp} className="mb-20">
+        <motion.section variants={fadeUp} className="mb-24">
           <div className="space-y-4 border-t border-zinc-200 pt-8 dark:border-zinc-800">
             {FIELDS.map(({ domain, detail }) => (
               <div key={domain} className="flex items-baseline gap-4">
                 <span className="label-overline min-w-[4.5rem] shrink-0">
                   {domain}
                 </span>
-                <span className="text-sm leading-snug text-zinc-500 dark:text-zinc-400">
-                  {detail}
-                </span>
+                <span className="text-body">{detail}</span>
               </div>
             ))}
           </div>
         </motion.section>
 
         {/* Index — mobile / tablet only; desktop shows it in the right column */}
-        <motion.section variants={fadeUp} className="lg:hidden">
-          <SelectedWorkHeader />
+        <Section
+          label="Selected work"
+          meta={SELECTED_WORK_PERIOD}
+          className="lg:hidden"
+        >
           <IndexList />
-        </motion.section>
-      </main>
+        </Section>
+      </div>
 
       {/* ── RIGHT: Index sidebar — desktop only ── */}
       <motion.nav
         variants={fadeUp}
+        aria-label="Selected work"
         className="hidden lg:flex lg:flex-col lg:sticky lg:top-32 lg:self-start lg:border-l lg:border-zinc-200 lg:pl-10 dark:lg:border-zinc-800"
       >
         <SelectedWorkHeader />
         <IndexList compact />
       </motion.nav>
-    </motion.div>
+    </Page>
   );
 }

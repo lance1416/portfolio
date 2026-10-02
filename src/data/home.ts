@@ -16,8 +16,8 @@ export interface ElsewhereLink {
 export interface NowItem {
   label: string;
   detail: string;
-  lightColor: string;
-  darkColor: string;
+  /** Base colour; `role-scope` lightens it in dark mode. */
+  color: string;
 }
 
 export interface Field {
@@ -51,14 +51,12 @@ export const NOW_ITEMS: NowItem[] = [
   {
     label: 'IQBank',
     detail: 'Leading the 10-person dev team',
-    lightColor: '#3b5fb2',
-    darkColor: '#7baae8',
+    color: '#3b5fb2',
   },
   {
     label: 'Oxford',
     detail: 'MSc awaiting conferral',
-    lightColor: '#002147',
-    darkColor: '#5b8fdf',
+    color: '#002147',
   },
 ];
 

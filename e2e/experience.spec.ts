@@ -40,10 +40,15 @@ test('the date rail stays pinned while reading a long entry', async ({
     window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY + 150);
   });
 
-  const railTop = await entry.evaluate(
-    (el) => (el.firstElementChild as HTMLElement).getBoundingClientRect().top,
-  );
   const entryTop = await entry.evaluate((el) => el.getBoundingClientRect().top);
   expect(entryTop).toBeLessThan(0);
-  expect(railTop).toBe(128); // md:top-32
+  // The entry fades up as it reveals; the rail settles once that lands.
+  await expect
+    .poll(() =>
+      entry.evaluate(
+        (el) =>
+          (el.firstElementChild as HTMLElement).getBoundingClientRect().top,
+      ),
+    )
+    .toBe(128); // md:top-32
 });

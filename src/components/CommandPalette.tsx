@@ -17,6 +17,7 @@ import { profile } from '@/data/profile';
 import { useScrollLock } from '@/hooks/useScrollLock';
 import { cn } from '@/utils/cn';
 import { openResume } from '@/utils/resume';
+import { DURATION, SPRING, timed } from '@/utils/variants';
 import { IconSwap } from './IconSwap';
 
 interface Action {
@@ -156,7 +157,7 @@ export function CommandPalette() {
             animate={{ opacity: 1 }}
             exit={{
               opacity: 0,
-              transition: { duration: 0.15, ease: 'easeOut' },
+              transition: timed(DURATION.exit),
             }}
             onClick={close}
             className="fixed inset-0 z-[100] bg-zinc-900/20 backdrop-blur-sm dark:bg-black/40"
@@ -169,9 +170,9 @@ export function CommandPalette() {
               exit={{
                 opacity: 0,
                 y: -8,
-                transition: { duration: 0.15, ease: 'easeOut' },
+                transition: timed(DURATION.exit),
               }}
-              transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+              transition={SPRING.ui}
               className="w-full max-w-xl overflow-hidden rounded-2xl bg-white/80 shadow-overlay backdrop-blur-xl dark:bg-zinc-900/80 pointer-events-auto"
             >
               <div className="flex items-center border-b border-zinc-200/60 px-4 dark:border-zinc-800/60">

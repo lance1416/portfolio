@@ -8,17 +8,19 @@ import {
   type Variants,
 } from 'motion/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { PAGE_COLUMN } from '@/components/Page';
 import { useCommandPalette } from '@/context/CommandPaletteContext';
 import type { ProjectItem } from '@/data/projects';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useScrollLock } from '@/hooks/useScrollLock';
 import { cn } from '@/utils/cn';
+import { DURATION, fadeUp, timed } from '@/utils/variants';
 import {
   ProjectDetails,
   ProjectImage,
   ProjectLinks,
-  projectAccent,
   projectNumber,
+  projectScope,
   TITLE_SEQUENCE,
 } from './ProjectCard';
 import { SplitText } from './SplitText';
@@ -46,7 +48,7 @@ const SWIPE_THRESHOLD = 60;
 const PANEL: Variants = {
   hidden: TITLE_SEQUENCE.hidden,
   show: { ...TITLE_SEQUENCE.show, opacity: 1 },
-  exit: { opacity: 0, transition: { duration: 0.12 } },
+  exit: { opacity: 0, transition: timed(DURATION.exit) },
 };
 
 function RingFace({
@@ -208,36 +210,50 @@ export function ProjectRing({ projects }: { projects: ProjectItem[] }) {
         }
       }}
     >
-      <div className="mx-auto grid h-full max-w-6xl grid-cols-[minmax(0,5fr)_minmax(0,7fr)] items-center gap-10 px-8 lg:gap-16">
+      <div
+        className={cn(
+          PAGE_COLUMN,
+          'grid h-full grid-cols-[minmax(0,5fr)_minmax(0,7fr)] items-center gap-10 lg:gap-16',
+        )}
+      >
         {/* Text column; sits above the ring so passed cards fade behind it */}
         <div className="relative z-10">
           <div className="mb-8 flex items-center justify-between gap-4">
-            <h1 className="label-overline">Projects</h1>
+            {/* The chapter mark PageHeader shows elsewhere; the front project's
+                name is this page's big title. */}
+            <h1 className="label-overline">
+              <span aria-hidden="true">§ 02 · </span>Projects
+            </h1>
             {/* Position in the carousel; each bar jumps to its project */}
             <div className="flex items-center gap-3">
-              <p className="font-mono text-sm tabular-nums text-zinc-500 dark:text-zinc-400">
+              <p className="mono-meta">
                 <span className="text-zinc-900 dark:text-zinc-100">
                   {projectNumber(active)}
                 </span>{' '}
                 / {projectNumber(last)}
               </p>
               <div className="flex gap-1.5">
-                {projects.map((p, i) => (
-                  <button
-                    key={p.id}
-                    type="button"
-                    onClick={() => setActive(i)}
-                    aria-label={`Show ${p.title}`}
-                    aria-current={i === active}
-                    // after: extends the 32×4 bar to a 38×40 hit area, meeting its neighbours
-                    className="relative h-1 w-8 rounded-full bg-zinc-200 transition-colors after:absolute after:-inset-x-[3px] after:-inset-y-[18px] dark:bg-zinc-800"
-                    style={
-                      i === active
-                        ? { backgroundColor: projectAccent(p) }
-                        : undefined
-                    }
-                  />
-                ))}
+                {projects.map((p, i) => {
+                  const scope = projectScope(p);
+                  return (
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => setActive(i)}
+                      aria-label={`Show ${p.title}`}
+                      aria-current={i === active}
+                      style={scope.style}
+                      // after: extends the 32×4 bar to a 38×40 hit area, meeting its neighbours
+                      className={cn(
+                        scope.className,
+                        'relative h-1 w-8 rounded-full transition-colors after:absolute after:-inset-x-[3px] after:-inset-y-[18px]',
+                        i === active
+                          ? 'bg-(--role)'
+                          : 'bg-zinc-200 dark:bg-zinc-800',
+                      )}
+                    />
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -249,9 +265,10 @@ export function ProjectRing({ projects }: { projects: ProjectItem[] }) {
               initial="hidden"
               animate="show"
               exit="exit"
+              {...projectScope(project)}
             >
               <div className="flex items-start justify-between gap-4">
-                <h2 className="font-display text-5xl font-normal leading-none tracking-tight text-zinc-900 lg:text-6xl dark:text-zinc-50">
+                <h2 className="heading-page">
                   <SplitText text={project.title} stagger={0.04} />
                 </h2>
                 <div className="flex items-center gap-2 pt-2">
@@ -259,21 +276,11 @@ export function ProjectRing({ projects }: { projects: ProjectItem[] }) {
                   <ProjectLinks project={project} />
                 </div>
               </div>
-              <p className="mt-3 font-mono text-sm text-zinc-500 dark:text-zinc-400">
+              <p className="mt-2 font-mono text-sm text-zinc-500 dark:text-zinc-400">
                 <SplitText text={project.subtitle} stagger={0.012} />
               </p>
 
-              <motion.div
-                className="mt-8"
-                variants={{
-                  hidden: { opacity: 0, y: 8 },
-                  show: {
-                    opacity: 1,
-                    y: 0,
-                    transition: { duration: 0.3, ease: 'easeOut' },
-                  },
-                }}
-              >
+              <motion.div className="mt-8" variants={fadeUp}>
                 <ProjectDetails project={project} />
               </motion.div>
             </motion.div>

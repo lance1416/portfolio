@@ -1,14 +1,14 @@
 import { motion } from 'motion/react';
 import { usePageTransition } from '@/utils/pageTransition';
-import { fadeUp } from '@/utils/variants';
+import { DURATION, fadeUp, timed } from '@/utils/variants';
 
 interface PageHeaderProps {
   chapter: string;
   title: string;
 }
 
-/** Odometer roll: a snappy settle, landing as the page turn does. */
-const ROLL = { duration: 0.48, ease: [0.22, 1, 0.36, 1] } as const;
+/** Odometer roll on the house curve, landing as the page turn does. */
+const rollIn = (delay: number) => timed(DURATION.slow, delay);
 
 export function PageHeader({ chapter, title }: PageHeaderProps) {
   const num = chapter.replace('§ ', '');
@@ -31,14 +31,14 @@ export function PageHeader({ chapter, title }: PageHeaderProps) {
         aria-hidden="true"
         initial={roll ? { y: from, opacity: 0 } : false}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ ...ROLL, delay: 0.12 }}
+        transition={rollIn(0.12)}
         className="pointer-events-none absolute right-0 top-0 select-none font-display text-[9rem] font-bold leading-none tracking-tighter text-zinc-900/[0.04] short:text-[6rem] dark:text-white/[0.04]"
       >
         {num}
       </motion.span>
 
       <p className="label-overline mb-4">{chapter}</p>
-      <h1 className="font-display text-5xl font-normal tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-6xl short:text-5xl">
+      <h1 className="heading-page">
         {/* The mask clips the roll to the line box; the padding pair keeps
             descenders inside it without shifting the layout. */}
         <span className="-mb-[0.2em] block overflow-clip pb-[0.2em]">
@@ -46,7 +46,7 @@ export function PageHeader({ chapter, title }: PageHeaderProps) {
             className="block"
             initial={roll ? { y: from } : false}
             animate={{ y: 0 }}
-            transition={{ ...ROLL, delay: 0.06 }}
+            transition={rollIn(0.06)}
           >
             {title}
           </motion.span>

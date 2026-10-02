@@ -1,5 +1,6 @@
 import { motion, type Variants } from 'motion/react';
 import { Fragment } from 'react';
+import { SPRING } from '@/utils/variants';
 
 const CHAR: Variants = {
   hidden: { opacity: 0, y: '0.35em', filter: 'blur(6px)' },
@@ -7,7 +8,7 @@ const CHAR: Variants = {
     opacity: 1,
     y: 0,
     filter: 'blur(0px)',
-    transition: { type: 'spring', stiffness: 420, damping: 32 },
+    transition: SPRING.content,
   },
 };
 

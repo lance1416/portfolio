@@ -5,7 +5,6 @@ export interface EducationItem {
   period: string;
   details: string[];
   logoUrl?: string;
-  isActive?: boolean;
 }
 
 export interface AwardItem {

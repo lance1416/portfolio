@@ -1,4 +1,6 @@
+import { motion } from 'motion/react';
 import type { ProjectItem } from '@/data/projects';
+import { fadeUp } from '@/utils/variants';
 import { ProjectCard } from './ProjectCard';
 
 /**
@@ -8,7 +10,11 @@ import { ProjectCard } from './ProjectCard';
  */
 export function ProjectStrip({ projects }: { projects: ProjectItem[] }) {
   return (
-    <div className="-mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <motion.div
+      variants={fadeUp}
+      // Bleeds into the page gutters so cards swipe in from the screen edge.
+      className="-mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-6 sm:-mx-8 sm:px-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+    >
       {projects.map((project, i) => (
         <div
           key={project.id}
@@ -17,6 +23,6 @@ export function ProjectStrip({ projects }: { projects: ProjectItem[] }) {
           <ProjectCard project={project} index={i} />
         </div>
       ))}
-    </div>
+    </motion.div>
   );
 }

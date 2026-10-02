@@ -1,5 +1,7 @@
 import { FaEnvelope, FaGithub, FaLinkedin } from 'react-icons/fa6';
+import { PAGE_COLUMN } from '@/components/Page';
 import { profile } from '@/data/profile';
+import { cn } from '@/utils/cn';
 
 const SOCIAL_LINKS = [
   { label: 'GitHub', href: profile.links.github, icon: FaGithub, ext: true },
@@ -19,8 +21,13 @@ const SOCIAL_LINKS = [
 
 export function Footer() {
   return (
-    <footer className="mt-auto border-t border-zinc-200/60 py-10 dark:border-zinc-800/60">
-      <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-6 px-6 sm:flex-row sm:px-8">
+    <footer className="mt-auto border-t border-zinc-200 py-10 dark:border-zinc-800">
+      <div
+        className={cn(
+          PAGE_COLUMN,
+          'flex flex-col items-center justify-between gap-6 sm:flex-row',
+        )}
+      >
         <p className="font-mono text-xs text-zinc-500 dark:text-zinc-400">
           © {new Date().getFullYear()} {profile.name}
         </p>
