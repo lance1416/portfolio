@@ -20,18 +20,6 @@ import { fadeUp } from '@/utils/variants';
 const tint = (color: string | undefined) =>
   ({ '--role-base': color }) as CSSProperties;
 
-/**
- * The headline: what I work on, as plain facts. One visual line per RollLine
- * (so each rolls on its own); the last fact is set in grey like a coda.
- */
-const HERO_LINES = [
-  { text: 'Quantum error', muted: false },
-  { text: 'correction.', muted: false },
-  { text: 'Rust kernels.', muted: false },
-  { text: 'A course platform', muted: true },
-  { text: 'with 379 users.', muted: true },
-];
-
 const NBSP = String.fromCodePoint(0xa0);
 const NB_HYPHEN = String.fromCodePoint(0x2011);
 
@@ -220,14 +208,10 @@ export default function Home() {
       {/* ── CENTER: Hero ── */}
       <div className="order-1 lg:order-none lg:px-10">
         <motion.section variants={fadeUp} className="mb-24">
-          {/* Home's title: each line rolls in after a page turn, like every
-              other page's PageHeader title. */}
-          <h2 className="font-display text-4xl font-normal leading-[1.15] tracking-tight text-zinc-900 sm:text-5xl dark:text-zinc-50">
-            {HERO_LINES.map(({ text, muted }, i) => (
-              <RollLine key={text} delay={0.06 + i * 0.05}>
-                {muted ? <span className="text-zinc-500">{text}</span> : text}
-              </RollLine>
-            ))}
+          {/* Home's title: a plain hello; the paragraph says the rest. It
+              rolls in after a page turn like every PageHeader title. */}
+          <h2 className="font-display text-4xl font-normal leading-tight tracking-tight text-zinc-900 dark:text-zinc-50">
+            <RollLine>Hi, I’m Sinan.</RollLine>
           </h2>
 
           {/* Short rule — typographic pause between poem and prose */}
