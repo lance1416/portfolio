@@ -91,7 +91,7 @@ test.describe('3D ring', () => {
     const nav = await box('nav');
     const dock = await box('.fixed.bottom-6');
     const text = await box('main .relative.z-10');
-    const card = await box('.transform-3d > button[aria-hidden="true"]');
+    const card = await box('.transform-3d > button[data-front]');
 
     for (const part of [text, card]) {
       expect(part.top).toBeGreaterThan(nav.bottom);

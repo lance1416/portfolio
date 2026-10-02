@@ -75,11 +75,13 @@ function RingFace({
   });
 
   return (
+    // A pointer shortcut only: the progress bars are the keyboard and
+    // screen-reader way to switch, so the faces stay out of both.
     <motion.button
       type="button"
-      tabIndex={active ? -1 : 0}
-      aria-label={active ? undefined : `Show ${project.title}`}
-      aria-hidden={active}
+      tabIndex={-1}
+      aria-hidden
+      data-front={active || undefined}
       onClick={active ? undefined : onSelect}
       className={cn(
         'absolute inset-0 [backface-visibility:hidden]',
