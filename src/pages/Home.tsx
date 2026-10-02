@@ -14,22 +14,22 @@ import {
   SELECTED_WORK_PERIOD,
 } from '@/data/home';
 import { profile } from '@/data/profile';
-import { projectsData } from '@/data/projects';
 import { fadeUp } from '@/utils/variants';
-
-/** Colours the hero borrows: Oxford blue, and KidneyOS's from its project. */
-const OXFORD = '#002147';
-const KIDNEYOS = projectsData.find((p) => p.id === 'kidneyos')?.color;
 
 /** Inline `role-scope` colour, lightened in dark mode like every item colour. */
 const tint = (color: string | undefined) =>
   ({ '--role-base': color }) as CSSProperties;
 
+/**
+ * The headline: what I work on, as plain facts. One visual line per RollLine
+ * (so each rolls on its own); the last fact is set in grey like a coda.
+ */
 const HERO_LINES = [
-  'Quantum research.',
-  'Systems architecture.',
-  'Product engineering.',
-  'At every layer.',
+  { text: 'Quantum error', muted: false },
+  { text: 'correction.', muted: false },
+  { text: 'Rust kernels.', muted: false },
+  { text: 'A course platform', muted: true },
+  { text: 'with 379 users.', muted: true },
 ];
 
 const NBSP = String.fromCodePoint(0xa0);
@@ -223,13 +223,9 @@ export default function Home() {
           {/* Home's title: each line rolls in after a page turn, like every
               other page's PageHeader title. */}
           <h2 className="font-display text-4xl font-normal leading-[1.15] tracking-tight text-zinc-900 sm:text-5xl dark:text-zinc-50">
-            {HERO_LINES.map((line, i) => (
-              <RollLine key={line} delay={0.06 + i * 0.05}>
-                {i === HERO_LINES.length - 1 ? (
-                  <span className="text-zinc-500">{line}</span>
-                ) : (
-                  line
-                )}
+            {HERO_LINES.map(({ text, muted }, i) => (
+              <RollLine key={text} delay={0.06 + i * 0.05}>
+                {muted ? <span className="text-zinc-500">{text}</span> : text}
               </RollLine>
             ))}
           </h2>
@@ -243,19 +239,14 @@ export default function Home() {
             className="text-lead text-pretty sm:text-balance"
           >
             I did my MSc at the{' '}
-            <span
-              className="role-scope font-display italic text-(--role-text)"
-              style={tint(OXFORD)}
-            >
+            {/* Brand colours: Oxford blue and Rust's orange (index.css) */}
+            <span className="font-display italic text-oxford">
               University of Oxford
             </span>{' '}
             on quantum error correction, then spent the summer pointing the same
             diagrams at neural networks. Outside research I build software,
             anything from{' '}
-            <span
-              className="role-scope font-mono text-sm tracking-tight text-(--role-text)"
-              style={tint(KIDNEYOS)}
-            >
+            <span className="font-mono text-sm tracking-tight text-rust">
               Rust kernel drivers to the course platform
             </span>{' '}
             I run with my team.

@@ -49,6 +49,14 @@
   --color-accent: oklch(42% 0.22 268);
   --color-accent-muted: oklch(72% 0.14 268);
   --color-accent-subtle: oklch(97% 0.03 268);
+
+  /* Brand colours named in Home's intro, used exactly where they read as
+     text (4.5:1); in the other theme only the lightness moves, same hue.
+     Oxford blue #002147 is exact here; Rust's #f74c00 is 3.4:1 on the light
+     page, so light mode takes the nearest passing shade. Dark mode swaps
+     them (see .dark). */
+  --color-oxford: #002147;
+  --color-rust: #ce3f02;
 }
 
 @utility shadow-border {
@@ -104,6 +112,9 @@
     --page-bg: #0c0c0c;
     --color-accent: oklch(72% 0.14 268);
     --color-accent-subtle: oklch(18% 0.06 268);
+    /* Rust orange is exact on dark; Oxford blue lightened to 4.6:1. */
+    --color-oxford: #597daa;
+    --color-rust: #f74c00;
 
     /* Depth shadows vanish on dark backgrounds; keep only the ring. */
     --elevation-border: 0 0 0 1px oklch(1 0 0 / 0.08);
