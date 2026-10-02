@@ -100,11 +100,15 @@ test('terminal mode has no violations', async ({ page }) => {
 test('the first Tab reveals a skip link that focuses the page content', async ({
   page,
   isMobile,
+  browserName,
 }) => {
   test.skip(isMobile, 'keyboard navigation');
   await page.goto('/experience');
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-  await page.keyboard.press('Tab');
+  // Safari on macOS skips buttons and links on Tab by default; Option+Tab
+  // reaches them, and WebKit on macOS behaves the same.
+  const mac = browserName === 'webkit' && process.platform === 'darwin';
+  await page.keyboard.press(mac ? 'Alt+Tab' : 'Tab');
   const skip = page.getByRole('button', { name: 'Skip to content' });
   await expect(skip).toBeFocused();
   await expect(skip).toBeInViewport();
