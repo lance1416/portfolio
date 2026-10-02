@@ -76,7 +76,7 @@ export default function MainLayout() {
       <CommandPalette />
       <Navbar />
 
-      <div className="relative z-10 flex-1 pb-32 pt-32">
+      <div className="relative z-10 flex-1 pb-32 pt-32 short:pt-24">
         <Outlet context={pageContext} />
       </div>
 

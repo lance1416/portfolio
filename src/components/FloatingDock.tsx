@@ -80,7 +80,7 @@ export function FloatingDock() {
       initial={{ y: 100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ type: 'spring', stiffness: 300, damping: 24, delay: 0.2 }}
-      className="fixed bottom-6 left-1/2 z-50 hidden [view-transition-name:dock] -translate-x-1/2 items-center gap-2 rounded-3xl bg-white/60 p-2 shadow-floating backdrop-blur-xl dark:bg-zinc-900/60 sm:flex [@media(max-height:480px)]:hidden"
+      className="fixed bottom-6 left-1/2 z-50 hidden [view-transition-name:dock] -translate-x-1/2 items-center gap-2 rounded-3xl bg-white/60 p-2 shadow-floating backdrop-blur-xl dark:bg-zinc-900/60 sm:flex short:hidden"
     >
       <DockItem
         icon={Search}

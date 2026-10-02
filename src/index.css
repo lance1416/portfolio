@@ -33,6 +33,9 @@
 
 @variant dark (&:where(.dark, .dark *));
 
+/* Short screens, i.e. phones on their side: tighter chrome so content shows. */
+@custom-variant short (@media (max-height: 480px));
+
 @theme {
   --font-display:
     "Playfair Display Variable", "Playfair Display Fallback", Georgia, "Times New Roman", serif;

@@ -166,3 +166,14 @@ test.describe('swipe strip', () => {
       .toBe(true);
   });
 });
+
+test('on a phone held sideways, the first card’s title shows without scrolling', async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop', 'one engine is enough');
+  await page.setViewportSize({ width: 844, height: 390 });
+  await page.goto('/projects');
+  const title = page.getByRole('heading', { level: 3 }).first();
+  await expect(title).toBeVisible();
+  await expect(title).toBeInViewport({ ratio: 1 });
+});
