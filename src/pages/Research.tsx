@@ -1,9 +1,9 @@
+import { CnotFigure } from '@/components/CnotFigure';
 import { Page, RAIL_GRID } from '@/components/Page';
 import { PageHeader } from '@/components/PageHeader';
 import { AwardRow, EducationEntry } from '@/components/ResearchComponents';
 import { Section } from '@/components/Section';
 import { SkillPill } from '@/components/SkillPill';
-import { SpiderFusion } from '@/components/SpiderFusion';
 import { awardsData, dissertationData, educationData } from '@/data/research';
 import { cn } from '@/utils/cn';
 
@@ -40,7 +40,7 @@ export default function Research() {
                   />
                 ))}
               </div>
-              <SpiderFusion />
+              <CnotFigure />
             </div>
           </article>
         </Section>
