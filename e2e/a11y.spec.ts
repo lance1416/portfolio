@@ -78,20 +78,18 @@ test('the open mobile menu has no violations', async ({ page, viewport }) => {
   expect(await scan(page)).toEqual([]);
 });
 
-test('terminal mode has no violations', async ({ page }) => {
+test('terminal mode has no violations', async ({ page, viewport }) => {
   await page.goto('/projects');
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-  await page.evaluate(() => {
-    // Same toggle the dock and menu use, without depending on either layout.
-    document
-      .querySelector<HTMLButtonElement>('[aria-label="Terminal Mode"]')
-      ?.click();
-  });
-  const prompt = page.getByRole('textbox', { name: 'Command' });
-  if (!(await prompt.isVisible())) {
+  if (hasMobileMenu(viewport)) {
     await page.getByRole('button', { name: 'Toggle mobile menu' }).click();
     await page.getByRole('button', { name: 'Terminal' }).click();
+  } else {
+    await page.getByRole('button', { name: 'Terminal Mode' }).click();
   }
+  // The terminal loads on demand, so wait for its prompt.
+  const prompt = page.getByRole('textbox', { name: 'Command' });
+  await expect(prompt).toBeFocused();
   await prompt.fill('help');
   await prompt.press('Enter');
   expect(await scan(page)).toEqual([]);

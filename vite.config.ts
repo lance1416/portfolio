@@ -49,6 +49,26 @@ export default defineConfig({
       '@': path.resolve(import.meta.dirname, 'src'),
     },
   },
+  build: {
+    rolldownOptions: {
+      output: {
+        // Frameworks in their own chunks: a deploy that only touches app code
+        // leaves these cached. Same bytes on a first visit, just split.
+        codeSplitting: {
+          groups: [
+            {
+              name: 'react',
+              test: /node_modules[\\/](react|react-dom|scheduler|react-router|react-router-dom)[\\/]/,
+            },
+            {
+              name: 'motion',
+              test: /node_modules[\\/](motion|motion-dom|motion-utils|framer-motion)[\\/]/,
+            },
+          ],
+        },
+      },
+    },
+  },
   test: {
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],

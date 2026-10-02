@@ -1,11 +1,10 @@
-import { useLayoutEffect, useRef } from 'react';
+import { lazy, Suspense, useLayoutEffect, useRef } from 'react';
 import { Outlet, ScrollRestoration, useLocation } from 'react-router-dom';
 import { CommandPalette } from '@/components/CommandPalette';
 import { FloatingDock } from '@/components/FloatingDock';
 import { Footer } from '@/components/Footer';
 import { Navbar } from '@/components/Navbar';
 import { ScrollProgress } from '@/components/ScrollProgress';
-import { TerminalView } from '@/components/TerminalView';
 import { useTerminal } from '@/context/TerminalContext';
 import {
   directionBetween,
@@ -13,6 +12,14 @@ import {
   supportsViewTransitions,
   type TurnDirection,
 } from '@/utils/pageTransition';
+
+// Few visitors open terminal mode, so it (and the page data it reads) loads on
+// demand instead of riding in the main bundle.
+const TerminalView = lazy(() =>
+  import('@/components/TerminalView').then((m) => ({
+    default: m.TerminalView,
+  })),
+);
 
 export default function MainLayout() {
   const { isTerminal } = useTerminal();
@@ -44,7 +51,12 @@ export default function MainLayout() {
   };
 
   if (isTerminal) {
-    return <TerminalView />;
+    return (
+      // The terminal's own background, so loading it never flashes the page.
+      <Suspense fallback={<div className="min-h-screen bg-zinc-950" />}>
+        <TerminalView />
+      </Suspense>
+    );
   }
 
   return (
