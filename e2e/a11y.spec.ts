@@ -16,10 +16,25 @@ async function settle(page: Page) {
     }
     scrollTo(0, 0);
   });
+  // CSS transitions (e.g. the theme's background fade) show in getAnimations()…
   await page.waitForFunction(() =>
     document.getAnimations().every((a) => a.playState !== 'running'),
   );
-  await page.waitForTimeout(500);
+  // …but Motion's springs run in JS and take longer under load: also wait
+  // until every element's opacity holds still between polls.
+  await page.waitForFunction(
+    () => {
+      const w = window as Window & { __opacities?: string };
+      const now = [...document.querySelectorAll('body *')]
+        .map((el) => getComputedStyle(el).opacity)
+        .join();
+      const settled = now === w.__opacities;
+      w.__opacities = now;
+      return settled;
+    },
+    undefined,
+    { polling: 250 },
+  );
 }
 
 for (const path of PAGES) {
