@@ -66,7 +66,7 @@ export const dissertationData = {
   title:
     'The Effect of Fault-Equivalence Rewrites on Quantum Error Decodability',
   abstract:
-    'My MSc dissertation bridges the gap between diagrammatic reasoning and practical quantum error correction. Using the ZX-calculus, it investigates how fault-equivalence rewrites can improve or harm the decodability of quantum circuits, pushing toward fault-tolerant quantum computation.',
+    'My dissertation uses the ZX-calculus to study fault-equivalence rewrites, and whether they make quantum circuits easier or harder to decode.',
   tags: [
     'Quantum Computing',
     'ZX-Calculus',
