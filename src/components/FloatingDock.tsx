@@ -1,7 +1,6 @@
 import {
   FileText,
   type LucideIcon,
-  Moon,
   Search,
   TerminalSquare,
 } from 'lucide-react';
@@ -10,6 +9,7 @@ import { useState } from 'react';
 import { useCommandPalette } from '@/context/CommandPaletteContext';
 import { useTerminal } from '@/context/TerminalContext';
 import { useTheme } from '@/context/ThemeContext';
+import { ACTION_LABELS, themeAction } from '@/data/actions';
 import { openResume } from '@/utils/resume';
 import { PALETTE_SHORTCUT } from '@/utils/shortcut';
 import { SPRING } from '@/utils/variants';
@@ -72,7 +72,8 @@ function DockItem({
 export function FloatingDock() {
   const { toggleTerminal } = useTerminal();
   const { open: openCommandPalette } = useCommandPalette();
-  const { toggleTheme } = useTheme();
+  const { toggleTheme, isDark } = useTheme();
+  const theme = themeAction(isDark);
 
   return (
     // Hidden on short screens (a phone on its side), where it would cover a
@@ -85,7 +86,7 @@ export function FloatingDock() {
     >
       <DockItem
         icon={Search}
-        label="Command Palette"
+        label={ACTION_LABELS.search}
         shortcut={PALETTE_SHORTCUT}
         onClick={openCommandPalette}
       />
@@ -93,13 +94,17 @@ export function FloatingDock() {
       {/* Separator */}
       <div className="h-8 w-px bg-zinc-200/60 dark:bg-zinc-700/50" />
 
-      <DockItem icon={FileText} label="Download Resume" onClick={openResume} />
+      <DockItem
+        icon={FileText}
+        label={ACTION_LABELS.resume}
+        onClick={openResume}
+      />
       <DockItem
         icon={TerminalSquare}
-        label="Terminal Mode"
+        label={ACTION_LABELS.terminal}
         onClick={toggleTerminal}
       />
-      <DockItem icon={Moon} label="Toggle Theme" onClick={toggleTheme} />
+      <DockItem icon={theme.icon} label={theme.label} onClick={toggleTheme} />
     </motion.div>
   );
 }

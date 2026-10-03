@@ -75,7 +75,7 @@ const scan = (page: Page) =>
 test('the open command palette has no violations', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-  const input = page.getByPlaceholder('Type a command or search...');
+  const input = page.getByPlaceholder('Type a command or search…');
   await expect(async () => {
     if (!(await input.isVisible()))
       await page.keyboard.press('ControlOrMeta+k');
@@ -98,9 +98,9 @@ test('terminal mode has no violations', async ({ page, viewport }) => {
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   if (hasMobileMenu(viewport)) {
     await page.getByRole('button', { name: 'Toggle mobile menu' }).click();
-    await page.getByRole('button', { name: 'Terminal' }).click();
+    await page.getByRole('button', { name: 'Terminal mode' }).click();
   } else {
-    await page.getByRole('button', { name: 'Terminal Mode' }).click();
+    await page.getByRole('button', { name: 'Terminal mode' }).click();
   }
   // The terminal loads on demand, so wait for its prompt.
   const prompt = page.getByRole('textbox', { name: 'Command' });

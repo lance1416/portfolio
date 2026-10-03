@@ -4,7 +4,6 @@ import {
   FileText,
   Home,
   type LucideIcon,
-  Moon,
   Search,
 } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
@@ -12,6 +11,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCommandPalette } from '@/context/CommandPaletteContext';
 import { useTheme } from '@/context/ThemeContext';
+import { ACTION_LABELS, themeAction } from '@/data/actions';
 import { NAV_LINKS } from '@/data/navigation';
 import { profile } from '@/data/profile';
 import { useScrollLock } from '@/hooks/useScrollLock';
@@ -30,7 +30,8 @@ interface Action {
 
 export function CommandPalette() {
   const { isOpen, close } = useCommandPalette();
-  const { toggleTheme } = useTheme();
+  const { toggleTheme, isDark } = useTheme();
+  const theme = themeAction(isDark);
   const [query, setQuery] = useState('');
   const [copied, setCopied] = useState(false);
 
@@ -92,19 +93,19 @@ export function CommandPalette() {
     })),
     {
       id: 'theme',
-      name: 'Toggle Dark Mode',
-      icon: Moon,
+      name: theme.label,
+      icon: theme.icon,
       onSelect: toggleTheme,
     },
     {
       id: 'resume',
-      name: 'Download Resume',
+      name: ACTION_LABELS.resume,
       icon: FileText,
       onSelect: openResume,
     },
     {
       id: 'email',
-      name: copied ? 'Email Copied!' : 'Copy Email Address',
+      name: copied ? ACTION_LABELS.emailCopied : ACTION_LABELS.copyEmail,
       icon: copied ? Check : Copy,
       onSelect: copyEmail,
       // Stays open to show the "copied" confirmation, then closes itself.
@@ -185,7 +186,7 @@ export function CommandPalette() {
                     setSelectedIndex(0);
                   }}
                   onKeyDown={handleKeyDown}
-                  placeholder="Type a command or search..."
+                  placeholder="Type a command or search…"
                   className="h-14 w-full bg-transparent px-4 font-mono text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none dark:text-zinc-50 dark:placeholder:text-zinc-500"
                 />
                 <kbd className="hidden sm:inline-flex items-center gap-1 rounded border border-zinc-200 bg-zinc-100 px-2 py-0.5 font-mono text-[10px] text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400">

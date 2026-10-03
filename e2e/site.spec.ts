@@ -66,7 +66,7 @@ test('the command palette navigates from the keyboard', async ({ page }) => {
   // Under parallel load WebKit can take the first keystroke before React has
   // committed; press again only while the palette is still closed (the
   // shortcut toggles, so blind retries could close it).
-  const input = page.getByPlaceholder('Type a command or search...');
+  const input = page.getByPlaceholder('Type a command or search…');
   await expect(async () => {
     if (!(await input.isVisible()))
       await page.keyboard.press('ControlOrMeta+k');
@@ -103,7 +103,7 @@ test.describe('floating dock', () => {
   }) => {
     await page.goto('/');
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-    await page.getByRole('button', { name: 'Toggle Theme' }).click();
+    await page.getByRole('button', { name: 'Switch to dark mode' }).click();
     await expect(page.locator('html')).toHaveClass(/\bdark\b/);
 
     await page.reload();
@@ -153,9 +153,9 @@ test('terminal mode browses the site and exits where it ends up', async ({
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   if (hasMobileMenu(viewport)) {
     await page.getByRole('button', { name: 'Toggle mobile menu' }).click();
-    await page.getByRole('button', { name: 'Terminal' }).click();
+    await page.getByRole('button', { name: 'Terminal mode' }).click();
   } else {
-    await page.getByRole('button', { name: 'Terminal Mode' }).click();
+    await page.getByRole('button', { name: 'Terminal mode' }).click();
   }
 
   const prompt = page.getByRole('textbox', { name: 'Command' });

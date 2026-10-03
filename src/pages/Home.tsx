@@ -237,7 +237,7 @@ export default function Home() {
           </p>
         </motion.section>
 
-        {/* Field credentials — unpacks "at every layer" with concrete context */}
+        {/* Field credentials: one line of specifics per area */}
         <motion.section variants={fadeUp} className="mb-24">
           <div className="space-y-4 border-t border-zinc-200 pt-8 dark:border-zinc-800">
             {FIELDS.map(({ domain, detail }) => (

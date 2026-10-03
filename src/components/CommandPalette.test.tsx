@@ -9,7 +9,7 @@ const openPalette = () =>
     fireEvent.keyDown(document, { key: 'k', ctrlKey: true });
   });
 
-const input = () => screen.getByPlaceholderText('Type a command or search...');
+const input = () => screen.getByPlaceholderText('Type a command or search…');
 const location = () => screen.getByTestId('location').textContent;
 // The palette locks page scroll exactly while it's open, which is observable
 // immediately, unlike DOM removal after the exit animation.
@@ -72,11 +72,11 @@ describe('CommandPalette', () => {
     openPalette();
 
     await act(async () => {
-      fireEvent.click(screen.getByText('Copy Email Address'));
+      fireEvent.click(screen.getByText('Copy email address'));
     });
 
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith(profile.email);
-    expect(screen.getByText('Email Copied!')).toBeInTheDocument();
+    expect(screen.getByText('Email copied')).toBeInTheDocument();
     expect(isOpen()).toBe(true);
 
     act(() => {
@@ -90,7 +90,7 @@ describe('CommandPalette', () => {
     renderWithProviders(<CommandPalette />);
     openPalette();
     await act(async () => {
-      fireEvent.click(screen.getByText('Copy Email Address'));
+      fireEvent.click(screen.getByText('Copy email address'));
     });
 
     // Close early, reopen, then let the old timer's deadline pass.
@@ -103,7 +103,7 @@ describe('CommandPalette', () => {
     });
 
     expect(isOpen()).toBe(true);
-    expect(screen.getByText('Copy Email Address')).toBeInTheDocument();
+    expect(screen.getByText('Copy email address')).toBeInTheDocument();
   });
 
   it('does not claim success when the clipboard is unavailable', async () => {
@@ -112,10 +112,10 @@ describe('CommandPalette', () => {
     openPalette();
 
     await act(async () => {
-      fireEvent.click(screen.getByText('Copy Email Address'));
+      fireEvent.click(screen.getByText('Copy email address'));
     });
 
-    expect(screen.queryByText('Email Copied!')).not.toBeInTheDocument();
+    expect(screen.queryByText('Email copied')).not.toBeInTheDocument();
     expect(isOpen()).toBe(false);
   });
 });

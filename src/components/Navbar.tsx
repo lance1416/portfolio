@@ -2,7 +2,6 @@ import {
   FileText,
   type LucideIcon,
   Menu,
-  Moon,
   Search,
   TerminalSquare,
   X,
@@ -13,6 +12,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useCommandPalette } from '@/context/CommandPaletteContext';
 import { useTerminal } from '@/context/TerminalContext';
 import { useTheme } from '@/context/ThemeContext';
+import { ACTION_LABELS, themeAction } from '@/data/actions';
 import { NAV_LINKS } from '@/data/navigation';
 import { profile } from '@/data/profile';
 import { useScrollLock } from '@/hooks/useScrollLock';
@@ -21,10 +21,12 @@ import { PALETTE_SHORTCUT } from '@/utils/shortcut';
 import { DURATION, SPRING, timed } from '@/utils/variants';
 import { IconSwap } from './IconSwap';
 
+// The same quiet surface as the dock: a translucent row with a hairline,
+// pressed in like every control.
 const MOBILE_ACTION_CLASS =
-  'flex flex-col items-center justify-center gap-2 rounded-2xl bg-zinc-100 p-4 text-sm font-semibold text-zinc-900 transition-transform active:scale-[0.96] dark:bg-zinc-900 dark:text-zinc-50';
+  'flex items-center gap-3 rounded-2xl bg-white/60 px-4 py-3.5 text-sm font-medium text-zinc-700 shadow-border transition-[background-color,scale] duration-150 ease-out active:scale-[0.96] active:bg-zinc-100 dark:bg-zinc-900/60 dark:text-zinc-200 dark:active:bg-zinc-800';
 
-/** Tile in the mobile menu's action grid: a button, or a new-tab link when `href` is set. */
+/** Row in the mobile menu's action list: a button, or a new-tab link when `href` is set. */
 function MobileAction({
   icon: Icon,
   label,
@@ -38,7 +40,10 @@ function MobileAction({
 }) {
   const content = (
     <>
-      <Icon className="h-6 w-6 text-zinc-500 dark:text-zinc-400" />
+      <Icon
+        aria-hidden="true"
+        className="h-5 w-5 text-zinc-500 dark:text-zinc-400"
+      />
       {label}
     </>
   );
@@ -68,7 +73,8 @@ export function Navbar() {
   const closeMobileMenu = () => setMenuOpenedAt(null);
   const { toggleTerminal } = useTerminal();
   const { open } = useCommandPalette();
-  const { toggleTheme } = useTheme();
+  const { toggleTheme, isDark } = useTheme();
+  const theme = themeAction(isDark);
 
   useScrollLock(isMobileMenuOpen);
 
@@ -210,27 +216,31 @@ export function Navbar() {
               ))}
             </div>
 
-            {/* Mobile Actions Grid (Replaces the Dock) */}
+            {/* Actions (the dock's, which phones don't show), named as everywhere */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ ...SPRING.content, delay: 0.35 }}
-              className="grid grid-cols-2 gap-3 border-t border-zinc-200 pt-6 dark:border-zinc-800"
+              className="grid gap-2 border-t border-zinc-200 pt-6 dark:border-zinc-800"
             >
               <MobileAction
                 icon={Search}
-                label="Search"
+                label={ACTION_LABELS.search}
                 onClick={openCommandPalette}
               />
               <MobileAction
                 icon={FileText}
-                label="Resume"
+                label={ACTION_LABELS.resume}
                 href={profile.resumeUrl}
               />
-              <MobileAction icon={Moon} label="Theme" onClick={toggleTheme} />
+              <MobileAction
+                icon={theme.icon}
+                label={theme.label}
+                onClick={toggleTheme}
+              />
               <MobileAction
                 icon={TerminalSquare}
-                label="Terminal"
+                label={ACTION_LABELS.terminal}
                 onClick={toggleTerminal}
               />
             </motion.div>
