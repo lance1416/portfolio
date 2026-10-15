@@ -1,9 +1,23 @@
 import { RotateCcw } from 'lucide-react';
 import { motion } from 'motion/react';
+import { type ComponentType, lazy, Suspense } from 'react';
 import { isRouteErrorResponse, Link, useRouteError } from 'react-router-dom';
 import { Page } from '@/components/Page';
 import { PageHeader } from '@/components/PageHeader';
 import { fadeUp } from '@/utils/variants';
+
+/**
+ * The broken island, loaded on demand to keep it out of the main bundle.
+ * This page may be up *because* a chunk failed to load (e.g. after a
+ * deploy), so a failed load renders nothing rather than throwing again.
+ */
+const BrokenIsland = lazy<ComponentType>(() =>
+  Promise.all([import('@/components/PixelScene'), import('@/scene/island')])
+    .then(([{ PixelScene }, { brokenIsland, BROKEN_LABEL }]) => ({
+      default: () => <PixelScene scene={brokenIsland} label={BROKEN_LABEL} />,
+    }))
+    .catch(() => ({ default: () => null })),
+);
 
 /**
  * Replaces the whole layout when a route throws, so it has no navbar; it
@@ -56,6 +70,12 @@ export default function ErrorPage() {
               Back to home
             </Link>
           </div>
+        </motion.div>
+
+        <motion.div variants={fadeUp} className="mt-16">
+          <Suspense fallback={null}>
+            <BrokenIsland />
+          </Suspense>
         </motion.div>
       </Page>
     </div>

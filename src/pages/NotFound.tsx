@@ -3,6 +3,8 @@ import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { Page } from '@/components/Page';
 import { PageHeader } from '@/components/PageHeader';
+import { PixelScene } from '@/components/PixelScene';
+import { CAMP_LABEL, campIsland } from '@/scene/island';
 import { fadeUp } from '@/utils/variants';
 
 export default function NotFound() {
@@ -17,6 +19,10 @@ export default function NotFound() {
           <ArrowLeft aria-hidden="true" className="h-4 w-4" />
           Back to home
         </Link>
+      </motion.div>
+
+      <motion.div variants={fadeUp} className="mt-16">
+        <PixelScene scene={campIsland} label={CAMP_LABEL} />
       </motion.div>
     </Page>
   );

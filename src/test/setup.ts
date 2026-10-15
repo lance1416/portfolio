@@ -24,6 +24,8 @@ beforeEach(() => {
     dispatchEvent: vi.fn(),
   }));
   window.scrollTo = vi.fn();
+  /** No canvas backend: jsdom logs "Not implemented" on getContext. */
+  HTMLCanvasElement.prototype.getContext = vi.fn(() => null);
   Element.prototype.scrollIntoView = vi.fn();
 });
 
