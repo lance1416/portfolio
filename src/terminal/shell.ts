@@ -7,7 +7,9 @@ export type Output =
   | { type: 'json'; value: unknown }
   | { type: 'table'; rows: [string, string][] }
   /** Directory listing; `path` is each entry's absolute path, for click-to-open. */
-  | { type: 'ls'; entries: { name: string; path: string; dir: boolean }[] };
+  | { type: 'ls'; entries: { name: string; path: string; dir: boolean }[] }
+  /** The night-island scene, drawn inline. */
+  | { type: 'scene' };
 
 /** Side effects the view carries out after printing. */
 export type Effect =
@@ -150,6 +152,11 @@ export const COMMANDS: Record<string, Command> = {
             effect: { type: 'theme', theme: arg as (typeof THEMES)[number] },
           }
         : error(`usage: theme <${THEMES.join('|')}>`),
+  },
+  campfire: {
+    usage: 'campfire',
+    summary: 'sit by the fire for a bit',
+    run: () => ({ output: [{ type: 'scene' }] }),
   },
   clear: {
     usage: 'clear',

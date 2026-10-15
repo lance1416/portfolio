@@ -101,11 +101,11 @@ describe('run', () => {
 
 describe('complete', () => {
   it.each([
-    ['ca', [], 'cat '],
+    ['cam', [], 'campfire '],
     ['cd pro', [], 'cd projects/'],
     ['cat who', [], 'cat whoami.json'],
     ['cat ../who', ['projects'], 'cat ../whoami.json'],
-    // Ambiguous: 'clear' and 'cd' and 'cat' share only 'c'.
+    // Ambiguous: 'clear', 'cd', 'cat' and 'campfire' share only 'c'.
     ['c', [], 'c'],
     ['cat zzz', [], 'cat zzz'],
   ])('%s in %j → %s', (line, cwd, expected) => {
