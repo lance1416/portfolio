@@ -4,6 +4,9 @@ export interface Location {
   name: string;
   /** IANA time zone. */
   tz: string;
+  /** Where the city is, for the sun in its little sky. */
+  lat: number;
+  lon: number;
 }
 
 export interface ElsewhereLink {
@@ -35,9 +38,9 @@ export interface IndexEntry {
 }
 
 export const LOCATIONS: Location[] = [
-  { name: 'Beijing', tz: 'Asia/Shanghai' },
-  { name: 'Toronto', tz: 'America/Toronto' },
-  { name: 'Oxford', tz: 'Europe/London' },
+  { name: 'Beijing', tz: 'Asia/Shanghai', lat: 39.9, lon: 116.4 },
+  { name: 'Toronto', tz: 'America/Toronto', lat: 43.65, lon: -79.38 },
+  { name: 'Oxford', tz: 'Europe/London', lat: 51.75, lon: -1.26 },
 ];
 
 export const ELSEWHERE: ElsewhereLink[] = [

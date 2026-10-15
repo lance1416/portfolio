@@ -4,20 +4,28 @@ import { useTheme } from '@/context/ThemeContext';
 import { SCENE_H, SCENE_W, type SceneFactory } from '@/scene/engine';
 import { cn } from '@/utils/cn';
 
+/** The frame for a full-size scene: 16:9, column-wide, on a hairline. */
+export const SCENE_FRAME = 'aspect-video w-full rounded-lg shadow-border';
+
 /**
  * A pixel scene (`src/scene/`) on a pixelated canvas: `night` in the dark
  * theme, `dusk` in the light one, rebuilt when the theme changes. It only
  * animates while on screen and the tab is visible; with reduced motion it
- * draws one still frame.
+ * draws a still frame, redrawn each minute (for scenes that follow the clock).
+ * Without a `label` it's decoration, ignored by screen readers.
  */
 export function PixelScene({
   scene: create,
   label,
+  width = SCENE_W,
+  height = SCENE_H,
   className,
 }: {
-  /** A module-level factory, so the scene isn't rebuilt every render. */
+  /** A stable factory (module-level or memoised), or the scene restarts. */
   scene: SceneFactory;
-  label: string;
+  label?: string;
+  width?: number;
+  height?: number;
   className?: string;
 }) {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -31,7 +39,13 @@ export function PixelScene({
 
     const scene = create(ctx, isDark ? 'night' : 'dusk');
     scene.render();
-    if (reduced) return;
+    if (reduced) {
+      const timer = setInterval(() => {
+        scene.update(0);
+        scene.render();
+      }, 60_000);
+      return () => clearInterval(timer);
+    }
 
     let frame = 0;
     let last = 0;
@@ -71,14 +85,10 @@ export function PixelScene({
   return (
     <canvas
       ref={ref}
-      width={SCENE_W}
-      height={SCENE_H}
-      role="img"
-      aria-label={label}
-      className={cn(
-        'block aspect-video w-full rounded-lg shadow-border [image-rendering:pixelated]',
-        className,
-      )}
+      width={width}
+      height={height}
+      {...(label && { role: 'img', 'aria-label': label })}
+      className={cn('block [image-rendering:pixelated]', className)}
     />
   );
 }

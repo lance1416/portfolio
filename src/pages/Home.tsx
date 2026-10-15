@@ -1,6 +1,13 @@
 import { ArrowUpRight } from 'lucide-react';
 import { motion } from 'motion/react';
-import { type CSSProperties, useEffect, useState } from 'react';
+import {
+  type ComponentType,
+  type CSSProperties,
+  lazy,
+  Suspense,
+  useEffect,
+  useState,
+} from 'react';
 import { Link } from 'react-router-dom';
 import { Page } from '@/components/Page';
 import { RollLine } from '@/components/RollLine';
@@ -10,6 +17,7 @@ import {
   FIELDS,
   INDEX_ENTRIES,
   LOCATIONS,
+  type Location,
   NOW_ITEMS,
   SELECTED_WORK_PERIOD,
 } from '@/data/home';
@@ -32,6 +40,14 @@ const noBreaks = (text: string) =>
   text.replaceAll(' · ', `${NBSP}· `).replace(/(\w)-(\w)/g, `$1${NB_HYPHEN}$2`);
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
+
+/** Where a city's sky goes until it loads (or if it can't). */
+const SkySlot = () => <span className="block h-4 w-16" />;
+
+// Decoration, so it stays out of the main bundle.
+const CitySky = lazy<ComponentType<Location>>(() =>
+  import('@/components/CitySky').catch(() => ({ default: SkySlot })),
+);
 
 function LocalTime() {
   const [times, setTimes] = useState<Record<string, string>>({});
@@ -62,8 +78,15 @@ function LocalTime() {
   return (
     <ul className="flex flex-col gap-1.5 font-mono text-xs text-zinc-500 dark:text-zinc-400">
       {LOCATIONS.map((loc) => (
-        <li key={loc.name} className="flex justify-between gap-8">
+        // Fixed columns, so the skies line up whatever the city's name.
+        <li
+          key={loc.name}
+          className="grid grid-cols-[1fr_auto_auto] items-center gap-3"
+        >
           <span>{loc.name}</span>
+          <Suspense fallback={<SkySlot />}>
+            <CitySky {...loc} />
+          </Suspense>
           <span className="tabular-nums">{times[loc.name] ?? '--:--'}</span>
         </li>
       ))}

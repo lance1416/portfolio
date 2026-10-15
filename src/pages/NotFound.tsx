@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { Page } from '@/components/Page';
 import { PageHeader } from '@/components/PageHeader';
-import { PixelScene } from '@/components/PixelScene';
+import { PixelScene, SCENE_FRAME } from '@/components/PixelScene';
 import { CAMP_LABEL, campIsland } from '@/scene/island';
 import { fadeUp } from '@/utils/variants';
 
@@ -22,7 +22,11 @@ export default function NotFound() {
       </motion.div>
 
       <motion.div variants={fadeUp} className="mt-16">
-        <PixelScene scene={campIsland} label={CAMP_LABEL} />
+        <PixelScene
+          scene={campIsland}
+          label={CAMP_LABEL}
+          className={SCENE_FRAME}
+        />
       </motion.div>
     </Page>
   );

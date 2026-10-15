@@ -13,8 +13,14 @@ import { fadeUp } from '@/utils/variants';
  */
 const BrokenIsland = lazy<ComponentType>(() =>
   Promise.all([import('@/components/PixelScene'), import('@/scene/island')])
-    .then(([{ PixelScene }, { brokenIsland, BROKEN_LABEL }]) => ({
-      default: () => <PixelScene scene={brokenIsland} label={BROKEN_LABEL} />,
+    .then(([{ PixelScene, SCENE_FRAME }, { brokenIsland, BROKEN_LABEL }]) => ({
+      default: () => (
+        <PixelScene
+          scene={brokenIsland}
+          label={BROKEN_LABEL}
+          className={SCENE_FRAME}
+        />
+      ),
     }))
     .catch(() => ({ default: () => null })),
 );

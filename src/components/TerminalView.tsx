@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { PixelScene } from '@/components/PixelScene';
+import { PixelScene, SCENE_FRAME } from '@/components/PixelScene';
 import { useTerminal } from '@/context/TerminalContext';
 import { useTheme } from '@/context/ThemeContext';
 import { CAMP_LABEL, campIsland } from '@/scene/island';
@@ -99,7 +99,7 @@ function Block({
         <PixelScene
           scene={campIsland}
           label={CAMP_LABEL}
-          className="my-2 max-w-xl"
+          className={`${SCENE_FRAME} my-2 max-w-xl`}
         />
       );
     case 'error':
