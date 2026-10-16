@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import type { AwardItem, EducationItem } from '@/data/research';
 import { cn } from '@/utils/cn';
 import { DashList } from './DashList';
@@ -10,12 +11,19 @@ const ROW = 'border-t border-zinc-200 first:border-t-0 dark:border-zinc-800';
  * A degree, laid out like a role on Experience: crest and dates in the rail,
  * institution, degree and details beside them.
  */
-export function EducationEntry({ item }: { item: EducationItem }) {
+export function EducationEntry({
+  item,
+  rail,
+}: {
+  item: EducationItem;
+  /** Something extra under the dates (Oxford's Radcliffe Camera). */
+  rail?: ReactNode;
+}) {
   return (
     <article
       className={cn(RAIL_GRID, ROW, 'group gap-5 py-12 first:pt-0 last:pb-0')}
     >
-      <div className="flex items-center gap-4 md:block">
+      <div className="flex flex-wrap items-center gap-x-4 md:block">
         {item.logoUrl && (
           <img
             src={item.logoUrl}
@@ -31,6 +39,7 @@ export function EducationEntry({ item }: { item: EducationItem }) {
         <p className="font-mono text-xs tabular-nums text-zinc-700 dark:text-zinc-300">
           {item.period}
         </p>
+        {rail}
       </div>
 
       <div className="min-w-0">

@@ -1,6 +1,7 @@
 import { CnotFigure } from '@/components/CnotFigure';
 import { Page, RAIL_GRID } from '@/components/Page';
 import { PageHeader } from '@/components/PageHeader';
+import { RadcliffeCamera } from '@/components/RadcliffeCamera';
 import { AwardRow, EducationEntry } from '@/components/ResearchComponents';
 import { Section } from '@/components/Section';
 import { SkillPill } from '@/components/SkillPill';
@@ -47,7 +48,12 @@ export default function Research() {
 
         <Section label="Education">
           {educationData.map((item) => (
-            <EducationEntry key={item.id} item={item} />
+            <EducationEntry
+              key={item.id}
+              item={item}
+              // The cat waits out Oxford's drizzle in the Radcliffe Camera.
+              rail={item.id === 'oxford' && <RadcliffeCamera />}
+            />
           ))}
         </Section>
 
