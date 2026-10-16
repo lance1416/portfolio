@@ -89,7 +89,9 @@ test.describe('3D ring', () => {
         });
 
     const nav = await box('nav');
-    const dock = await box('.fixed.bottom-6');
+    // A div: the footer shares the dock's band (and classes) on this page.
+    const dock = await box('div.fixed.bottom-6');
+    const footer = await box('footer');
     const header = await box('main header');
     // The text block itself (its column cell stretches to the grid row).
     const text = await box('main .relative.z-10 > div');
@@ -106,6 +108,12 @@ test.describe('3D ring', () => {
     // sits under the ring.
     expect(text.right).toBeLessThan(card.left);
     expect(counter.top).toBeGreaterThan(card.bottom);
+    // The page can't scroll, so the footer sits on screen beside the dock.
+    // (within a pixel: the dock's spring entrance settles sub-pixel)
+    expect(Math.abs(footer.top - dock.top)).toBeLessThan(1);
+    expect(footer.bottom).toBeLessThanOrEqual(
+      await page.evaluate(() => innerHeight),
+    );
   });
 
   test('reduced motion gets the swipe strip instead of the ring', async ({

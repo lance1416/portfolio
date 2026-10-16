@@ -14,6 +14,7 @@ import type { ProjectItem } from '@/data/projects';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useScrollLock } from '@/hooks/useScrollLock';
 import { cn } from '@/utils/cn';
+import { claimOneScreen } from '@/utils/oneScreen';
 import { usePageEntrance } from '@/utils/pageTransition';
 import { DURATION, fadeUp, stagger, timed } from '@/utils/variants';
 import { PageHeader } from './PageHeader';
@@ -129,8 +130,13 @@ export function ProjectRing({ projects }: { projects: ProjectItem[] }) {
     [last],
   );
 
-  // The page is exactly one screen; nothing to scroll.
+  // The page is exactly one screen; nothing to scroll. The footer moves up
+  // beside the dock meanwhile, where it can be reached.
   useScrollLock(true);
+  useEffect(() => {
+    const release = claimOneScreen();
+    return release;
+  }, []);
   // Braces matter: an effect must return nothing or a cleanup function, and
   // scrollTo can return a Promise where browser extensions wrap it.
   useEffect(() => {

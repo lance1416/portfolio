@@ -6,6 +6,7 @@ import { profile } from '@/data/profile';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { CAT_SPOTS, useCatsFound } from '@/utils/cats';
 import { cn } from '@/utils/cn';
+import { useOneScreen } from '@/utils/oneScreen';
 
 // Only once every hiding place is found, so it loads on demand.
 const NappingCat = lazy(() => import('@/components/NappingCat'));
@@ -34,13 +35,24 @@ export function Footer() {
   const hasDock = useMediaQuery(DOCK_SHOWN);
   // Where there's no dock to nap on, the cat naps here.
   const napsHere = found.length === CAT_SPOTS.length && !hasDock;
+  // On a one-screen page (the Projects ring) there's no "below the page":
+  // the footer becomes a slim row in the dock's band, the dock between its
+  // two halves (64px tall, 24px up, like the dock).
+  const oneScreen = useOneScreen();
 
   return (
-    <footer className="mt-auto border-t border-zinc-200 py-10 dark:border-zinc-800">
+    <footer
+      className={
+        oneScreen
+          ? 'pointer-events-none fixed inset-x-0 bottom-6 z-40 h-16'
+          : 'mt-auto border-t border-zinc-200 py-10 dark:border-zinc-800'
+      }
+    >
       <div
         className={cn(
           PAGE_COLUMN,
           'flex flex-col items-center justify-between gap-6 sm:flex-row',
+          oneScreen && 'h-full [&>*]:pointer-events-auto',
         )}
       >
         <div className="flex items-center gap-3">

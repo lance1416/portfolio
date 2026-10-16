@@ -2,6 +2,7 @@ import { act, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { CAT_SPOTS, findCat, resetCats } from '@/utils/cats';
+import { claimOneScreen } from '@/utils/oneScreen';
 import { Footer } from './Footer';
 
 const renderFooter = () =>
@@ -31,5 +32,20 @@ describe('Footer', () => {
     expect(
       await screen.findByRole('button', { name: 'Pet Yuyuan' }),
     ).toBeInTheDocument();
+  });
+
+  it('sits beside the dock while a page fills one screen, then goes back', () => {
+    renderFooter();
+    const footer = screen.getByRole('contentinfo');
+    expect(footer).not.toHaveClass('fixed');
+
+    let release = () => {};
+    act(() => {
+      release = claimOneScreen();
+    });
+    expect(footer).toHaveClass('fixed');
+
+    act(release);
+    expect(footer).not.toHaveClass('fixed');
   });
 });
