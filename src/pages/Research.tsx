@@ -16,7 +16,7 @@ export default function Research() {
     <Page>
       <PageHeader chapter="§ 03" title="Research" />
 
-      <div className="space-y-24">
+      <div className="space-y-16 sm:space-y-24">
         <Section label="MSc dissertation" first>
           <article className={cn(RAIL_GRID, 'gap-5')}>
             {/* The paper's front matter, in the same rail as every entry:

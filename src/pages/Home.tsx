@@ -94,6 +94,34 @@ function LocalTime() {
   );
 }
 
+/** What's happening now: one line per thing, dotted in its colour. */
+function NowList({ className }: { className?: string }) {
+  return (
+    <ul className={className}>
+      {NOW_ITEMS.map((item) => (
+        <li
+          key={item.label}
+          className="role-scope flex items-start gap-2.5"
+          style={tint(item.color)}
+        >
+          <span
+            aria-hidden="true"
+            className="mt-[5px] h-1.5 w-1.5 shrink-0 rounded-full bg-(--role)"
+          />
+          <div>
+            <p className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
+              {item.label}
+            </p>
+            <p className="text-balance text-xs text-zinc-500 dark:text-zinc-400">
+              {noBreaks(item.detail)}
+            </p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 function SelectedWorkHeader() {
   return (
     <div className="mb-3 flex items-baseline justify-between">
@@ -165,9 +193,13 @@ export default function Home() {
       {/* ── LEFT: Identity sidebar ── */}
       <motion.aside
         variants={fadeUp}
-        className="order-2 flex flex-col gap-10 lg:order-none lg:sticky lg:top-32 lg:self-start lg:border-r lg:border-zinc-200 lg:pr-8 dark:lg:border-zinc-800"
+        // Below lg it follows the content, holding just Elsewhere then Local
+        // time (side by side on tablets): the name block stays for screen
+        // readers only — the navbar and the hello already say who this is —
+        // and Now moves up under the intro.
+        className="order-2 grid gap-10 sm:grid-cols-2 sm:gap-x-12 lg:order-none lg:sticky lg:top-32 lg:flex lg:flex-col lg:self-start lg:border-r lg:border-zinc-200 lg:pr-8 dark:lg:border-zinc-800"
       >
-        <div>
+        <div className="sr-only lg:not-sr-only">
           <p className="label-overline mb-3">Portfolio</p>
           <h1 className="font-display text-2xl font-normal text-zinc-900 dark:text-zinc-50">
             {profile.name}
@@ -180,36 +212,17 @@ export default function Home() {
           <LocalTime />
         </div>
 
-        <div>
+        {/* Desktop only; smaller screens show it under the intro. */}
+        <div className="hidden lg:block">
           <h2 className="label-overline mb-3">Now</h2>
-          <ul className="space-y-3">
-            {NOW_ITEMS.map((item) => (
-              <li
-                key={item.label}
-                className="role-scope flex items-start gap-2.5"
-                style={tint(item.color)}
-              >
-                <span
-                  aria-hidden="true"
-                  className="mt-[5px] h-1.5 w-1.5 shrink-0 rounded-full bg-(--role)"
-                />
-                <div>
-                  <p className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
-                    {item.label}
-                  </p>
-                  <p className="text-balance text-xs text-zinc-500 dark:text-zinc-400">
-                    {noBreaks(item.detail)}
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <NowList className="space-y-3" />
         </div>
 
-        <div>
+        <div className="order-first lg:order-none">
           <h2 className="label-overline mb-3">Elsewhere</h2>
-          {/* Each link is a 40px-tall block (py-3 around 16px text); -my-3 keeps the section's outer spacing. */}
-          <ul className="-my-3 flex flex-col">
+          {/* Each link is a 40px-tall block (py-3 around 16px text); -my-3 keeps the section's outer spacing.
+              A wrapping row below lg, a column in the desktop sidebar. */}
+          <ul className="-my-3 flex flex-wrap gap-x-6 lg:flex-col lg:gap-x-0">
             {ELSEWHERE.map(({ label, href, ext }) => (
               <li key={label}>
                 <a
@@ -230,9 +243,15 @@ export default function Home() {
 
       {/* ── CENTER: Hero ── */}
       <div className="order-1 lg:order-none lg:px-10">
-        <motion.section variants={fadeUp} className="mb-24">
+        {/* Closer to Now below it on smaller screens; desktop has the fields next. */}
+        <motion.section variants={fadeUp} className="mb-10 lg:mb-24">
           {/* Home's title: a plain hello; the paragraph says the rest. It
               rolls in after a page turn like every PageHeader title. */}
+          {/* The role, shown here while the sidebar's name block is hidden
+              (screen readers get it from that block). */}
+          <p aria-hidden="true" className="label-overline mb-4 lg:hidden">
+            {profile.role}
+          </p>
           <h2 className="font-display text-4xl font-normal leading-tight tracking-tight text-zinc-900 dark:text-zinc-50">
             <RollLine>Hi, I’m Sinan.</RollLine>
           </h2>
@@ -260,8 +279,15 @@ export default function Home() {
           </p>
         </motion.section>
 
+        {/* Now — below lg, straight after the intro; desktop keeps it in the
+            sidebar */}
+        <motion.section variants={fadeUp} className="mb-16 sm:mb-24 lg:hidden">
+          <h2 className="label-overline mb-3">Now</h2>
+          <NowList className="grid gap-3 sm:grid-cols-2" />
+        </motion.section>
+
         {/* Field credentials: one line of specifics per area */}
-        <motion.section variants={fadeUp} className="mb-24">
+        <motion.section variants={fadeUp} className="mb-16 sm:mb-24">
           <div className="space-y-4 border-t border-zinc-200 pt-8 dark:border-zinc-800">
             {FIELDS.map(({ domain, detail }) => (
               <div key={domain} className="flex items-baseline gap-4">
