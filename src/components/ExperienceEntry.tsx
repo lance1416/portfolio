@@ -1,6 +1,6 @@
 import { ArrowUpRight } from 'lucide-react';
 import { motion } from 'motion/react';
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { type ExperienceItem, roleSpan } from '@/data/experience';
 import { cn } from '@/utils/cn';
 import { formatDuration, formatPeriod } from '@/utils/months';
@@ -9,7 +9,14 @@ import { DashList } from './DashList';
 import { RAIL_GRID } from './Page';
 import { SkillPill } from './SkillPill';
 
-export function ExperienceEntry({ job }: { job: ExperienceItem }) {
+export function ExperienceEntry({
+  job,
+  rail,
+}: {
+  job: ExperienceItem;
+  /** Something extra under the dates (the current role's desk scene). */
+  rail?: ReactNode;
+}) {
   const { months } = roleSpan(job);
   const [lead, ...details] = job.description;
 
@@ -28,7 +35,7 @@ export function ExperienceEntry({ job }: { job: ExperienceItem }) {
     >
       {/* Date rail: the swatch matches this role's bar in the timeline; sticky
           on desktop so the dates stay in view through a long entry. */}
-      <div className="flex items-baseline gap-3 md:sticky md:top-32 md:block md:self-start">
+      <div className="flex flex-wrap items-baseline gap-x-3 md:sticky md:top-32 md:block md:self-start">
         <span
           aria-hidden="true"
           className="block h-1.5 w-8 shrink-0 self-center rounded-full bg-(--role) md:mb-4"
@@ -37,6 +44,7 @@ export function ExperienceEntry({ job }: { job: ExperienceItem }) {
           {formatPeriod(job.start, job.end)}
         </p>
         <p className="mono-meta md:mt-1">{formatDuration(months)}</p>
+        {rail}
       </div>
 
       <div className="min-w-0">

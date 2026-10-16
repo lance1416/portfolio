@@ -2,17 +2,16 @@ import { AnimatePresence, motion } from 'motion/react';
 import type { CSSProperties } from 'react';
 import { useState } from 'react';
 import { PixelIcon } from '@/components/PixelIcon';
-import { SCENE_H, SCENE_W } from '@/scene/engine';
-import type { Box } from '@/scene/signpost';
+import { type Box, SCENE_H, SCENE_W } from '@/scene/engine';
 import { type CatSpot, findCat } from '@/utils/cats';
 import { DURATION, timed } from '@/utils/variants';
 
-/** Places an overlay on a box of a full-size scene, in percentages. */
-export const boxStyle = (b: Box): CSSProperties => ({
-  left: `${(b.x / SCENE_W) * 100}%`,
-  top: `${(b.y / SCENE_H) * 100}%`,
-  width: `${(b.w / SCENE_W) * 100}%`,
-  height: `${(b.h / SCENE_H) * 100}%`,
+/** Places an overlay on a box of a scene (full-size unless given), in percentages. */
+export const boxStyle = (b: Box, w = SCENE_W, h = SCENE_H): CSSProperties => ({
+  left: `${(b.x / w) * 100}%`,
+  top: `${(b.y / h) * 100}%`,
+  width: `${(b.w / w) * 100}%`,
+  height: `${(b.h / h) * 100}%`,
 });
 
 const HEART = [
@@ -63,9 +62,21 @@ export function usePetHearts() {
 
 /**
  * The button over the cat in a scene: petting it counts it as found (and
- * says so with a heart). Its box is in scene pixels.
+ * says so with a heart). Its box is in scene pixels; the scene must be its
+ * positioned parent.
  */
-export function HiddenCat({ spot, box }: { spot: CatSpot; box: Box }) {
+export function HiddenCat({
+  spot,
+  box,
+  sceneW = SCENE_W,
+  sceneH = SCENE_H,
+}: {
+  spot: CatSpot;
+  box: Box;
+  /** The scene's size in pixels, when it isn't full-size. */
+  sceneW?: number;
+  sceneH?: number;
+}) {
   const { pet, hearts } = usePetHearts();
 
   return (
@@ -76,7 +87,7 @@ export function HiddenCat({ spot, box }: { spot: CatSpot; box: Box }) {
         findCat(spot);
         pet();
       }}
-      style={boxStyle(box)}
+      style={boxStyle(box, sceneW, sceneH)}
       // The cat is a few pixels tall on a phone: the pseudo-element keeps
       // the hit area finger-sized.
       className="absolute rounded-sm after:absolute after:-inset-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"

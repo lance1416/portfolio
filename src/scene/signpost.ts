@@ -8,6 +8,7 @@
  */
 import { CAT_H, CAT_W, drawCat } from './cat';
 import {
+  type Box,
   type Ctx,
   ditherRows,
   hash,
@@ -22,14 +23,6 @@ import {
 } from './engine';
 import { drawText, textWidth } from './pixelFont';
 import { pointerIn } from './pointer';
-
-/** A rectangle in scene pixels. */
-export interface Box {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-}
 
 const POST_X = 95; // the post is 2px wide, from here
 const POST_TOP = 38;

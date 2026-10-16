@@ -18,6 +18,14 @@ export interface Scene {
   render(): void;
 }
 
+/** A rectangle in scene pixels (e.g. where the cat sits). */
+export interface Box {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
 /** Builds a scene; `<PixelScene>` calls it again when the theme changes. */
 export type SceneFactory = (ctx: Ctx, mood: Mood) => Scene;
 
