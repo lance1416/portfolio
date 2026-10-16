@@ -14,15 +14,19 @@ test('a timeline bar jumps to its entry, below the navbar, and focuses it', asyn
   await expect(page).toHaveURL(/#iqbank$/);
 
   // The smooth scroll lands with the entry just under the fixed navbar
-  // (scroll-mt-32), not hidden behind it.
+  // (scroll-mt-32), not hidden behind it. Within a pixel: the jump sums
+  // offsetTops, which round to whole pixels, while a phone's high-DPR
+  // layout can put the entry on a half pixel (it landed at 127.5 on Pixel 7).
   const navBottom = await page
     .locator('nav')
     .evaluate((el) => el.getBoundingClientRect().bottom);
   await expect
-    .poll(() => entry.evaluate((el) => el.getBoundingClientRect().top), {
-      timeout: 5000,
-    })
-    .toBeCloseTo(128, 0);
+    .poll(
+      () =>
+        entry.evaluate((el) => Math.abs(el.getBoundingClientRect().top - 128)),
+      { timeout: 5000 },
+    )
+    .toBeLessThan(1);
   expect(128).toBeGreaterThan(navBottom);
 });
 
