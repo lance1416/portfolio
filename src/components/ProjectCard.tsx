@@ -5,6 +5,7 @@ import { FaGithub, FaItchIo } from 'react-icons/fa6';
 import type { LinkType, ProjectItem } from '@/data/projects';
 import { cn } from '@/utils/cn';
 import { DashList } from './DashList';
+import { PaperCrane } from './PaperCrane';
 import { SkillPill } from './SkillPill';
 import { SplitText } from './SplitText';
 
@@ -128,6 +129,8 @@ export function ProjectDetails({ project }: { project: ProjectItem }) {
         {project.skills.map((skill) => (
           <SkillPill key={skill} skill={skill} activeColor="var(--role)" />
         ))}
+        {/* An origami game gets the cat's paper crane. */}
+        {project.id === 'evogami' && <PaperCrane />}
       </div>
     </>
   );
