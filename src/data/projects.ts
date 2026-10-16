@@ -24,6 +24,21 @@ export interface ProjectItem {
 
 export const projectsData: ProjectItem[] = [
   {
+    id: 'ctws',
+    title: 'CTWS',
+    subtitle: 'Self-Hosted Workspace for One Person',
+    year: '2026',
+    color: '#c08a1e',
+    image: { name: 'ctws', widths: [640, 1280] },
+    description: [
+      'Designed and built on my own a workspace where one person’s tasks, meetings, people and reading link to each other: a React app and a Fastify API over PostgreSQL, in one TypeScript monorepo.',
+      'Built nested tasks that reorder by drag and roll progress up the tree, repeating meetings that split into this one, this and later, or all, and birthdays kept in both the solar and lunar calendars.',
+      'Every push runs type checks, unit tests and a Playwright suite; a release tag only publishes the Docker image once that commit’s suite has passed.',
+    ],
+    skills: ['TypeScript', 'React', 'Fastify', 'PostgreSQL', 'Playwright'],
+    links: [{ type: 'github', url: 'https://github.com/lance1416/ctws' }],
+  },
+  {
     id: 'kidneyos',
     title: 'KidneyOS',
     subtitle: 'PintOS-Inspired Teaching Operating System in Rust',

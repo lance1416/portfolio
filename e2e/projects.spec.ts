@@ -17,7 +17,7 @@ test.describe('3D ring', () => {
 
   test.beforeEach(async ({ page }) => {
     await page.goto('/projects');
-    await expect(front(page)).toHaveAttribute('aria-label', 'Show KidneyOS');
+    await expect(front(page)).toHaveAttribute('aria-label', 'Show CTWS');
     await page.mouse.move(640, 450);
   });
 
@@ -27,12 +27,12 @@ test.describe('3D ring', () => {
   }) => {
     test.skip(hasTouch, 'touch devices swipe instead (see below)');
     await page.mouse.wheel(0, 120);
-    await expect(front(page)).toHaveAttribute('aria-label', 'Show Evogami');
+    await expect(front(page)).toHaveAttribute('aria-label', 'Show KidneyOS');
 
     // A new gesture after a pause goes back.
     await page.waitForTimeout(500);
     await page.mouse.wheel(0, -120);
-    await expect(front(page)).toHaveAttribute('aria-label', 'Show KidneyOS');
+    await expect(front(page)).toHaveAttribute('aria-label', 'Show CTWS');
 
     expect(await page.evaluate(() => window.scrollY)).toBe(0);
   });
@@ -42,11 +42,21 @@ test.describe('3D ring', () => {
     hasTouch,
   }) => {
     test.skip(hasTouch, 'touch devices swipe instead (see below)');
-    for (let i = 0; i < 10; i++) await page.mouse.wheel(0, 40);
+    // A trackpad flick: ten events 16ms apart, fired from inside the page.
+    // (page.mouse.wheel in a loop can space events past the 150ms gesture
+    // gap on a slow browser, which is then genuinely a second gesture.)
+    await page.evaluate(async () => {
+      for (let i = 0; i < 10; i++) {
+        window.dispatchEvent(
+          new WheelEvent('wheel', { deltaY: 40, cancelable: true }),
+        );
+        await new Promise((resolve) => setTimeout(resolve, 16));
+      }
+    });
     await page.waitForTimeout(300);
-    await expect(front(page)).toHaveAttribute('aria-label', 'Show Evogami');
-    // Evogami is the last project; also proves nothing overshot past it.
-    await expect(page.locator('.transform-3d > button')).toHaveCount(2);
+    // One step, not to the last project (Evogami) or beyond.
+    await expect(front(page)).toHaveAttribute('aria-label', 'Show KidneyOS');
+    await expect(page.locator('.transform-3d > button')).toHaveCount(3);
   });
 
   test('dragging sideways swipes between projects', async ({ page }) => {
@@ -58,25 +68,25 @@ test.describe('3D ring', () => {
       await page.mouse.up();
     };
     await drag(-200);
-    await expect(front(page)).toHaveAttribute('aria-label', 'Show Evogami');
-    await drag(200);
     await expect(front(page)).toHaveAttribute('aria-label', 'Show KidneyOS');
+    await drag(200);
+    await expect(front(page)).toHaveAttribute('aria-label', 'Show CTWS');
   });
 
   test('passed cards vanish behind the text; the next one waits half-lit', async ({
     page,
   }) => {
-    await expect.poll(() => faceOpacities(page)).toEqual([1, 0.5]);
+    await expect.poll(() => faceOpacities(page)).toEqual([1, 0.5, 0.5]);
 
     await page.keyboard.press('ArrowRight');
-    await expect(front(page)).toHaveAttribute('aria-label', 'Show Evogami');
-    await expect.poll(() => faceOpacities(page)).toEqual([0, 1]);
+    await expect(front(page)).toHaveAttribute('aria-label', 'Show KidneyOS');
+    await expect.poll(() => faceOpacities(page)).toEqual([0, 1, 0.5]);
   });
 
   test('the stage fits between the navbar and the dock', async ({ page }) => {
     // Measure the settled layout: webfonts loaded, entrance animations done.
     await page.evaluate(() => document.fonts.ready);
-    await expect.poll(() => faceOpacities(page)).toEqual([1, 0.5]);
+    await expect.poll(() => faceOpacities(page)).toEqual([1, 0.5, 0.5]);
     await page.waitForTimeout(500);
 
     const box = (selector: string) =>
