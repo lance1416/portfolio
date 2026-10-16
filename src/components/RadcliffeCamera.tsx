@@ -1,5 +1,5 @@
 import { HiddenCat } from '@/components/HiddenCat';
-import { PixelScene } from '@/components/PixelScene';
+import { PixelScene, SMALL_DISSOLVE } from '@/components/PixelScene';
 import {
   RADCLIFFE_CAT_BOX,
   RADCLIFFE_H,
@@ -9,18 +9,19 @@ import {
 } from '@/scene/radcliffe';
 
 /**
- * Oxford's entry gets the Radcliffe Camera in the drizzle, the cat in its
- * doorway. A row of its own on phones, under the dates on wider screens.
+ * Oxford's entry gets the Radcliffe Camera in the drizzle, the cat beside
+ * it. A row of its own on phones, under the dates on wider screens.
  */
 export function RadcliffeCamera() {
   return (
-    <div className="relative mt-4 basis-full md:mt-6 md:w-36">
+    <div className="relative mt-4 basis-full md:mt-6 md:w-[156px]">
       <PixelScene
         scene={radcliffe}
         width={RADCLIFFE_W}
         height={RADCLIFFE_H}
         label={RADCLIFFE_LABEL}
-        className="h-24 w-36 rounded-md shadow-border"
+        className="h-24 w-[156px]"
+        dissolve={SMALL_DISSOLVE}
       />
       <HiddenCat
         spot="research"

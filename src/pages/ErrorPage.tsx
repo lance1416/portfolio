@@ -14,12 +14,16 @@ import { fadeUp } from '@/utils/variants';
 const FallenSignpost = lazy<ComponentType>(() =>
   Promise.all([import('@/components/PixelScene'), import('@/scene/signpost')])
     .then(
-      ([{ PixelScene, SCENE_FRAME }, { fallenSignpost, FALLEN_LABEL }]) => ({
+      ([
+        { PixelScene, SCENE_DISSOLVE, SCENE_FRAME },
+        { fallenSignpost, FALLEN_LABEL },
+      ]) => ({
         default: () => (
           <PixelScene
             scene={fallenSignpost}
             label={FALLEN_LABEL}
             className={SCENE_FRAME}
+            dissolve={SCENE_DISSOLVE}
           />
         ),
       }),

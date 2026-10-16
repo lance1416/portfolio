@@ -4,7 +4,11 @@ import { Link } from 'react-router-dom';
 import { boxStyle, HiddenCat } from '@/components/HiddenCat';
 import { Page } from '@/components/Page';
 import { PageHeader } from '@/components/PageHeader';
-import { PixelScene, SCENE_FRAME } from '@/components/PixelScene';
+import {
+  PixelScene,
+  SCENE_DISSOLVE,
+  SCENE_FRAME,
+} from '@/components/PixelScene';
 import {
   CAT_BOX,
   SIGNPOST_LABEL,
@@ -34,6 +38,7 @@ export default function NotFound() {
           scene={signpost}
           label={SIGNPOST_LABEL}
           className={SCENE_FRAME}
+          dissolve={SCENE_DISSOLVE}
         />
         {SIGNS.map((sign) => (
           <Link

@@ -10,7 +10,7 @@ import { CAT_H, CAT_W, drawCat } from './cat';
 import {
   type Box,
   type Ctx,
-  ditherRows,
+  gradientRows,
   hash,
   layer,
   type Mood,
@@ -77,9 +77,9 @@ export const FALLEN_CAT_BOX: Box = {
 
 /** Each board's top-left once it's fallen into the grass. */
 const FALLEN_AT: Record<string, [number, number]> = {
-  EXPERIENCE: [10, 99],
+  EXPERIENCE: [24, 95],
   PROJECTS: [126, 90],
-  RESEARCH: [116, 99],
+  RESEARCH: [112, 96],
 };
 
 export const SIGNPOST_LABEL =
@@ -110,11 +110,12 @@ const PALETTES: Record<Mood, Palette> = {
     stars: true,
     lanternGlow: 1,
   },
+  // Pale, to dissolve into the light theme's off-white page.
   dusk: {
-    sky: ['#2e2a5c', '#463871', '#694781', '#965784', '#c66d7e', '#ea9479'],
-    hills: '#5a4672',
-    grass: ['#6f8f4c', '#5c7a3e'],
-    path: ['#b08a62', '#9a7652'],
+    sky: ['#f5f1ee', '#f2e9e7', '#efdfdf', '#eed3d0', '#efc6bc', '#f0b9a6'],
+    hills: '#ddcfda',
+    grass: ['#c8d6ad', '#b7c89b'],
+    path: ['#e4d1b5', '#d7c2a3'],
     wood: ['#a57a4c', '#c0955f', '#6e4e2e', '#3a2616'],
     post: ['#8a6440', '#6e4e2e'],
     stars: false,
@@ -123,7 +124,7 @@ const PALETTES: Record<Mood, Palette> = {
 };
 
 function paintBackdrop(ctx: Ctx, pal: Palette, fallen: boolean) {
-  ditherRows(ctx, 0, GROUND, pal.sky);
+  gradientRows(ctx, 0, GROUND, pal.sky);
 
   // Far hills: a soft ridge along the horizon.
   for (let x = 0; x < SCENE_W; x++) {
@@ -139,9 +140,9 @@ function paintBackdrop(ctx: Ctx, pal: Palette, fallen: boolean) {
       const depth = y - GROUND;
       const trunk = Math.abs(x - (POST_X + 1)) < 6 + depth * 1.4;
       const fork = depth < 4 && Math.abs(y - (GROUND + 2)) < 2;
-      let color = hash(x >> 1, y, 3) > 0.8 ? pal.grass[1] : pal.grass[0];
+      let color = hash(x >> 1, y, 3) > 0.94 ? pal.grass[1] : pal.grass[0];
       if (trunk || fork)
-        color = hash(x, y, 5) > 0.75 ? pal.path[1] : pal.path[0];
+        color = hash(x, y, 5) > 0.93 ? pal.path[1] : pal.path[0];
       px(ctx, x, y, color);
     }
   }

@@ -1,5 +1,5 @@
 import { HiddenCat } from '@/components/HiddenCat';
-import { PixelScene } from '@/components/PixelScene';
+import { PixelScene, SMALL_DISSOLVE } from '@/components/PixelScene';
 import {
   DESK_CAT_BOX,
   DESK_H,
@@ -21,7 +21,8 @@ export function LateDesk() {
         width={DESK_W}
         height={DESK_H}
         label={DESK_LABEL}
-        className="h-24 w-36 rounded-md shadow-border"
+        className="h-24 w-36"
+        dissolve={SMALL_DISSOLVE}
       />
       <HiddenCat
         spot="experience"

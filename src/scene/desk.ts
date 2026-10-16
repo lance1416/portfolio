@@ -23,7 +23,7 @@ const DESK_TOP = 23;
 const IQBANK = '#3b5fb2';
 
 export const DESK_CAT_BOX: Box = {
-  x: 36,
+  x: 34,
   y: DESK_TOP - CAT_H,
   w: CAT_W,
   h: CAT_H,
@@ -34,6 +34,7 @@ export const DESK_LABEL =
 
 interface Palette {
   wall: string;
+  desk: [top: string, edge: string, front: string, drawer: string];
   frame: string;
   sky: [string, string];
   stars: boolean;
@@ -44,16 +45,19 @@ interface Palette {
 const PALETTES: Record<Mood, Palette> = {
   night: {
     wall: '#1b1e31',
+    desk: ['#a57a4c', '#8a6440', '#5c4129', '#4a3420'],
     frame: '#2c3150',
     sky: ['#0a0f26', '#141a3a'],
     stars: true,
     screen: '#d5dbec',
     lampGlow: 1,
   },
+  // Pale, to dissolve into the light theme's off-white page.
   dusk: {
-    wall: '#4a4062',
-    frame: '#5d5278',
-    sky: ['#c66d7e', '#ee9a78'],
+    wall: '#ece5e8',
+    desk: ['#dcc29b', '#ccae84', '#bc9d70', '#a8895d'],
+    frame: '#d5c8d2',
+    sky: ['#f2d8cd', '#f0bba6'],
     stars: false,
     screen: '#e8ecf6',
     lampGlow: 0.5,
@@ -96,11 +100,11 @@ function paintRoom(ctx: Ctx, pal: Palette) {
   }
 
   // The desk: a lit top edge, then its front with a drawer.
-  rect(ctx, 0, DESK_TOP, DESK_W, 1, '#a57a4c');
-  rect(ctx, 0, DESK_TOP + 1, DESK_W, 1, '#8a6440');
-  rect(ctx, 0, DESK_TOP + 2, DESK_W, DESK_H - DESK_TOP - 2, '#5c4129');
-  rect(ctx, 18, DESK_TOP + 4, 12, 1, '#4a3420');
-  px(ctx, 23, DESK_TOP + 5, '#a57a4c');
+  rect(ctx, 0, DESK_TOP, DESK_W, 1, pal.desk[0]);
+  rect(ctx, 0, DESK_TOP + 1, DESK_W, 1, pal.desk[1]);
+  rect(ctx, 0, DESK_TOP + 2, DESK_W, DESK_H - DESK_TOP - 2, pal.desk[2]);
+  rect(ctx, 18, DESK_TOP + 4, 12, 1, pal.desk[3]);
+  px(ctx, 23, DESK_TOP + 5, pal.desk[0]);
 
   // The monitor: bezel, stand and foot.
   rect(ctx, 18, 9, 16, 12, '#202028');

@@ -64,17 +64,28 @@ export function px(ctx: Ctx, x: number, y: number, color: string) {
   ctx.fillRect(Math.round(x), Math.round(y), 1, 1);
 }
 
-const BAYER = [0, 0.5, 0.75, 0.25];
-
-/** A vertical gradient through `colors` over rows y0…y1, 2×2-dithered. */
-export function ditherRows(ctx: Ctx, y0: number, y1: number, colors: string[]) {
+/**
+ * A smooth vertical gradient through `colors` over rows y0…y1: one solid
+ * colour per row, blended between the stops (no dithering, no speckle).
+ */
+export function gradientRows(
+  ctx: Ctx,
+  y0: number,
+  y1: number,
+  colors: string[],
+) {
+  const rgb = colors.map((c) =>
+    [1, 3, 5].map((i) => Number.parseInt(c.slice(i, i + 2), 16)),
+  );
   for (let y = y0; y < y1; y++) {
-    for (let x = 0; x < SCENE_W; x++) {
-      const v =
-        ((y - y0) / (y1 - y0)) * (colors.length - 1) +
-        BAYER[(x & 1) + (y & 1) * 2];
-      px(ctx, x, y, colors[Math.min(colors.length - 1, Math.floor(v))]);
-    }
+    const v = ((y - y0) / Math.max(1, y1 - y0 - 1)) * (rgb.length - 1);
+    const i = Math.min(rgb.length - 2, Math.floor(v));
+    const k = v - i;
+    const [r, g, b] = rgb[i].map((c, j) =>
+      Math.round(c + (rgb[i + 1][j] - c) * k),
+    );
+    ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+    ctx.fillRect(0, y, SCENE_W, 1);
   }
 }
 

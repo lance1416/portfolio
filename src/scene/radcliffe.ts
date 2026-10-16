@@ -19,14 +19,14 @@ import {
 } from './engine';
 import { pointerIn } from './pointer';
 
-export const RADCLIFFE_W = 48;
+export const RADCLIFFE_W = 52;
 export const RADCLIFFE_H = 32;
 
 const GROUND = 30;
 const CENTRE = 24;
 
 export const RADCLIFFE_CAT_BOX: Box = {
-  x: RADCLIFFE_W - CAT_W,
+  x: 38,
   y: GROUND - CAT_H,
   w: CAT_W,
   h: CAT_H,
@@ -51,12 +51,13 @@ const PALETTES: Record<Mood, Palette> = {
     ground: '#2a2b35',
     rain: '#a7bbe8',
   },
+  // Pale, to dissolve into the light theme's off-white page.
   dusk: {
-    sky: ['#694781', '#e08a7a'],
-    stone: ['#d6c497', '#b5a379', '#eadaae'],
+    sky: ['#f3ecec', '#f1c9b9'],
+    stone: ['#cdb98a', '#ad9a6f', '#e2d0a2'],
     lead: ['#7d8496', '#646b7c'],
-    ground: '#6b6676',
-    rain: '#f1ecff',
+    ground: '#d6d0d6',
+    rain: '#8e9bbd',
   },
 };
 
