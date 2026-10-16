@@ -50,7 +50,7 @@ const EYES: [number, number][] = [
   [6, 3],
 ];
 
-const PUPIL = '#3b2a22';
+export const PUPIL = '#3b2a22';
 
 export const CAT_COLORS = {
   b: '#a99d9b',

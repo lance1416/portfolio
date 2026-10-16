@@ -1,10 +1,12 @@
 /**
  * The cat asleep, curled into a loaf with its tail wrapped round the front,
  * z's drifting up. Once every hiding place is found it naps on the dock (or
- * the footer); petting it (`wake`) opens its eyes for a moment.
+ * the footer); petting it (`wake`) opens its eyes for a moment, and they
+ * follow the pointer like the other cats'.
  */
-import { CAT_COLORS } from './cat';
+import { CAT_COLORS, PUPIL } from './cat';
 import { px, type SceneFactory } from './engine';
+import { pointerIn } from './pointer';
 
 export const NAP_W = 17;
 export const NAP_H = 14;
@@ -50,7 +52,14 @@ export const nap: SceneFactory = (ctx) => {
           px(ctx, dx, top + dy, color);
         });
       });
-      if (awake) return;
+      if (awake) {
+        // The eyes are a pixel tall, so a pupil sits left or right in each,
+        // both the same way: towards the pointer, or glancing about.
+        const look = pointerIn(ctx.canvas);
+        const side = look ? (look.x >= 4.5 ? 1 : 0) : Math.floor(t / 1.2) % 2;
+        for (const eye of [1, 6]) px(ctx, eye + side, top + 3, PUPIL);
+        return;
+      }
       // A "z" drifting up from its head and fading, one every 2.4 s.
       const k = (t % 2.4) / 2.4;
       ctx.globalAlpha = 1 - k;
