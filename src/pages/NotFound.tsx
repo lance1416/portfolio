@@ -1,10 +1,17 @@
 import { ArrowLeft } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
+import { boxStyle, HiddenCat } from '@/components/HiddenCat';
 import { Page } from '@/components/Page';
 import { PageHeader } from '@/components/PageHeader';
 import { PixelScene, SCENE_FRAME } from '@/components/PixelScene';
-import { CAMP_LABEL, campIsland } from '@/scene/island';
+import {
+  CAT_BOX,
+  SIGNPOST_LABEL,
+  SIGNS,
+  signBox,
+  signpost,
+} from '@/scene/signpost';
 import { fadeUp } from '@/utils/variants';
 
 export default function NotFound() {
@@ -21,12 +28,24 @@ export default function NotFound() {
         </Link>
       </motion.div>
 
-      <motion.div variants={fadeUp} className="mt-16">
+      {/* The signpost's boards are real links to the pages they name. */}
+      <motion.div variants={fadeUp} className="relative mt-16">
         <PixelScene
-          scene={campIsland}
-          label={CAMP_LABEL}
+          scene={signpost}
+          label={SIGNPOST_LABEL}
           className={SCENE_FRAME}
         />
+        {SIGNS.map((sign) => (
+          <Link
+            key={sign.to}
+            to={sign.to}
+            viewTransition
+            aria-label={`Go to ${sign.name}`}
+            style={boxStyle(signBox(sign))}
+            className="absolute rounded-sm transition-colors hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          />
+        ))}
+        <HiddenCat spot="notFound" box={CAT_BOX} />
       </motion.div>
     </Page>
   );
