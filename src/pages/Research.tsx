@@ -1,10 +1,10 @@
-import { CnotFigure } from '@/components/CnotFigure';
 import { Page, RAIL_GRID } from '@/components/Page';
 import { PageHeader } from '@/components/PageHeader';
 import { RadcliffeCamera } from '@/components/RadcliffeCamera';
 import { AwardRow, EducationEntry } from '@/components/ResearchComponents';
 import { Section } from '@/components/Section';
 import { SkillPill } from '@/components/SkillPill';
+import { SurfaceCodeFigure } from '@/components/SurfaceCodeFigure';
 import { awardsData, dissertationData, educationData } from '@/data/research';
 import { cn } from '@/utils/cn';
 
@@ -41,7 +41,7 @@ export default function Research() {
                   />
                 ))}
               </div>
-              <CnotFigure />
+              <SurfaceCodeFigure />
             </div>
           </article>
         </Section>
