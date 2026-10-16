@@ -21,6 +21,7 @@ import { PageHeader } from './PageHeader';
 import {
   ProjectCounter,
   ProjectDetails,
+  ProjectEgg,
   ProjectImage,
   ProjectLinks,
   projectScope,
@@ -251,6 +252,7 @@ export function ProjectRing({ projects }: { projects: ProjectItem[] }) {
                     <SplitText text={project.title} stagger={0.04} />
                   </h2>
                   <div className="flex items-center gap-2">
+                    <ProjectEgg project={project} />
                     <span className="mono-meta">{project.year}</span>
                     <ProjectLinks project={project} />
                   </div>

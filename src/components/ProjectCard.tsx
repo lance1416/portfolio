@@ -5,9 +5,11 @@ import { FaGithub, FaItchIo } from 'react-icons/fa6';
 import type { LinkType, ProjectItem } from '@/data/projects';
 import { cn } from '@/utils/cn';
 import { DashList } from './DashList';
+import { HardDisk } from './HardDisk';
 import { PaperCrane } from './PaperCrane';
 import { SkillPill } from './SkillPill';
 import { SplitText } from './SplitText';
+import { Toaster } from './Toaster';
 
 const renderLinkIcon = (type: LinkType) => {
   switch (type) {
@@ -120,6 +122,17 @@ export function ProjectImage({
   );
 }
 
+/**
+ * A small scene beside the year: a kernel gets its disk and Rust's crab,
+ * Cheesy Toast Work Space a toaster. (Evogami's crane sits with its skills,
+ * where the cat hides.) Up here so it never adds a row to the ring's text.
+ */
+export function ProjectEgg({ project }: { project: ProjectItem }) {
+  if (project.id === 'kidneyos') return <HardDisk />;
+  if (project.id === 'ctws') return <Toaster />;
+  return null;
+}
+
 /** Bullet points and skills. */
 export function ProjectDetails({ project }: { project: ProjectItem }) {
   return (
@@ -167,6 +180,7 @@ export function ProjectCard({
       <div className="mb-3 flex items-center justify-between">
         <span className="label-overline">Project {projectNumber(index)}</span>
         <div className="flex items-center gap-2">
+          <ProjectEgg project={project} />
           <span className="mono-meta">{project.year}</span>
           <ProjectLinks project={project} />
         </div>
