@@ -6,15 +6,18 @@ import {
 } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
 import { useTheme } from '@/context/ThemeContext';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 import {
   drawFaults,
   duration,
   type FaultInk,
-  FIG_H,
-  FIG_W,
+  type FigureLayout,
   type Pauli,
+  ROW,
+  STACK,
   travelTime,
 } from '@/scene/faultFlow';
+import { cn } from '@/utils/cn';
 import { DURATION, SPRING, stagger, timed } from '@/utils/variants';
 
 /** ZX spider colours, as PyZX draws them. */
@@ -29,7 +32,13 @@ const STATUS: Record<Pauli, string> = {
  * The canvas over Fig. 1 that plays a fault through it (`scene/faultFlow`).
  * With reduced motion it shows where the copies end up, without the trip.
  */
-function FaultLayer({ fault }: { fault: { kind: Pauli; run: number } | null }) {
+function FaultLayer({
+  fault,
+  layout,
+}: {
+  fault: { kind: Pauli; run: number } | null;
+  layout: FigureLayout;
+}) {
   const ref = useRef<HTMLCanvasElement>(null);
   const reduce = useReducedMotion();
   const { isDark } = useTheme();
@@ -58,8 +67,8 @@ function FaultLayer({ fault }: { fault: { kind: Pauli; run: number } | null }) {
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.clearRect(0, 0, w, h);
       if (t === null || !fault) return;
-      ctx.setTransform(w / FIG_W, 0, 0, h / FIG_H, 0, 0);
-      drawFaults(ctx, fault.kind, t, ink);
+      ctx.setTransform(w / layout.w, 0, 0, h / layout.h, 0, 0);
+      drawFaults(ctx, fault.kind, t, ink, layout);
     };
 
     if (!fault) {
@@ -84,7 +93,7 @@ function FaultLayer({ fault }: { fault: { kind: Pauli; run: number } | null }) {
     };
     frame = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(frame);
-  }, [fault, isDark, reduce]);
+  }, [fault, isDark, reduce, layout]);
 
   return (
     // Hidden from screen readers on a wrapper: Biome counts a canvas as
@@ -109,6 +118,9 @@ function FaultLayer({ fault }: { fault: { kind: Pauli; run: number } | null }) {
  */
 export function CnotFigure() {
   const reduce = useReducedMotion();
+  // Side by side, both halves shrink to slivers on a phone: stack them there.
+  const layout = useMediaQuery('(max-width: 639px)') ? STACK : ROW;
+  const [zxX, zxY] = layout.diagrams[1];
   const [fault, setFault] = useState<{ kind: Pauli; run: number } | null>(null);
   const play = (kind: Pauli) =>
     setFault((f) => ({ kind, run: (f?.run ?? 0) + 1 }));
@@ -149,10 +161,13 @@ export function CnotFigure() {
 
   return (
     <figure className="mt-12">
-      <div ref={frame} className="relative max-w-xl">
+      <div
+        ref={frame}
+        className={cn('relative', layout === STACK ? 'max-w-64' : 'max-w-xl')}
+      >
         <motion.svg
           variants={stagger}
-          viewBox="0 0 560 140"
+          viewBox={`0 0 ${layout.w} ${layout.h}`}
           role="img"
           aria-label="A CNOT gate: the circuit symbol, with a control dot on the top wire and a target on the bottom wire, equals a ZX-diagram with a green Z spider on the top wire connected to a red X spider on the bottom wire."
           className="block w-full overflow-visible"
@@ -184,16 +199,20 @@ export function CnotFigure() {
 
           <motion.text
             variants={node}
-            x="280"
-            y="80"
+            x={layout.equals[0]}
+            y={layout.equals[1]}
             textAnchor="middle"
             className={`fill-zinc-500 font-display text-[32px] dark:fill-zinc-400 ${origin}`}
           >
             =
           </motion.text>
 
-          {/* ZX-diagram: Z spider (green) on control, X spider (red) on target */}
-          <motion.g variants={side}>
+          {/* ZX-diagram: Z spider (green) on control, X spider (red) on target.
+              Drawn at x 340–540; the layout moves it (under the circuit on phones). */}
+          <motion.g
+            variants={side}
+            transform={`translate(${zxX - 320} ${zxY})`}
+          >
             <motion.path variants={wire} d="M 340 40 H 540" className={ink} />
             <motion.path variants={wire} d="M 340 100 H 540" className={ink} />
             <motion.path variants={wire} d="M 440 40 V 100" className={ink} />
@@ -215,7 +234,7 @@ export function CnotFigure() {
             />
           </motion.g>
         </motion.svg>
-        <FaultLayer fault={fault} />
+        <FaultLayer fault={fault} layout={layout} />
       </div>
 
       <div className="mt-6 flex flex-wrap gap-3">

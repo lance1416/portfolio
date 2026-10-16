@@ -5,23 +5,50 @@
  * as a Pauli box on the circuit, as a π spider on the ZX-diagram, where the
  * copy is the π-copy rule through the other colour's spider.
  *
- * Coordinates are the figure's SVG units (viewBox 560×140); the caller scales
- * the canvas to match.
+ * Coordinates are the figure's SVG units; the caller scales the canvas to
+ * match its layout (side by side, or stacked on phones).
  */
 
 export type Pauli = 'X' | 'Z';
 export type Point = [x: number, y: number];
 
-export const FIG_W = 560;
-export const FIG_H = 140;
+/** How the figure is laid out: its viewBox, and where each half sits. */
+export interface FigureLayout {
+  w: number;
+  h: number;
+  /** Offsets of the circuit, then the ZX-diagram, from the circuit's own place. */
+  diagrams: Point[];
+  /** Where the "=" between them goes. */
+  equals: Point;
+}
+
+/** Side by side: circuit, "=", ZX-diagram. */
+export const ROW: FigureLayout = {
+  w: 560,
+  h: 140,
+  diagrams: [
+    [0, 0],
+    [320, 0],
+  ],
+  equals: [280, 80],
+};
+
+/** On phones: the ZX-diagram under the circuit, so both draw larger. */
+export const STACK: FigureLayout = {
+  w: 240,
+  h: 300,
+  diagrams: [
+    [0, 0],
+    [0, 170],
+  ],
+  equals: [120, 168],
+};
 
 const CONTROL = 40;
 const TARGET = 100;
 const IN = 20;
 const GATE = 120;
 const OUT = 220;
-/** The ZX-diagram is the circuit shifted right by this much. */
-const DIAGRAMS = [0, 320];
 
 const SPEED = 170; // SVG units per second
 const HOLD = 1.2; // seconds the copies rest on the outputs
@@ -100,6 +127,7 @@ export function drawFaults(
   kind: Pauli,
   t: number,
   ink: FaultInk,
+  layout: FigureLayout = ROW,
 ) {
   const travel = travelTime(kind);
   const fadeOut = Math.min(1, Math.max(0, (t - travel - HOLD) / FADE));
@@ -108,9 +136,9 @@ export function drawFaults(
   const split = routeLength(main.slice(0, 2));
   const d = t * SPEED;
 
-  for (const [index, ox] of DIAGRAMS.entries()) {
+  for (const [index, [ox, oy]] of layout.diagrams.entries()) {
     ctx.save();
-    ctx.translate(ox, 0);
+    ctx.translate(ox, oy);
 
     // A ripple where the error reaches each node.
     for (const m of meetings(kind)) {
