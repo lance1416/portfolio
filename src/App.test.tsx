@@ -73,11 +73,10 @@ describe('App', () => {
         ).toBeInTheDocument();
 
         if (path === '/projects') {
-          // Only the ring has per-project "Show …" controls.
-          const ringControls = screen.queryAllByRole('button', {
-            name: /^Show /,
-          });
-          expect(ringControls.length > 0).toBe(ring);
+          // Only the strip's cards carry a "Project 01" label (both layouts
+          // have the counter's "Show …" bars).
+          const stripCards = screen.queryAllByText('Project 01');
+          expect(stripCards.length > 0).toBe(!ring);
         }
       }
 

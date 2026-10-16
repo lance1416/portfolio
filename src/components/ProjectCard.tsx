@@ -191,3 +191,50 @@ export function ProjectCard({
     </motion.article>
   );
 }
+
+/**
+ * "01 / 02" and a bar per project, the current one in its colour. The bars
+ * are the keyboard and screen-reader control: each shows its project. Under
+ * the ring on wide screens, under the swipe strip on small ones.
+ */
+export function ProjectCounter({
+  projects,
+  active,
+  onSelect,
+}: {
+  projects: ProjectItem[];
+  active: number;
+  onSelect: (index: number) => void;
+}) {
+  return (
+    <div className="flex items-center gap-3">
+      <p className="mono-meta">
+        <span className="text-zinc-900 dark:text-zinc-100">
+          {projectNumber(active)}
+        </span>{' '}
+        / {projectNumber(projects.length - 1)}
+      </p>
+      <div className="flex gap-1.5">
+        {projects.map((p, i) => {
+          const scope = projectScope(p);
+          return (
+            <button
+              key={p.id}
+              type="button"
+              onClick={() => onSelect(i)}
+              aria-label={`Show ${p.title}`}
+              aria-current={i === active}
+              style={scope.style}
+              // after: extends the 32×4 bar to a 38×40 hit area, meeting its neighbours
+              className={cn(
+                scope.className,
+                'relative h-1 w-8 rounded-full transition-colors after:absolute after:-inset-x-[3px] after:-inset-y-[18px]',
+                i === active ? 'bg-(--role)' : 'bg-zinc-200 dark:bg-zinc-800',
+              )}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+}

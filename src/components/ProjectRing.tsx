@@ -18,10 +18,10 @@ import { usePageEntrance } from '@/utils/pageTransition';
 import { DURATION, fadeUp, stagger, timed } from '@/utils/variants';
 import { PageHeader } from './PageHeader';
 import {
+  ProjectCounter,
   ProjectDetails,
   ProjectImage,
   ProjectLinks,
-  projectNumber,
   projectScope,
   TITLE_SEQUENCE,
 } from './ProjectCard';
@@ -205,35 +205,7 @@ export function ProjectRing({ projects }: { projects: ProjectItem[] }) {
 
   // Position in the carousel; each bar jumps to its project.
   const counter = (
-    <div className="flex items-center gap-3">
-      <p className="mono-meta">
-        <span className="text-zinc-900 dark:text-zinc-100">
-          {projectNumber(active)}
-        </span>{' '}
-        / {projectNumber(last)}
-      </p>
-      <div className="flex gap-1.5">
-        {projects.map((p, i) => {
-          const scope = projectScope(p);
-          return (
-            <button
-              key={p.id}
-              type="button"
-              onClick={() => setActive(i)}
-              aria-label={`Show ${p.title}`}
-              aria-current={i === active}
-              style={scope.style}
-              // after: extends the 32×4 bar to a 38×40 hit area, meeting its neighbours
-              className={cn(
-                scope.className,
-                'relative h-1 w-8 rounded-full transition-colors after:absolute after:-inset-x-[3px] after:-inset-y-[18px]',
-                i === active ? 'bg-(--role)' : 'bg-zinc-200 dark:bg-zinc-800',
-              )}
-            />
-          );
-        })}
-      </div>
-    </div>
+    <ProjectCounter projects={projects} active={active} onSelect={setActive} />
   );
 
   return (
