@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  distanceAt,
   meetings,
   pointAt,
   routeLength,
@@ -47,5 +48,28 @@ describe('faultFlow', () => {
     expect(pointAt(copy, -5)).toEqual([20, 40]);
     expect(pointAt(copy, 130)).toEqual([120, 70]);
     expect(pointAt(copy, 999)).toEqual([220, 100]);
+  });
+
+  it('brings both copies to their outputs at the same moment', () => {
+    for (const kind of ['X', 'Z'] as const) {
+      const [main, copy] = routes(kind);
+      const end = travelTime(kind);
+      // Neither is there just before the end; both are there at it.
+      for (const route of [main, copy]) {
+        expect(distanceAt(kind, route, end - 0.05)).toBeLessThan(
+          routeLength(route),
+        );
+        expect(distanceAt(kind, route, end)).toBeCloseTo(routeLength(route));
+      }
+    }
+  });
+
+  it('moves as one point until the split', () => {
+    const [main, copy] = routes('X');
+    for (const t of [0, 0.2, 0.5]) {
+      expect(pointAt(main, distanceAt('X', main, t))).toEqual(
+        pointAt(copy, distanceAt('X', copy, t)),
+      );
+    }
   });
 });

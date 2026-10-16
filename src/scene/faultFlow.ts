@@ -93,9 +93,46 @@ export function pointAt(route: Point[], d: number): Point {
   return route[route.length - 1];
 }
 
-/** Seconds until every copy has reached its output. */
+/** Distance along each route to the gate's near node, where the error splits. */
+const splitAt = (kind: Pauli) => routeLength(routes(kind)[0].slice(0, 2));
+
+/**
+ * Seconds from the split until the copies reach their outputs — together.
+ * It's how long the average copy would take at SPEED, so the copy with
+ * further to go speeds up as much as the other slows down.
+ */
+function afterSplit(kind: Pauli) {
+  const split = splitAt(kind);
+  const rest = routes(kind).map((r) => routeLength(r) - split);
+  return rest.reduce((a, b) => a + b, 0) / rest.length / SPEED;
+}
+
+/**
+ * How far along `route` the error is `t` seconds in: a single point at SPEED
+ * until it splits, then each copy at its own steady pace so that both reach
+ * their outputs at the same moment.
+ */
+export function distanceAt(kind: Pauli, route: Point[], t: number) {
+  const split = splitAt(kind);
+  const tSplit = split / SPEED;
+  if (t <= tSplit) return Math.max(0, t) * SPEED;
+  const k = Math.min(1, (t - tSplit) / afterSplit(kind));
+  return split + (routeLength(route) - split) * k;
+}
+
+/** When the error is `d` along `route` (the inverse of `distanceAt`). */
+function timeAt(kind: Pauli, route: Point[], d: number) {
+  const split = splitAt(kind);
+  if (d <= split) return d / SPEED;
+  return (
+    split / SPEED +
+    ((d - split) / (routeLength(route) - split)) * afterSplit(kind)
+  );
+}
+
+/** Seconds until the copies reach their outputs. */
 export const travelTime = (kind: Pauli) =>
-  Math.max(...routes(kind).map(routeLength)) / SPEED;
+  splitAt(kind) / SPEED + afterSplit(kind);
 
 export const duration = (kind: Pauli) => travelTime(kind) + HOLD + FADE;
 
@@ -104,7 +141,7 @@ export function meetings(kind: Pauli): { at: Point; time: number }[] {
   const via = routes(kind)[1];
   return [1, 2].map((i) => ({
     at: via[i],
-    time: routeLength(via.slice(0, i + 1)) / SPEED,
+    time: timeAt(kind, via, routeLength(via.slice(0, i + 1))),
   }));
 }
 
@@ -133,8 +170,8 @@ export function drawFaults(
   const fadeOut = Math.min(1, Math.max(0, (t - travel - HOLD) / FADE));
   const alpha = Math.min(1, t / 0.15) * (1 - fadeOut);
   const [main, copy] = routes(kind);
-  const split = routeLength(main.slice(0, 2));
-  const d = t * SPEED;
+  const split = splitAt(kind);
+  const tSplit = split / SPEED;
 
   for (const [index, [ox, oy]] of layout.diagrams.entries()) {
     ctx.save();
@@ -153,13 +190,18 @@ export function drawFaults(
     }
 
     for (const [i, route] of [main, copy].entries()) {
-      const head = Math.min(d, routeLength(route));
-      // Fading trail; the copy's starts at the split so the shared stretch
-      // isn't drawn twice.
-      const tail = Math.max(head - TRAIL, i ? split : 0);
+      const head = distanceAt(kind, route, t);
+      // Fading trail, longer the faster this copy goes; the copy's starts at
+      // the split so the shared stretch isn't drawn twice.
+      const pace =
+        t > tSplit
+          ? (routeLength(route) - split) / afterSplit(kind) / SPEED
+          : 1;
+      const trail = TRAIL * pace;
+      const tail = Math.max(head - trail, i ? split : 0);
       for (let s = tail; s < head; s += 1.5) {
         const [x, y] = pointAt(route, s);
-        ctx.globalAlpha = alpha * 0.45 * ((s - head + TRAIL) / TRAIL) ** 2;
+        ctx.globalAlpha = alpha * 0.45 * ((s - head + trail) / trail) ** 2;
         ctx.fillStyle = ink.glow[kind];
         ctx.beginPath();
         ctx.arc(x, y, 3, 0, Math.PI * 2);
