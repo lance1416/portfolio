@@ -38,8 +38,9 @@ export const experienceData: ExperienceItem[] = [
     end: '2026-08',
     link: 'https://www.fabrialcomputing.com/',
     description: [
-      'Applied diagrammatic methods from category theory, a formalism that came out of quantum computing, to modelling machine learning processes at an early-stage AI research startup (stealth).',
-      'Extended open-source diagrammatic rewriting tools with the group’s own constructions, and wrote the Python verification code that tested theoretical claims against AI models and training methods.',
+      'Applied diagrammatic methods from category theory to modelling machine learning processes at an early-stage AI research startup (stealth).',
+      'Developed the theory day to day with the research scientists, and turned each new claim into a concrete case that would confirm it or break it.',
+      'Extended open-source diagrammatic rewriting tools with the group’s own constructions, and wrote the Python verification code that ran those cases against AI models and training methods.',
       'Validated the formalism symbolically against small MLPs, turning up counterexamples that sent the theory back.',
     ],
     skills: [
@@ -58,7 +59,7 @@ export const experienceData: ExperienceItem[] = [
     start: '2025-04',
     link: 'https://iqbank.teach.cs.toronto.edu',
     description: [
-      'Built the study platform in TypeScript, React, and PostgreSQL for 379 users. Remain its largest code contributor and run it in production on university infrastructure with Docker and CI.',
+      'Built the study platform in TypeScript, React, and PostgreSQL for 379 users. Remain its largest code contributor and run it in production on university infrastructure with Docker and CI/CD pipelines.',
       'Designed the access-control model: orthogonal platform-wide (admin / staff / regular) and per-course (instructor / TA / student) role hierarchies.',
       'Lead the 10-person development team directly and an education-research team through its lead, handle developer interviews and onboarding, and coordinate from the UK across Toronto working hours.',
       'Run the user-research loop that sets the roadmap: a colour-blind user reporting unreadable text led to a rebuilt colour system, and requests for personalisation became question bookmarks and personal notes.',
@@ -68,7 +69,7 @@ export const experienceData: ExperienceItem[] = [
       'React',
       'PostgreSQL',
       'Docker',
-      'CI',
+      'CI/CD',
       'Access Control',
       'User Research',
     ],

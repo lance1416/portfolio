@@ -18,7 +18,7 @@ export const educationData: EducationItem[] = [
   {
     id: 'oxford',
     institution: 'University of Oxford',
-    degree: 'MSc in Advanced Computer Science (awaiting conferral)',
+    degree: 'MSc in Advanced Computer Science',
     period: '2025 – 2026',
     logoUrl: '/coat/oxford.webp',
     details: [

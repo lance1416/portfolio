@@ -56,11 +56,6 @@ export const NOW_ITEMS: NowItem[] = [
     detail: 'Leading the 10-person dev team',
     color: '#3b5fb2',
   },
-  {
-    label: 'Oxford',
-    detail: 'MSc awaiting conferral',
-    color: '#002147',
-  },
 ];
 
 export const FIELDS: Field[] = [
@@ -93,7 +88,7 @@ export const INDEX_ENTRIES: IndexEntry[] = [
   {
     number: '02',
     category: 'Systems',
-    title: 'KidneyOS — Rust-based operating system kernel',
+    title: 'KidneyOS — PintOS-inspired teaching OS in Rust',
     year: '2024',
     to: '/projects',
   },

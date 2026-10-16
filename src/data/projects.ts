@@ -26,7 +26,7 @@ export const projectsData: ProjectItem[] = [
   {
     id: 'kidneyos',
     title: 'KidneyOS',
-    subtitle: 'Rust-Based Toy Operating System',
+    subtitle: 'PintOS-Inspired Teaching Operating System in Rust',
     year: '2024',
     color: '#d34516',
     image: { name: 'kidney-os', widths: [640, 1280] },
