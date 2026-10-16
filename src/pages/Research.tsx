@@ -5,6 +5,7 @@ import { AwardRow, EducationEntry } from '@/components/ResearchComponents';
 import { Section } from '@/components/Section';
 import { SkillPill } from '@/components/SkillPill';
 import { SurfaceCodeFigure } from '@/components/SurfaceCodeFigure';
+import { UniversityCollege } from '@/components/UniversityCollege';
 import { awardsData, dissertationData, educationData } from '@/data/research';
 import { cn } from '@/utils/cn';
 
@@ -51,8 +52,14 @@ export default function Research() {
             <EducationEntry
               key={item.id}
               item={item}
-              // The cat waits out Oxford's drizzle in the Radcliffe Camera.
-              rail={item.id === 'oxford' && <RadcliffeCamera />}
+              // Oxford's drizzle (with the cat) and Toronto's snow.
+              rail={
+                item.id === 'oxford' ? (
+                  <RadcliffeCamera />
+                ) : item.id === 'uoft' ? (
+                  <UniversityCollege />
+                ) : null
+              }
             />
           ))}
         </Section>
