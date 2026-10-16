@@ -47,7 +47,10 @@ export default function NotFound() {
             viewTransition
             aria-label={`Go to ${sign.name}`}
             style={boxStyle(signBox(sign))}
-            className="absolute rounded-sm transition-colors hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            // On phones a board is ~15px tall: the pseudo-element stretches
+            // its hit area to ~40px (the boards' arrows point apart, so the
+            // stretched areas barely meet).
+            className="absolute rounded-sm transition-colors after:absolute after:inset-x-0 after:-inset-y-3 hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:after:inset-y-0"
           />
         ))}
         <HiddenCat spot="notFound" box={CAT_BOX} />
