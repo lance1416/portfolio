@@ -8,8 +8,8 @@ export type Output =
   | { type: 'table'; rows: [string, string][] }
   /** Directory listing; `path` is each entry's absolute path, for click-to-open. */
   | { type: 'ls'; entries: { name: string; path: string; dir: boolean }[] }
-  /** The night-island scene, drawn inline. */
-  | { type: 'scene' };
+  /** `cat` on its own: the cat, and where it has been found so far. */
+  | { type: 'cat' };
 
 /** Side effects the view carries out after printing. */
 export type Effect =
@@ -97,7 +97,8 @@ export const COMMANDS: Record<string, Command> = {
     usage: 'cat <file>',
     summary: 'print a file',
     run: (args, cwd) => {
-      if (!args.length) return error('cat: missing file operand');
+      // With nothing to print, the site's hidden cat and where it's been found.
+      if (!args.length) return { output: [{ type: 'cat' }] };
       const output: Output[] = [];
       for (const arg of args) {
         const target = resolve(cwd, arg);
@@ -152,11 +153,6 @@ export const COMMANDS: Record<string, Command> = {
             effect: { type: 'theme', theme: arg as (typeof THEMES)[number] },
           }
         : error(`usage: theme <${THEMES.join('|')}>`),
-  },
-  campfire: {
-    usage: 'campfire',
-    summary: 'sit by the fire for a bit',
-    run: () => ({ output: [{ type: 'scene' }] }),
   },
   clear: {
     usage: 'clear',

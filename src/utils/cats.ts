@@ -12,6 +12,14 @@ export const CAT_SPOTS = [
 ] as const;
 export type CatSpot = (typeof CAT_SPOTS)[number];
 
+/** Where to look, for terminal `cat`; plain enough to point the way. */
+export const CAT_HINTS: Record<CatSpot, string> = {
+  notFound: 'on a signpost, at a page that isn’t there',
+  experience: 'up late at a desk, where the timeline says Present',
+  projects: 'near something folded out of paper',
+  research: 'somewhere in Oxford, in the drizzle',
+};
+
 const KEY = 'portfolio-cats';
 const listeners = new Set<() => void>();
 

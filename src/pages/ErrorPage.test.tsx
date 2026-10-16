@@ -22,24 +22,24 @@ async function renderCrash() {
 
 describe('ErrorPage', () => {
   afterEach(() => {
-    vi.doUnmock('@/scene/island');
+    vi.doUnmock('@/scene/signpost');
     vi.resetModules();
   });
 
-  it('shows the error and the broken island', async () => {
+  it('shows the error and the fallen signpost', async () => {
     // React reports the caught render error; that's the point here.
     vi.spyOn(console, 'error').mockImplementation(() => {});
     await renderCrash();
 
     expect(screen.getByText('boom')).toBeInTheDocument();
     expect(
-      await screen.findByRole('img', { name: /cracked in two/ }),
+      await screen.findByRole('img', { name: /signpost has snapped/ }),
     ).toBeInTheDocument();
   });
 
   it('still renders when the scene chunk fails to load', async () => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
-    vi.doMock('@/scene/island', () => {
+    vi.doMock('@/scene/signpost', () => {
       throw new Error('Failed to fetch dynamically imported module');
     });
     await renderCrash();

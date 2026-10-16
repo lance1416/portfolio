@@ -7,21 +7,23 @@ import { PageHeader } from '@/components/PageHeader';
 import { fadeUp } from '@/utils/variants';
 
 /**
- * The broken island, loaded on demand to keep it out of the main bundle.
+ * The fallen signpost, loaded on demand to keep it out of the main bundle.
  * This page may be up *because* a chunk failed to load (e.g. after a
  * deploy), so a failed load renders nothing rather than throwing again.
  */
-const BrokenIsland = lazy<ComponentType>(() =>
-  Promise.all([import('@/components/PixelScene'), import('@/scene/island')])
-    .then(([{ PixelScene, SCENE_FRAME }, { brokenIsland, BROKEN_LABEL }]) => ({
-      default: () => (
-        <PixelScene
-          scene={brokenIsland}
-          label={BROKEN_LABEL}
-          className={SCENE_FRAME}
-        />
-      ),
-    }))
+const FallenSignpost = lazy<ComponentType>(() =>
+  Promise.all([import('@/components/PixelScene'), import('@/scene/signpost')])
+    .then(
+      ([{ PixelScene, SCENE_FRAME }, { fallenSignpost, FALLEN_LABEL }]) => ({
+        default: () => (
+          <PixelScene
+            scene={fallenSignpost}
+            label={FALLEN_LABEL}
+            className={SCENE_FRAME}
+          />
+        ),
+      }),
+    )
     .catch(() => ({ default: () => null })),
 );
 
@@ -80,7 +82,7 @@ export default function ErrorPage() {
 
         <motion.div variants={fadeUp} className="mt-16">
           <Suspense fallback={null}>
-            <BrokenIsland />
+            <FallenSignpost />
           </Suspense>
         </motion.div>
       </Page>

@@ -1,8 +1,10 @@
 /**
  * The 404: a signpost at a crossroads, its boards pointing to the site's
  * pages (the page lays real links over them), a lantern hanging from the
- * post, and the cat sitting on top. Night in the dark theme, dusk in the
- * light one.
+ * post, and the cat sitting on top. The error page's version has snapped:
+ * a stump, the post in the grass with the boards strewn about, the lantern
+ * still lit on the ground, and the cat sitting on the fallen post, unbothered.
+ * Night in the dark theme, dusk in the light one.
  */
 import { CAT_H, CAT_W, drawCat } from './cat';
 import {
@@ -15,6 +17,7 @@ import {
   px,
   SCENE_H,
   SCENE_W,
+  type Scene,
   type SceneFactory,
 } from './engine';
 import { drawText, textWidth } from './pixelFont';
@@ -71,8 +74,26 @@ export const CAT_BOX: Box = {
   h: CAT_H,
 };
 
+/** Where the cat sits once the post is down. */
+export const FALLEN_CAT_BOX: Box = {
+  x: 60,
+  y: GROUND + 6 - CAT_H,
+  w: CAT_W,
+  h: CAT_H,
+};
+
+/** Each board's top-left once it's fallen into the grass. */
+const FALLEN_AT: Record<string, [number, number]> = {
+  EXPERIENCE: [10, 99],
+  PROJECTS: [126, 90],
+  RESEARCH: [116, 99],
+};
+
 export const SIGNPOST_LABEL =
   'Pixel art: a signpost at a crossroads pointing to Experience, Projects and Research, with a cat sitting on top';
+
+export const FALLEN_LABEL =
+  'Pixel art: the signpost has snapped and its boards lie in the grass; a cat sits on the fallen post';
 
 interface Palette {
   sky: string[];
@@ -108,7 +129,7 @@ const PALETTES: Record<Mood, Palette> = {
   },
 };
 
-function paintBackdrop(ctx: Ctx, pal: Palette) {
+function paintBackdrop(ctx: Ctx, pal: Palette, fallen: boolean) {
   ditherRows(ctx, 0, GROUND, pal.sky);
 
   // Far hills: a soft ridge along the horizon.
@@ -132,14 +153,23 @@ function paintBackdrop(ctx: Ctx, pal: Palette) {
     }
   }
 
-  // The post, shaded on its left.
-  for (let y = POST_TOP; y < GROUND + 1; y++) {
+  // The post, shaded on its left; or its stump, and the rest in the grass.
+  for (let y = fallen ? GROUND - 5 : POST_TOP; y < GROUND + 1; y++) {
     px(ctx, POST_X, y, pal.post[1]);
     px(ctx, POST_X + 1, y, pal.post[0]);
   }
+  if (fallen) {
+    px(ctx, POST_X + 1, GROUND - 6, pal.post[0]);
+    for (let x = 46; x < 93; x++) {
+      px(ctx, x, GROUND + 6, pal.post[0]);
+      px(ctx, x, GROUND + 7, pal.post[1]);
+    }
+  }
 
   for (const sign of SIGNS) {
-    const b = signBox(sign);
+    const standing = signBox(sign);
+    const [fx, fy] = FALLEN_AT[sign.label];
+    const b = fallen ? { ...standing, x: fx, y: fy } : standing;
     const body = sign.left
       ? { x: b.x + TIP, w: b.w - TIP }
       : { x: b.x, w: b.w - TIP };
@@ -162,12 +192,16 @@ function paintBackdrop(ctx: Ctx, pal: Palette) {
   }
 }
 
-const LANTERN = { x: POST_X + 2, y: 77 };
-
-export const signpost: SceneFactory = (ctx, mood) => {
+function createSignpost(ctx: Ctx, mood: Mood, fallen: boolean): Scene {
   const pal = PALETTES[mood];
+  const lantern = fallen
+    ? { x: POST_X + 5, y: GROUND + 2 }
+    : { x: POST_X + 2, y: 77 };
+  const cat = fallen ? FALLEN_CAT_BOX : CAT_BOX;
   ctx.imageSmoothingEnabled = false;
-  const backdrop = layer(SCENE_W, SCENE_H, (c) => paintBackdrop(c, pal));
+  const backdrop = layer(SCENE_W, SCENE_H, (c) =>
+    paintBackdrop(c, pal, fallen),
+  );
   const rng = mulberry32(404);
   const stars = Array.from({ length: pal.stars ? 40 : 0 }, () => ({
     x: Math.floor(rng() * SCENE_W),
@@ -189,32 +223,46 @@ export const signpost: SceneFactory = (ctx, mood) => {
         px(ctx, s.x, s.y, '#dfe6ff');
       }
 
-      // The lantern on its hook, and its light on the post and path.
+      // The lantern on its hook (or on its side in the grass), and its
+      // light on the post and path.
       ctx.globalAlpha = 1;
-      px(ctx, LANTERN.x, LANTERN.y - 1, pal.post[1]);
-      for (let y = 0; y < 3; y++) {
-        px(ctx, LANTERN.x, LANTERN.y + y, '#ffcf6e');
-        px(ctx, LANTERN.x + 1, LANTERN.y + y, y === 1 ? '#fff1c4' : '#ffcf6e');
+      if (!fallen) px(ctx, lantern.x, lantern.y - 1, pal.post[1]);
+      const [w, h] = fallen ? [3, 2] : [2, 3];
+      for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+          px(
+            ctx,
+            lantern.x + x,
+            lantern.y + y,
+            x + y === 1 ? '#fff1c4' : '#ffcf6e',
+          );
+        }
       }
       const flicker = 1 + Math.sin(t * 7) * 0.04 + Math.sin(t * 17) * 0.03;
       ctx.globalCompositeOperation = 'lighter';
       ctx.globalAlpha = pal.lanternGlow;
       const glow = ctx.createRadialGradient(
-        LANTERN.x + 1,
-        LANTERN.y + 1,
+        lantern.x + 1,
+        lantern.y + 1,
         1,
-        LANTERN.x + 1,
-        LANTERN.y + 1,
+        lantern.x + 1,
+        lantern.y + 1,
         26 * flicker,
       );
       glow.addColorStop(0, 'rgba(255, 190, 90, 0.35)');
       glow.addColorStop(1, 'rgba(255, 150, 60, 0)');
       ctx.fillStyle = glow;
-      ctx.fillRect(LANTERN.x - 30, LANTERN.y - 30, 62, 62);
+      ctx.fillRect(lantern.x - 30, lantern.y - 30, 62, 62);
       ctx.globalCompositeOperation = 'source-over';
       ctx.globalAlpha = 1;
 
-      drawCat(ctx, CAT_BOX.x, CAT_BOX.y, t, pointerIn(ctx.canvas));
+      drawCat(ctx, cat.x, cat.y, t, pointerIn(ctx.canvas));
     },
   };
-};
+}
+
+export const signpost: SceneFactory = (ctx, mood) =>
+  createSignpost(ctx, mood, false);
+
+export const fallenSignpost: SceneFactory = (ctx, mood) =>
+  createSignpost(ctx, mood, true);

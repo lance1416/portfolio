@@ -7,10 +7,9 @@ import {
   useState,
 } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { PixelScene, SCENE_FRAME } from '@/components/PixelScene';
+import { CatStatus } from '@/components/CatStatus';
 import { useTerminal } from '@/context/TerminalContext';
 import { useTheme } from '@/context/ThemeContext';
-import { CAMP_LABEL, campIsland } from '@/scene/island';
 import { display, pathForRoute } from '@/terminal/fs';
 import {
   complete,
@@ -94,14 +93,8 @@ function Block({
           ))}
         </dl>
       );
-    case 'scene':
-      return (
-        <PixelScene
-          scene={campIsland}
-          label={CAMP_LABEL}
-          className={`${SCENE_FRAME} my-2 max-w-xl`}
-        />
-      );
+    case 'cat':
+      return <CatStatus />;
     case 'error':
       return <div className="text-rose-400">{output.text}</div>;
     case 'json':

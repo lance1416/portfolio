@@ -5,14 +5,18 @@ import {
   TerminalSquare,
 } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { useCommandPalette } from '@/context/CommandPaletteContext';
 import { useTerminal } from '@/context/TerminalContext';
 import { useTheme } from '@/context/ThemeContext';
 import { ACTION_LABELS, themeAction } from '@/data/actions';
+import { CAT_SPOTS, useCatsFound } from '@/utils/cats';
 import { openResume } from '@/utils/resume';
 import { PALETTE_SHORTCUT } from '@/utils/shortcut';
 import { SPRING } from '@/utils/variants';
+
+// Only once every hiding place is found, so it loads on demand.
+const NappingCat = lazy(() => import('@/components/NappingCat'));
 
 /** Icon button with a tooltip shown on hover and on keyboard focus. */
 function DockItem({
@@ -74,6 +78,7 @@ export function FloatingDock() {
   const { open: openCommandPalette } = useCommandPalette();
   const { toggleTheme, isDark } = useTheme();
   const theme = themeAction(isDark);
+  const home = useCatsFound().length === CAT_SPOTS.length;
 
   return (
     // Hidden on short screens (a phone on its side), where it would cover a
@@ -84,6 +89,13 @@ export function FloatingDock() {
       transition={{ ...SPRING.ui, delay: 0.2 }}
       className="fixed bottom-6 left-1/2 z-50 hidden [view-transition-name:dock] -translate-x-1/2 items-center gap-2 rounded-3xl bg-white/60 p-2 shadow-floating backdrop-blur-xl dark:bg-zinc-900/60 sm:flex short:hidden"
     >
+      {/* Moved in: asleep on top of the dock. First in the DOM, so the
+          items' tooltips draw over it. */}
+      {home && (
+        <Suspense fallback={null}>
+          <NappingCat className="absolute bottom-full right-4 -mb-1" />
+        </Suspense>
+      )}
       <DockItem
         icon={Search}
         label={ACTION_LABELS.search}

@@ -52,7 +52,7 @@ const EYES: [number, number][] = [
 
 const PUPIL = '#3b2a22';
 
-const COLORS = {
+export const CAT_COLORS = {
   b: '#a99d9b',
   l: '#c6bab5',
   s: '#857978',
@@ -81,9 +81,9 @@ export function drawCat(
   SPRITE.forEach((row, dy) => {
     [...row].forEach((ch, dx) => {
       if (ch === '.') return;
-      let color = COLORS[ch as keyof typeof COLORS];
+      let color = CAT_COLORS[ch as keyof typeof CAT_COLORS];
       // A blink: a shaded lid over the top of each eye, fur below.
-      if (blink && ch === 'e') color = dy === 3 ? COLORS.s : COLORS.l;
+      if (blink && ch === 'e') color = dy === 3 ? CAT_COLORS.s : CAT_COLORS.l;
       px(ctx, x + dx, y + dy, color);
     });
   });
@@ -96,6 +96,6 @@ export function drawCat(
     }
   }
   for (const [dx, dy] of flick ? TAIL_FLICK : TAIL) {
-    px(ctx, x + dx, y + dy, COLORS.tail);
+    px(ctx, x + dx, y + dy, CAT_COLORS.tail);
   }
 }
